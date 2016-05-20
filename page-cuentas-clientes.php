@@ -144,7 +144,7 @@ elseif (current_user_can('administrator')) { ?>
 	  	buttonFilter.init();
 		jQuery('#Container').mixItUp({
 			animation: { duration: 200 },
-			pagination: { limit: 5, loop: true, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a ><h4>Siguiente</h4></a>' },
+			pagination: { limit: 15, loop: true, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a ><h4>Siguiente</h4></a>' },
 			controls: { toggleFilterButtons: true, toggleLogic: 'and' }
 		});
 	});
