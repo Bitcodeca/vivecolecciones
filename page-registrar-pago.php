@@ -44,7 +44,7 @@
 			<div class="row">
 				<div class="col-md-12 margintop25 marginbot25">
 					<h2 class="text-center">Registrar Depósito</h2>
-
+					<h1 class="letranegra text-center">Introducir montos sin decimales</h1>
 					<form name="importa" method="post" action="http://vivecolecciones.com.ve/registrar-pago/" >
                             <div class="col-md-12 margintop25">
 								<div class="col-md-2">
@@ -129,7 +129,7 @@
 	  	buttonFilter.init();
 		jQuery('#Container').mixItUp({
 			animation: { duration: 200 },
-			pagination: { limit: 5, loop: true, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a ><h4>Siguiente</h4></a>' }
+			pagination: { limit: 15, loop: false, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a ><h4>Siguiente</h4></a>' }
 		});
 	});
 </script>
