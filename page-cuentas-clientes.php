@@ -16,17 +16,6 @@ elseif (current_user_can('administrator')) { ?>
 				}
 	        	?>
       			<h1 class="marginbot10 text-left">Pagos Recibidos</h1>
-		      		<div class="inventario margintop25">
-			    		<div class="col-md-2 col-sm-2 col-xs-4"><h4>Fecha</h4></div>
-					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Cliente</h4></div>
-					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Banco</h4></div>
-					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Número de Referencia</h4></div>
-					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Monto</h4></div>
-					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Status</h4></div>
-					</div>
-					<div class="clearfix"></div>
-					<div id="Container"><?php include (TEMPLATEPATH . '/funciones/estadodecuenta.php'); ?></div>
-                    <div class="pager-list marginbot10"></div>
 					<div class="row marginbot10">
 						<div class="text-center">  
 							<span class="finalinventario">Ordernar por: </span>
@@ -57,6 +46,17 @@ elseif (current_user_can('administrator')) { ?>
 							<a class="filter btn btn-default btnfiltro" data-filter=".banplus">Banco BanPlus</a>
 							<a class="filter btn btn-default btnfiltro" data-filter=".mercantil">Banco Mercantil</a>  
 		            </div>
+		      		<div class="inventario margintop25">
+			    		<div class="col-md-2 col-sm-2 col-xs-4"><h4>Fecha</h4></div>
+					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Cliente</h4></div>
+					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Banco</h4></div>
+					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Número de Referencia</h4></div>
+					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Monto</h4></div>
+					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Status</h4></div>
+					</div>
+					<div class="clearfix"></div>
+					<div id="Container"><?php include (TEMPLATEPATH . '/funciones/estadodecuenta.php'); ?></div>
+                    <div class="pager-list marginbot10"></div>
 				<?php } else { ?>
 					<h3 class="marginbot25">No existen colecciones asignadas</h3>
 				<?php } ?>
