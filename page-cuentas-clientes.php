@@ -16,36 +16,62 @@ elseif (current_user_can('administrator')) { ?>
 				}
 	        	?>
       			<h1 class="marginbot10 text-left">Pagos Recibidos</h1>
-					<div class="row marginbot10">
-						<div class="text-center">  
-							<span class="finalinventario">Ordernar por: </span>
-							<button type="button" class="sort btn btn-default" data-sort="default">Default</button>
-						  	<button type="button" class="sort btn btn-default" data-sort="myorder:asc">Anteriores</button>
-						  	<button type="button" class="sort btn btn-default active" data-sort="myorder:desc">Recientes</button>
+		            <div class="text-left">
+						<div class="clearfix"></div>
+						<div class="row margintop10">
+							<div class="col-md-2 col-sm-2 col-xs-12">
+								<span class="finalinventario">Filtrar por Status: </span>
+							</div>
+							<div class="col-md-10 col-sm-10 col-xs-12">
+								<a class="filter btn btn-default btnfiltro" data-filter=".aprobado">Aprobado</a>
+								<a class="filter btn btn-default btnfiltro" data-filter=".pendiente">Pendiente</a>
+								<a class="filter btn btn-default btnfiltro" data-filter=".negada">Negado</a>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+						<div class="row margintop10">
+							<div class="col-md-2 col-sm-2 col-xs-12">
+								<span class="finalinventario">Filtrar por Usuarios: </span>
+							</div>
+							<div class="col-md-10 col-sm-10 col-xs-12">
+				                <?php foreach ( $todoslosusuarios as $user ) {
+		    						echo '<a class="filter btn btn-default btnfiltro" data-filter=".'.$user->user_login.'"> '.$user->user_login.' </a>'; 
+		    					} ?>
+		    				</div>
+	    				</div>
+						<div class="clearfix"></div>
+						<div class="row margintop10">
+							<div class="col-md-2 col-sm-2 col-xs-12">
+								<span class="finalinventario">Filtrar por Banco: </span>
+							</div>
+							<div class="col-md-10 col-sm-10 col-xs-12">
+								<a class="filter btn btn-default btnfiltro" data-filter=".provincial">Provincial</a>
+								<a class="filter btn btn-default btnfiltro" data-filter=".banesco">Banesco</a>
+								<a class="filter btn btn-default btnfiltro" data-filter=".activo">Banco Activo</a>
+								<a class="filter btn btn-default btnfiltro" data-filter=".bicentenario">Banco Bicentenario</a>
+								<a class="filter btn btn-default btnfiltro" data-filter=".venezuela">Banco de Venezuela</a>
+								<a class="filter btn btn-default btnfiltro" data-filter=".banplus">Banco BanPlus</a>
+								<a class="filter btn btn-default btnfiltro" data-filter=".mercantil">Banco Mercantil</a>  
+							</div>
+						</div>
+						<div class="clearfix"></div>
+						<div class="row margintop10">
+							<div class="col-md-2 col-sm-2 col-xs-12">
+								<span class="finalinventario">Ordernar por: </span>
+							</div>
+							<div class="col-md-10 col-sm-10 col-xs-12">
+								<button type="button" class="sort btn btn-default" data-sort="default">Default</button>
+							  	<button type="button" class="sort btn btn-default" data-sort="myorder:asc">Anteriores</button>
+							  	<button type="button" class="sort btn btn-default active" data-sort="myorder:desc">Recientes</button>
+							</div>
+			            </div>
+						<div class="row margintop10">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+  								<a class="filter btn btn-default" id="Reset">Mostrar Todos</a>
+							</div>
 						</div>
 		            </div>
-		            <div class="text-left">
-	  						<a class="filter btn btn-default" id="Reset">Mostrar Todos</a>
-							<div class="clearfix"></div>
-							<span class="finalinventario">Filtrar por Status: </span>
-							<a class="filter btn btn-default btnfiltro" data-filter=".aprobado">Aprobado</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".pendiente">Pendiente</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".negada">Negado</a>
-							<div class="clearfix"></div>
-							<span class="finalinventario">Filtrar por Usuarios: </span>
-			                <?php foreach ( $todoslosusuarios as $user ) {
-	    						echo '<a class="filter btn btn-default btnfiltro" data-filter=".'.$user->user_login.'"> '.$user->user_login.' </a>'; 
-	    					} ?>
-							<div class="clearfix"></div>
-							<span class="finalinventario">Filtrar por Banco: </span>
-							<a class="filter btn btn-default btnfiltro" data-filter=".provincial">Provincial</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".banesco">Banesco</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".activo">Banco Activo</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".bicentenario">Banco Bicentenario</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".venezuela">Banco de Venezuela</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".banplus">Banco BanPlus</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".mercantil">Banco Mercantil</a>  
-		            </div>
+                    <div class="pager-list margintop10 marginbot10"></div>
 		      		<div class="inventario margintop25">
 			    		<div class="col-md-2 col-sm-2 col-xs-4"><h4>Fecha</h4></div>
 					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Cliente</h4></div>
