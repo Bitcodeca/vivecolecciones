@@ -5,12 +5,10 @@ if( current_user_can('subscriber')) { ?>
 <?php }
 elseif (current_user_can('administrator')) { ?>
 	<div class="container text-center margintop25 marginbot25">
-		<?php include (TEMPLATEPATH . '/funciones/constantes.php');
-			include (TEMPLATEPATH . '/funciones/usuariologged.php');
+		<?php include (TEMPLATEPATH . '/funciones/usuariologged.php');
 			$args=array('post_status' => 'publish', 'order' => 'ASC', 'post_type'=> 'post', 'posts_per_page' => -1); $my_query = new WP_Query($args);
         	if( $my_query->have_posts() ) {
-	        	include (TEMPLATEPATH . '/funciones/inventario.php');
-	        	include (TEMPLATEPATH . '/funciones/fechaclientes.php');
+        		$todoslosusuarios = get_users();
 				if(isset($_POST['btn'])) {
 					include (TEMPLATEPATH . '/funciones/cambiodestatus.php');
 				}
