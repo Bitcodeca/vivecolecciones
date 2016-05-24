@@ -19,16 +19,85 @@
 				</div>
 			</div>
 			<div class="row">
-				<?php include (TEMPLATEPATH . '/funciones/constantes.php');
-					$args=array('post_status' => 'publish', 'post_type'=> 'post', 'order' => 'ASC', 'posts_per_page' => -1 ); $my_query = new WP_Query($args);
-		        if( $my_query->have_posts() ) {
-		        	include (TEMPLATEPATH . '/funciones/inventario.php');
-		        	include (TEMPLATEPATH . '/funciones/pagocuotas.php'); ?>
+				<?php 
+				$todoslosusuarios = get_users( 'role=subscriber' );
+				$x=0;
+				$stotalcantidad=0;
+				$stotalvendedor=0;
+				$stotal=0;
+				$ssubtotalpremiobasico=0;
+				$ssubtotaldistribucion=0;
+				$ssubtotalgerencia=0;
+				$stotalacancelar=0;
+				$stotaladepositarquincenal=0;
+				foreach ( $todoslosusuarios as $user ) {
+					$buscar=$user->user_login;
+					include (TEMPLATEPATH . '/funciones/constantes.php');
+				 	$args=array('post_status' => 'publish', 'post_type'=> 'post',  'order' => 'ASC', 'posts_per_page' => -1, 'tax_query' => array( array(  'taxonomy' => 'Gerente', 'field' => 'name', 'terms' => $buscar ) ) ); 
+				 	$my_query = new WP_Query($args);
+			        if( $my_query->have_posts() ) {
+						$totalcosto=0;
+						$totalcantidad=0;
+						while ($my_query->have_posts()) : $my_query->the_post(); $id = get_the_ID();
+							//El producto
+					        $categories = get_the_category(); 
+					        $producto=$categories[0]->name;
+					        //Cantidad del producto
+					        $cantidadarray = get_the_terms( $post->ID , 'cantidad' ); 
+					        $cantidad=$cantidadarray[0]->name; 
+					        //Costo del producto
+					        $costoarray = get_the_terms( $post->ID , 'costo' ); 
+					        $costo=$costoarray[0]->name;
+					        //Total del producto
+					        $preciototal=$cantidad*$costo; 
+					        //Sumatoria de los totales de los productos
+					        $totalcosto=$totalcosto+$preciototal;
+					        //Sumatoria de las cantidades de productos 
+					        $totalcantidad=$totalcantidad+$cantidad;
+					        $fecha=get_the_date('d/m/Y');
+					        $x++;
+					    endwhile;
+
+				        $stotalcantidad=$stotalcantidad+$totalcantidad;
+						//Ganancia del vendedor actual
+						$totalvendedor=$gananciavendedor*$totalcantidad;
+						$stotalvendedor=$stotalvendedor+$totalvendedor;
+						//Total
+						$total=$totalcosto-$totalvendedor;
+						$stotal=$stotal+$total;
+						//Subtotal de Premio basico
+						$subtotalpremiobasico=$totalcantidad*$premiobasico;
+						$ssubtotalpremiobasico=$ssubtotalpremiobasico+$subtotalpremiobasico;
+						//Subtotal de Distribucion
+						$subtotaldistribucion=$totalcantidad*$distribucion;
+						$ssubtotaldistribucion=$ssubtotaldistribucion+$subtotaldistribucion;
+						//Subtotal de Gerencia
+						$subtotalgerencia=$totalcantidad*$gerencia;
+						$ssubtotalgerencia=$ssubtotalgerencia+$subtotalgerencia;
+						//Total a cancelar
+						$totalacancelar=$total-$subtotalgerencia-$subtotaldistribucion-$subtotalpremiobasico;
+						$stotalacancelar=$stotalacancelar+$totalacancelar;
+						//Total a depositar quincenal
+						$totaladepositarquincenal=$total/4;
+						$stotaladepositarquincenal=$stotaladepositarquincenal+$totaladepositarquincenal;				    				
+		        	} 
+		        }
+				
+
+				$con = mysqli_connect ("localhost","advv","cdavv210416","bdve210416");
+				$totaldepositado=0;
+				$totalaprobado=0;
+				$totalpendiente=0;
+				$result = mysqli_query($con, "SELECT * FROM registro WHERE status='aprobado'");
+				while ($row = mysqli_fetch_array($result)) { $totalaprobado=$totalaprobado+$row['monto']; }
+				$result = mysqli_query($con, "SELECT * FROM registro WHERE status='pendiente'");
+				while ($row = mysqli_fetch_array($result)) { $totalpendiente=$totalpendiente+$row['monto']; }
+				$totaldepositado=$totalaprobado+$totalpendiente; ?>
 					<div class="col-md-3 col-sm-3 col-xs-6">
-						<h3 class="borderbotazul">Colecciones Entregadas:</h3> <h4><?php echo $totalcantidad; ?></h4>
+						<h3 class="borderbotazul">Colecciones Entregadas:</h3> <h4><?php echo $stotalcantidad; ?></h4>
 					</div>
 					<div class="col-md-3 col-sm-3 col-xs-6">
-						<h3 class="borderbotazul">Total Invertido:</h3> <h4>Bsf <?php echo number_format($totalacancelar, 2, ',', '.'); ?></h4>
+						<h3 class="borderbotazul">Total Invertido:</h3> <h4>Bsf <?php echo number_format($stotalacancelar, 2, ',', '.'); ?></h4>
 					</div>
 					<div class="col-md-3 col-sm-3 col-xs-6">
 						<h3 class="borderbotazul">Total Registrado:</h3> <h4>Bsf <?php echo number_format($totaldepositado, 2, ',', '.'); ?></h4>
@@ -36,12 +105,9 @@
 					<div class="col-md-3 col-sm-3 col-xs-6">
 						<h3 class="borderbotazul">Total Aprobado:</h3> <h4>Bsf <?php echo number_format($totalaprobado, 2, ',', '.'); ?></h4>
 					</div>
-				<?php } else { ?>
-					<h3 class="marginbot25">No existen colecciones asignadas</h3>
-	    		<?php } ?>
 			</div>
 			<div class="clearfix"></div>
-			<?php $ptotalacancelar=$totalacancelar-$totalpendiente-$totalaprobado; ?>
+			<?php $ptotalacancelar=$stotalacancelar-$stotalpendiente-$stotalaprobado; ?>
 			<script type="text/javascript">
 			    google.charts.load('current', {'packages':['corechart']});
 			    google.charts.setOnLoadCallback(drawChart);
