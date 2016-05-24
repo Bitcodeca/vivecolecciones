@@ -53,6 +53,33 @@ function taxonomiagerente() {
   ));
 
 }
+
+////////////////////////
+// TAXONOMIA CAMPAÑA //
+//////////////////////
+add_action( 'init', 'taxonomiacampana', 0 );
+function taxonomiacampana() {
+  $labels = array(
+    'name' => _x( 'Campaña', 'taxonomy general name' ),
+    'singular_name' => _x( 'Campaña', 'taxonomy singular name' ),
+    'search_items' =>  __( 'Buscar Campaña' ),
+    'all_items' => __( 'Todos los Campañas' ),
+    'edit_item' => __( 'Editar Campaña' ), 
+    'update_item' => __( 'Actualizar Campaña' ),
+    'add_new_item' => __( 'Añadir Campaña' ),
+    'new_item_name' => __( 'Nueva Campaña' ),
+    'menu_name' => __( 'Campaña' ),
+  );    
+  register_taxonomy('campaña',array('admin'), array(
+    'hierarchical' => true,
+    'labels' => $labels,
+    'show_ui' => true,
+    'show_admin_column' => true,
+    'query_var' => true,
+    'rewrite' => array( 'slug' => 'campaña' ),
+  ));
+
+}
 /////////////////////////////////////////////////////////////////////
 // AGREGAR NOMBRE DE USUARIOS A TAXONOMIA GERENTE AUTOMATICAMENTE //
 ///////////////////////////////////////////////////////////////////
@@ -72,6 +99,23 @@ function termsgerente() {
            }
         }
  } add_action( 'init', 'termsgerente', 0 );
+
+function termscampana() {
+        $blogusers = get_users( 'role=subscriber' );
+        foreach ( $blogusers as $user ) {
+            $usuario= esc_html( $user->user_login );
+            if( !term_exists( $usuario , 'Campaña' ) ) {
+               wp_insert_term(
+                   $usuario,
+                   'Campaña',
+                   array(
+                     'description' => 'Campaña',
+                     'slug'        => $usuario
+                   )
+               );
+           }
+        }
+ } add_action( 'init', 'termscampana', 0 );
 
 //////////////////////
 // TAXONOMIA COSTO //
@@ -325,7 +369,7 @@ function postadmin(){
    'menu_position'=>6,
    'capability_type'=> 'page',
    'supports'=> array( 'title'),
-  'taxonomies' => array('gananciavendedor', 'premiobasico', 'distribucion', 'gerencia', 'Gerente', 'incentivo'),
+  'taxonomies' => array('gananciavendedor', 'premiobasico', 'distribucion', 'gerencia', 'Gerente', 'incentivo', 'campaña'),
    'query_var'=>true,
   );
   register_post_type( "admin", $args );
