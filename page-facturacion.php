@@ -1,10 +1,10 @@
 <?php get_header();
-	if( current_user_can('subscriber')) {
-		include (TEMPLATEPATH . '/funciones/constantes.php'); ?>
+	if( current_user_can('subscriber')) { ?>
 		<div class="container">
 	      	<div class="col-md-12">
 	      	<?php
   			include (TEMPLATEPATH . '/funciones/usuariologged.php');
+			include (TEMPLATEPATH . '/funciones/constantes.php'); 
    			$args=array('post_status' => 'publish', 'post_type'=> 'post', 'order' => 'DESC', 'posts_per_page' => -1, 'tax_query' => array( array(  'taxonomy' => 'Gerente', 'field' => 'slug', 'terms' => $usuariologged ) ) ); $my_query = new WP_Query($args);
 	        if( $my_query->have_posts() ) { ?>		      	
 					  	<div class="clearfix"></div>

@@ -20,7 +20,6 @@
 			</div>
 			<div class="row">
 				<?php include (TEMPLATEPATH . '/funciones/constantes.php');
-					include (TEMPLATEPATH . '/funciones/usuariologged.php');
 					$args=array('post_status' => 'publish', 'post_type'=> 'post', 'order' => 'ASC', 'posts_per_page' => -1 ); $my_query = new WP_Query($args);
 		        if( $my_query->have_posts() ) {
 		        	include (TEMPLATEPATH . '/funciones/inventario.php');
