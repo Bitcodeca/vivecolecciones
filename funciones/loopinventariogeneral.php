@@ -7,6 +7,8 @@
 	$todoslosusuarios = get_users();
 	foreach ( $todoslosusuarios as $user ) {
 		$buscar=$user->user_login;
+		$cliente=$buscar;
+		include (TEMPLATEPATH . '/funciones/constantes.php');
 	 	$args=array('post_status' => 'publish', 'post_type'=> 'post',  'order' => 'ASC', 'posts_per_page' => -1, 'tax_query' => array( array(  'taxonomy' => 'Gerente', 'field' => 'slug', 'terms' => $buscar ) ) ); $my_query = new WP_Query($args);
 	    if( $my_query->have_posts() ) { $totalcosto=0;$totalcantidad=0;
 			$totalcosto=0;$totalcantidad=0;$x=0;

@@ -3,7 +3,6 @@
 	<h1 class="letraroja">Acceso Negado</h1>
 	<?php }
 	elseif (current_user_can('administrator')) {
-		include (TEMPLATEPATH . '/funciones/constantes.php');
 		$pagina='reportes';
 		if(isset($_POST['btn'])) {
 			include (TEMPLATEPATH . '/funciones/cambiodestatus.php');
@@ -41,6 +40,7 @@
 		</div>
 		<?php if(isset($_POST['cliente'])) {
 			$cliente=$_POST['cliente'];
+			include (TEMPLATEPATH . '/funciones/constantes.php');
 			if(isset($_POST['print'])) { $pagina='print'; include (TEMPLATEPATH . '/funciones/descargarpdf.php'); } else { ?>
 			<div class="container"><h4 class="text-left">Viendo Usuario: <?php echo $cliente ?></h4></div>
 			<div class="container">

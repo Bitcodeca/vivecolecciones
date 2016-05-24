@@ -11,8 +11,8 @@
 
 	$todoslosusuarios = get_users();
 	foreach ( $todoslosusuarios as $user ) {
-		 $buscar=$user->user_login;
-		 $args=array('post_status' => 'publish', 'post_type'=> 'post', 'posts_per_page' => -1,  'order' => 'DESC', 'tax_query' => array( array(  'taxonomy' => 'Gerente', 'field' => 'slug', 'terms' => $buscar ) ) ); $my_query = new WP_Query($args);
+		 $cliente=$user->user_login;
+		 $args=array('post_status' => 'publish', 'post_type'=> 'post', 'posts_per_page' => -1,  'order' => 'DESC', 'tax_query' => array( array(  'taxonomy' => 'Gerente', 'field' => 'slug', 'terms' => $cliente ) ) ); $my_query = new WP_Query($args);
 	        if( $my_query->have_posts() ) {
 	        	while ($my_query->have_posts()) : $my_query->the_post(); $id = get_the_ID();
 	        		${'fecha'.$buscar}=get_the_date('d/m/Y');

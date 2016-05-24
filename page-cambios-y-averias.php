@@ -8,6 +8,7 @@
 			<div class="clearfix"></div>
 		</div>
 	<?php } elseif( current_user_can('subscriber')) {
+		$cliente=$usuariologged;
 		include (TEMPLATEPATH . '/funciones/constantes.php');
 		$bot=0;
 		if(isset($gerentearray)) {

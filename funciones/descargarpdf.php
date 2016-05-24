@@ -1,5 +1,4 @@
-<?php get_header();
-	include (TEMPLATEPATH . '/funciones/constantes.php'); ?>
+<?php get_header(); ?>
 	<style type="text/css">
 		@media print and (color) {	
 			* { -webkit-print-color-adjust: exact; print-color-adjust: exact !important; }
@@ -58,6 +57,7 @@
 			</div>
 	      	<div class="col-md-12">
 		      	<?php
+				include (TEMPLATEPATH . '/funciones/constantes.php'); 
 	  			include (TEMPLATEPATH . '/funciones/usuariologged.php');
 	   			$args=array('post_status' => 'publish', 'post_type'=> 'post',  'order' => 'DESC', 'tax_query' => array( array(  'taxonomy' => 'Gerente', 'field' => 'slug', 'terms' => $cliente ) ) ); $my_query = new WP_Query($args);
 		        if( $my_query->have_posts() ) { ?>

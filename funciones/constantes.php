@@ -1,6 +1,7 @@
 <?php
 	//Constantes 
-	$args=array('post_status' => 'publish', 'order' => 'ASC', 'posts_per_page' => -1, 'post_type'=> 'admin' ); $my_query = new WP_Query($args);
+	$args=array('post_status' => 'publish', 'order' => 'ASC', 'posts_per_page' => -1, 'post_type'=> 'admin', 'tax_query' => array( array(  'taxonomy' => 'campaña', 'field' => 'name', 'terms' => $cliente ) ) ); 
+	$my_query = new WP_Query($args);
     if( $my_query->have_posts() ) { 
     	//Inicializacion
     	$totalcosto=0;$totalcantidad=0;$x=0;

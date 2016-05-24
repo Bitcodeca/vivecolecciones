@@ -1,7 +1,6 @@
 <?php get_header();
 if( current_user_can('administrator')) { 
 	$pagina='inventariogeneral';
-	include (TEMPLATEPATH . '/funciones/constantes.php');
 	if(isset($_POST['btncya'])) {
 		include (TEMPLATEPATH . '/funciones/cambiosyaveriasstatus.php');
 	} ?>
