@@ -9,7 +9,7 @@
 					if ($status=='aprobado') {
 						 echo '<h1 class="letraverde">¡Gracias! Se ha realizado exitosamente el registro de depósito.</h1>';
 					} elseif ($status=='pendiente') {
-						  echo '<h1 class="letraamarilla">¡Gracias! Se procesará el registro realizado.</h1>';
+						  echo '<h1 class="letraamarilla">Uno de los datos suministrados no es correcto. Por favor intentar de nuevo.</h1>';
 					} elseif ($status=='negada') {
 						echo '<h1 class="letraroja">Ya ha introducido el mismo registro. Intente con uno diferente.</h1>';
 					}

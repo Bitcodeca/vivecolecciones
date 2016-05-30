@@ -18,9 +18,9 @@
 
 		}else{
 
-			$c=("INSERT INTO registro (fecha,banco,referencia,monto,cliente,status) VALUES ('$fecha','$banco','$referencia','$monto','$usuario','pendiente')");
+			//$c=("INSERT INTO registro (fecha,banco,referencia,monto,cliente,status) VALUES ('$fecha','$banco','$referencia','$monto','$usuario','pendiente')");
 			$status='pendiente';
-			mysqli_query($con,$c);
+			//mysqli_query($con,$c);
 
 		}
 				
@@ -45,12 +45,11 @@
 
 			} else {
 
-				$c=("INSERT INTO registro (fecha,banco,referencia,monto,cliente,status) VALUES ('$fecha','$banco','$referencia','$monto','$usuario','pendiente')");
+				//$c=("INSERT INTO registro (fecha,banco,referencia,monto,cliente,status) VALUES ('$fecha','$banco','$referencia','$monto','$usuario','pendiente')");
 				$status='pendiente';
-				mysqli_query($con,$c);
+				//mysqli_query($con,$c);
 
 			}
-
 		}
 	}
 
