@@ -108,7 +108,7 @@
 					</div>
 			</div>
 			<div class="clearfix"></div>
-			<?php $ptotalacancelar=$stotalacancelar-$stotalpendiente-$stotalaprobado; ?>
+			<?php $ptotalacancelar=$stotalacancelar-$totalpendiente-$totalaprobado; ?>
 			<script type="text/javascript">
 			    google.charts.load('current', {'packages':['corechart']});
 			    google.charts.setOnLoadCallback(drawChart);
