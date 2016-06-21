@@ -129,7 +129,7 @@
 	  	buttonFilter.init();
 		jQuery('#Container').mixItUp({
 			animation: { duration: 200 },
-			pagination: { limit: 15, loop: false, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a ><h4>Siguiente</h4></a>' }
+			pagination: { limit: 50, loop: false, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a ><h4>Siguiente</h4></a>' }
 		});
 	});
 </script>
