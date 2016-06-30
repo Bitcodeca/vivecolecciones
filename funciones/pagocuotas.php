@@ -89,16 +89,19 @@
 			$premiototal=0;
 		} else {
 			$premioporcentajeq1=$montoq1*$totalcantidad/$totaladepositarquincenal;
+			if ($premioporcentajeq1>=$totalcantidad){$premioporcentajeq1=$totalcantidad;}
 			$premioq1=$premioporcentajeq1*$incentivo;
 
 			$premioporcentajeq2=$montoq2*$totalcantidad/$totaladepositarquincenal;
+			if ($premioporcentajeq2>=$totalcantidad){$premioporcentajeq2=$totalcantidad;}
 			$premioq2=$premioporcentajeq2*$incentivo;
 
 			$premioporcentajeq3=$montoq3*$totalcantidad/$totaladepositarquincenal;
+			if ($premioporcentajeq3>=$totalcantidad){$premioporcentajeq3=$totalcantidad;}
 			$premioq3=$premioporcentajeq3*$incentivo;
 
-			$premioporcentajeq4=$montoq4*$totalcantidad/$totaladepositarquincenal;
-			$premioq4=$premioporcentajeq4*$incentivo;
+			$premioporcentajeq4=0;
+			$premioq4=0;
 
 			$premioporcentajetotal=$premioporcentajeq1+$premioporcentajeq2+$premioporcentajeq3+$premioporcentajeq4;
 			$premiototal=$premioq1+$premioq2+$premioq3+$premioq4;
