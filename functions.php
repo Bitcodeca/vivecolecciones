@@ -104,12 +104,12 @@ function termscampana() {
         $blogusers = get_users( 'role=subscriber' );
         foreach ( $blogusers as $user ) {
             $usuario= esc_html( $user->user_login );
-            if( !term_exists( $usuario , 'Campaña' ) ) {
+            if( !term_exists( $usuario , 'campaña' ) ) {
                wp_insert_term(
                    $usuario,
-                   'Campaña',
+                   'campaña',
                    array(
-                     'description' => 'Campaña',
+                     'description' => 'campaña',
                      'slug'        => $usuario
                    )
                );
