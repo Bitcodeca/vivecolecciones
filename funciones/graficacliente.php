@@ -123,5 +123,24 @@
 	//Total
 	$total=$totalcosto-$totalvendedor;
 
-	$debe=$total-$totaldepositado;
+	//Subtotal de Premio basico
+	$subtotalpremiobasico=$totalcantidad*$premiobasico;
+
+	//Subtotal de Distribucion
+	$subtotaldistribucion=$totalcantidad*$distribucion;
+
+	//Subtotal de Gerencia
+	$subtotalgerencia=$totalcantidad*$gerencia;
+
+	//Total a cancelar
+	$totalacancelar=$total-$subtotalgerencia-$subtotaldistribucion-$subtotalpremiobasico;
+
+
+
+
+
+	//Total
+	$total=$total-$totalvendedor;
+
+	$debe=$totalacancelar-$totaldepositado;
 ?>
