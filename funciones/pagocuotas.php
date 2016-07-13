@@ -64,7 +64,7 @@
 			elseif ($c2unix < $fechadepositounix && $fechadepositounix <= $c3unix){
 				$montoq3=$montoq3+$montodeposito;
 			}
-			elseif ($c3unix < $fechadepositounix && $fechadepositounix <= $c4unix){
+			elseif ($c3unix < $fechadepositounix ){
 				$montoq4=$montoq4+$montodeposito;
 			} 
 			elseif ($fechadepositounix > $c4unix) { $montosp=$montosp+$montodeposito; }
