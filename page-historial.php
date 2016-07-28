@@ -6,26 +6,13 @@ if( current_user_can('subscriber')) { ?>
 elseif (current_user_can('administrator')) { ?>
 	<div class="container text-center margintop25 marginbot25">
 		<?php include (TEMPLATEPATH . '/funciones/usuariologged.php');
-			$args=array('post_status' => 'publish', 'order' => 'ASC', 'post_type'=> 'post', 'posts_per_page' => 1); $my_query = new WP_Query($args);
+			$args=array('post_status' => 'publish', 'order' => 'ASC', 'post_type'=> 'post', 'posts_per_page' => 1); 
+			$my_query = new WP_Query($args);
         	if( $my_query->have_posts() ) {
         		$todoslosusuarios = get_users();
-				if(isset($_POST['btn'])) {
-					include (TEMPLATEPATH . '/funciones/cambiodestatus.php');
-				}
 	        	?>
       			<h1 class="marginbot10 text-left">Pagos Recibidos</h1>
 		            <div class="text-left">
-						<div class="clearfix"></div>
-						<div class="row margintop10">
-							<div class="col-md-2 col-sm-2 col-xs-12">
-								<span class="finalinventario">Filtrar por Status: </span>
-							</div>
-							<div class="col-md-10 col-sm-10 col-xs-12">
-								<a class="filter btn btn-default btnfiltro" data-filter=".aprobado">Aprobado</a>
-								<a class="filter btn btn-default btnfiltro" data-filter=".pendiente">Pendiente</a>
-								<a class="filter btn btn-default btnfiltro" data-filter=".negada">Negado</a>
-							</div>
-						</div>
 						<div class="clearfix"></div>
 						<div class="row margintop10">
 							<div class="col-md-2 col-sm-2 col-xs-12">
@@ -34,27 +21,12 @@ elseif (current_user_can('administrator')) { ?>
 							<div class="col-md-10 col-sm-10 col-xs-12">
 				                <?php 
 				                $con = mysqli_connect ("localhost","advv","cdavv210416","bdve210416");
-								$result = mysqli_query($con, "SELECT DISTINCT cliente FROM registro");
+								$result = mysqli_query($con, "SELECT DISTINCT cliente FROM historial");
 								while ($row = mysqli_fetch_array($result)) {
 									echo '<a class="filter btn btn-default btnfiltro" data-filter=".'.$row['cliente'].'"> '.$row['cliente'].' </a>';
 								} ?>
 		    				</div>
 	    				</div>
-						<div class="clearfix"></div>
-						<div class="row margintop10">
-							<div class="col-md-2 col-sm-2 col-xs-12">
-								<span class="finalinventario">Filtrar por Banco: </span>
-							</div>
-							<div class="col-md-10 col-sm-10 col-xs-12">
-								<a class="filter btn btn-default btnfiltro" data-filter=".provincial">Provincial</a>
-								<a class="filter btn btn-default btnfiltro" data-filter=".banesco">Banesco</a>
-								<a class="filter btn btn-default btnfiltro" data-filter=".activo">Banco Activo</a>
-								<a class="filter btn btn-default btnfiltro" data-filter=".bicentenario">Banco Bicentenario</a>
-								<a class="filter btn btn-default btnfiltro" data-filter=".venezuela">Banco de Venezuela</a>
-								<a class="filter btn btn-default btnfiltro" data-filter=".banplus">Banco BanPlus</a>
-								<a class="filter btn btn-default btnfiltro" data-filter=".mercantil">Banco Mercantil</a>  
-							</div>
-						</div>
 						<div class="clearfix"></div>
 						<div class="row margintop10">
 							<div class="col-md-2 col-sm-2 col-xs-12">
@@ -74,51 +46,18 @@ elseif (current_user_can('administrator')) { ?>
 		            </div>
                     <div class="pager-list margintop10 marginbot10"></div>
 		      		<div class="inventario margintop25">
-			    		<div class="col-md-2 col-sm-2 col-xs-4"><h4>Fecha</h4></div>
-					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Cliente</h4></div>
-					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Banco</h4></div>
-					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Número de Referencia</h4></div>
-					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Monto</h4></div>
-					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Status</h4></div>
+					    <div class="col-md-2 col-sm-2 col-xs-6"><h4>Cliente</h4></div>
+					    <div class="col-md-2 col-sm-2 col-xs-6"><h4>Fecha Inicio</h4></div>
+					    <div class="col-md-2 col-sm-2 col-xs-6"><h4>Fecha Fin</h4></div>
+					    <div class="col-md-3 col-sm-3 col-xs-6"><h4>Monto</h4></div>
+					    <div class="col-md-3 col-sm-3 col-xs-12"><h4>Comentario</h4></div>
 					</div>
 					<div class="clearfix"></div>
-					<div id="Container"><?php include (TEMPLATEPATH . '/funciones/estadodecuenta.php'); ?></div>
+					<div id="Container"><?php include (TEMPLATEPATH . '/funciones/historial.php'); ?></div>
                     <div class="pager-list marginbot10"></div>
 				<?php } else { ?>
 					<h3 class="marginbot25">No existen colecciones asignadas</h3>
 				<?php } ?>
-		<div class="clearfix"></div>
-		<div class="col-md-6 margintop50">
-	     	<h2>Seleccione el archivo a importar</h2>
-	        <form name="importa" method="post" action="<?php echo get_bloginfo('template_directory');?>/funciones/detec.php" enctype="multipart/form-data">
-				<div class="form-group">
-	                <input class="btn btn-default marginauto" type="file" name="excel" />
-				</div>
-				<div class="form-group">
-					<input class="btn btn-default" type='submit' name='enviar'  value="Importar"  formtarget="_new"  />
-				</div>
-			</form>
-		</div>
-		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
-		<script type="text/javascript">
-	      google.charts.load('current', {'packages':['corechart']});
-	      google.charts.setOnLoadCallback(drawChart);
-	      function drawChart() {
-	        var data = google.visualization.arrayToDataTable([
-	          ['Información', 'Valor'],
-	          ['Depositos Aprobados', <?php echo $aprobado; ?>],
-	          ['Depositos Negados', <?php echo $negado; ?>],
-	          ['Depositos Pendientes por Revisión', <?php echo $pendiente; ?>]
-	        ]);
-	        var options = { title: 'Depósitos Registrados' };
-	        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-		  	chart.draw(data, options);
-	      }
-	    </script>
-    	<div class="col-md-6 margintop25">
-			<div id="piechart" class="piechart1"></div>'
-		</div>
 	</div>
 	<div class="clearfix"></div>
 

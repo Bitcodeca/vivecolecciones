@@ -8,8 +8,7 @@
 
 	foreach ( $todoslosusuarios as $user ) {
 		$buscar=$user->user_login;
-		foreach ($bancoarray as $ordenbanco) {
-			$result = mysqli_query($con, "SELECT * FROM registro WHERE cliente='".$buscar."' AND banco LIKE '%".$ordenbanco."%' ");
+			$result = mysqli_query($con, "SELECT * FROM registro WHERE cliente='".$buscar."'");
 			while ($row = mysqli_fetch_array($result)) {
 				$iddeposito=$row['id'];
 				$clientedeposito=$row['cliente'];
@@ -69,29 +68,8 @@
 					<input hidden type="text" name="id" id="id" value="<?php echo $iddeposito; ?>">
 				</form>
 			</div>
-			<script>
-			  jQuery(function() {
-			    jQuery( "#fecha<?php echo $iddeposito; ?>" ).datepicker({
-	        		dateFormat: 'dd/mm/yy',
-	        		defaultDate: '<?php echo $fechadeposito; ?>'
-	    		});
-			  });
-			</script>
 			<div class="clearfix"></div>
 				<?php
-				if (${'fecha'.$clientedeposito} <= $fechadeposito && $fechadeposito <= ${'c1'.$clientedeposito}){
-					${'montoq1'.$clientedeposito}=${'montoq1'.$clientedeposito}+$montodeposito;
-				}
-				if (${'c1'.$clientedeposito} < $fechadeposito && $fechadeposito <= ${'c2'.$clientedeposito}){
-					${'montoq2'.$clientedeposito}=${'montoq2'.$clientedeposito}+$montodeposito;
-				}
-				if (${'c2'.$clientedeposito} < $fechadeposito && $fechadeposito <= ${'c3'.$clientedeposito}){
-					${'montoq3'.$clientedeposito}=${'montoq3'.$clientedeposito}+$montodeposito;
-				}
-				if (${'c3'.$clientedeposito} < $fechadeposito && $fechadeposito <= ${'c4'.$clientedeposito}){
-					${'montoq4'.$clientedeposito}=${'montoq4'.$clientedeposito}+$montodeposito;
-				}
-			}
 		}
 	}
 ?>

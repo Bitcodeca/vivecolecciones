@@ -130,6 +130,7 @@ if(isset($_POST['cerrarfactura'])) {
 								        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 								        <h2 class="modal-title" id="myModalLabel"><b>ATENCIÓN</b></h2>
 							      </div>
+						        <form name="cierre" method="post" action="http://vivecolecciones.com.ve/administracion/" >
 							      <div class="modal-body">
 							        	<h3>¿Desea cerrar la factura del usuario <b><?php echo $buscar; ?></b>? </h3>
 							        	<br>
@@ -138,17 +139,19 @@ if(isset($_POST['cerrarfactura'])) {
 							        	<h4>con un total de <b>Bsf <?php echo number_format($montototal, 2, ',', '.'); ?></b></h4>
 							        	<br>
 							        	<h5><b>Una vez realizado, no habrá vuelta atrás</b></h5>
+							        	<br>
+							        	<h5>Agregar comentario del cierre de factura: </h5>
+							        	<textarea class="form-control" placeholder="Comentario de factura" rows="3" name="comentario" id="comentario"></textarea>
 							      </div>
 							      <div class="modal-footer">
 								        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
-								        <form name="cierre" method="post" action="http://vivecolecciones.com.ve/administracion/" >
 								        	<input hidden type="text" name="fechainicierre" id="fechainicierre" value="<?php echo $primerafecha; ?>">
 								        	<input hidden type="text" name="fechafincierre" id="fechafincierre" value="<?php echo $ultimafecha; ?>">
-								        	<input hidden type="text" name="clientecierre" id="clientecierre" value="<?php echo $buscar; ?>">
+								        	<input hidden type="text" name="cliente" id="cliente" value="<?php echo $buscar; ?>">
 								        	<input hidden type="text" name="montocierre" id="montocierre" value="<?php echo $montototal; ?>">
 								        	<button type="submit" name="cerrarfactura" id="cerrarfactura" class="btn btn-primary">Aceptar</button>
-										</form>
 							      </div>
+								</form>
 						    </div>
 					  </div>
 				</div>
