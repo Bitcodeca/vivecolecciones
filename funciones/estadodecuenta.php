@@ -32,7 +32,7 @@
 				$fechaunixdep=strtotime($fechacambiadadep);
 			?>
 			<div class="mix <?php echo $clientedeposito; ?> <?php echo $bancodeposito; ?> <?php echo $statusdeposito; ?>" data-myorder="<?php echo $fechaunixdep; ?>">
-				<form name="importa<?php echo $iddeposito; ?>" method="post" action="http://vivecolecciones.com.ve/cuentas-clientes/" >
+				<form name="importa<?php echo $iddeposito; ?>" method="post" >
 			        <div class="row text-center bordertopnegro">
 						<div class="col-md-2 col-sm-2 col-xs-12"> 
 							<input placeholder="Fecha"  id="fecha<?php echo $iddeposito; ?>" name="fecha<?php echo $iddeposito; ?>" type="text" class="form-control" value="<?php echo $fechadeposito; ?>">

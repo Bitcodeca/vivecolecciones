@@ -240,6 +240,7 @@
 								<span class="finalinventario">Filtrar por Banco: </span>
 							</div>
 							<div class="col-md-10 col-sm-10 col-xs-12">
+							
 								<a class="filter btn btn-default btnfiltro" data-filter=".provincial">Provincial</a>
 								<a class="filter btn btn-default btnfiltro" data-filter=".banesco">Banesco</a>
 								<a class="filter btn btn-default btnfiltro" data-filter=".activo">Banco Activo</a>
