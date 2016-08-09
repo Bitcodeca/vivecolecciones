@@ -41,7 +41,7 @@
     <div class="container paddingtop75 paddingbot75">
         <div class="row">
             <div class="col-md-12 text-center">
-                <a href="http://vive.bitcodeweb.com/"><img src="<?php echo get_bloginfo('template_directory');?>/img/logo.jpg" class="marginauto img-responsive"></a>
+                <a href="#"><img src="<?php echo get_bloginfo('template_directory');?>/img/logo.jpg" class="marginauto img-responsive"></a>
             </div>
         </div>
     </div>

@@ -94,7 +94,7 @@ extract($_POST);
 			if (${'ltenombre'.$i}==$Z){${'ltecolumna'.$i}='Z';}	
 			$i++;
 		}
-		$i=2;
+		$i=1;
  		$id=1;
 		 $param=0;
 		while($param==0) {                  
