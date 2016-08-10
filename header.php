@@ -32,6 +32,9 @@
                         elseif( current_user_can('subscriber')) {
                             wp_nav_menu(array( 'theme_location' => 'user', 'container' => false, 'menu_class' => 'nav navbar-nav navbar-right', 'walker' => new Bootstrap_Walker_Nav_Menu() ) );
                         } 
+                        elseif( current_user_can('contributor')) {
+                            wp_nav_menu(array( 'theme_location' => 'contributor', 'container' => false, 'menu_class' => 'nav navbar-nav navbar-right', 'walker' => new Bootstrap_Walker_Nav_Menu() ) );
+                        } 
                     ?>
                 </div>
             </div>

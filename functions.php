@@ -24,6 +24,7 @@ function menunavbar() {
 	add_theme_support('menus');
     register_nav_menu('admin', 'Administrador');
     register_nav_menu('user', 'Usuario');
+    register_nav_menu('contributor', 'Analista');
 	}
 add_action('init', 'menunavbar');
 
