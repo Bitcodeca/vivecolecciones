@@ -1,340 +1,385 @@
 <?php get_header();
-if( current_user_can('subscriber')) { ?>
-	<h1 class="letraroja">Acceso Negado</h1>
-	<div class="clearfix"></div>
-<?php }
-elseif (current_user_can('administrator')) { ?>
-	<div class="container text-center margintop25 marginbot25">
-		<?php include (TEMPLATEPATH . '/funciones/usuariologged.php');
-			$args=array('post_status' => 'publish', 'order' => 'ASC', 'post_type'=> 'post', 'posts_per_page' => 1); $my_query = new WP_Query($args);
-        	if( $my_query->have_posts() ) {
-        		$todoslosusuarios = get_users();
-				if(isset($_POST['btn'])) { include (TEMPLATEPATH . '/funciones/cambiodestatus.php'); } ?>
+	include (TEMPLATEPATH . '/funciones/usuariologged.php');
+	if( current_user_can('administrator')) {
+		$pagina='inicio';
+		if(isset($_POST['btncya'])) {
+			include (TEMPLATEPATH . '/funciones/cambiosyaveriasstatus.php');
+		}?>
+<!--
+//////////////////////////////////////////////
+//////////// ADMINISTRADOR //////////////////
+////////////////////////////////////////////
+-->
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-      			<h1 class="marginbot10 text-left">Pagos Recibidos</h1>
+		<div class="container marginbot25">
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<h1>Bienvenido <?php echo $nombrelogged.' '.$apellidologged; ?></h1>
+				</div>
+			</div>
+			<div class="row">
+				<?php 
+				$todoslosusuarios = get_users( 'role=subscriber' );
+				$x=0;
+				$stotalcantidad=0;
+				$stotalvendedor=0;
+				$stotal=0;
+				$ssubtotalpremiobasico=0;
+				$ssubtotaldistribucion=0;
+				$ssubtotalgerencia=0;
+				$stotalacancelar=0;
+				$stotaladepositarquincenal=0;
+				foreach ( $todoslosusuarios as $user ) {
+					$buscar=$user->user_login;
+					$cliente=$buscar;
+					include (TEMPLATEPATH . '/funciones/constantes.php');
+				 	$args=array('post_status' => 'publish', 'post_type'=> 'post',  'order' => 'ASC', 'posts_per_page' => -1, 'tax_query' => array( array(  'taxonomy' => 'Gerente', 'field' => 'name', 'terms' => $buscar ) ) ); 
+				 	$my_query = new WP_Query($args);
+			        if( $my_query->have_posts() ) {
+						$totalcosto=0;
+						$totalcantidad=0;
+						while ($my_query->have_posts()) : $my_query->the_post(); $id = get_the_ID();
+							//El producto
+					        $categories = get_the_category(); 
+					        $producto=$categories[0]->name;
+					        //Cantidad del producto
+					        $cantidadarray = get_the_terms( $post->ID , 'cantidad' ); 
+					        $cantidad=$cantidadarray[0]->name; 
+					        //Costo del producto
+					        $costoarray = get_the_terms( $post->ID , 'costo' ); 
+					        $costo=$costoarray[0]->name;
+					        //Total del producto
+					        $preciototal=$cantidad*$costo; 
+					        //Sumatoria de los totales de los productos
+					        $totalcosto=$totalcosto+$preciototal;
+					        //Sumatoria de las cantidades de productos 
+					        $totalcantidad=$totalcantidad+$cantidad;
+					        $fecha=get_the_date('d/m/Y');
+					        $x++;
+					    endwhile;
 
-	            <div class="text-left">
-					<div class="clearfix"></div>
-					<form class="controls" name="busqueda" id="busqueda" method="post">
-						<div class="row margintop10">
-							<div class="col-md-2 col-sm-2 col-xs-12">
-								<span class="finalinventario">Filtrar por Status: </span>
+				        $stotalcantidad=$stotalcantidad+$totalcantidad;
+						//Ganancia del vendedor actual
+						$totalvendedor=$gananciavendedor*$totalcantidad;
+						$stotalvendedor=$stotalvendedor+$totalvendedor;
+						//Total
+						$total=$totalcosto-$totalvendedor;
+						$stotal=$stotal+$total;
+						//Subtotal de Premio basico
+						$subtotalpremiobasico=$totalcantidad*$premiobasico;
+						$ssubtotalpremiobasico=$ssubtotalpremiobasico+$subtotalpremiobasico;
+						//Subtotal de Distribucion
+						$subtotaldistribucion=$totalcantidad*$distribucion;
+						$ssubtotaldistribucion=$ssubtotaldistribucion+$subtotaldistribucion;
+						//Subtotal de Gerencia
+						$subtotalgerencia=$totalcantidad*$gerencia;
+						$ssubtotalgerencia=$ssubtotalgerencia+$subtotalgerencia;
+						//Total a cancelar
+						$totalacancelar=$total-$subtotalgerencia-$subtotaldistribucion-$subtotalpremiobasico;
+						$stotalacancelar=$stotalacancelar+$totalacancelar;
+						//Total a depositar quincenal
+						$totaladepositarquincenal=$total/4;
+						$stotaladepositarquincenal=$stotaladepositarquincenal+$totaladepositarquincenal;				    				
+		        	} 
+		        }
+				
+
+				$con = mysqli_connect ("localhost","advv","cdavv210416","bdve210416");
+				$totaldepositado=0;
+				$totalaprobado=0;
+				$totalpendiente=0;
+				$result = mysqli_query($con, "SELECT * FROM registro WHERE status='aprobado'");
+				while ($row = mysqli_fetch_array($result)) { $totalaprobado=$totalaprobado+$row['monto']; }
+				$result = mysqli_query($con, "SELECT * FROM registro WHERE status='pendiente'");
+				while ($row = mysqli_fetch_array($result)) { $totalpendiente=$totalpendiente+$row['monto']; }
+				$totaldepositado=$totalaprobado+$totalpendiente; ?>
+					<div class="col-md-3 col-sm-3 col-xs-6">
+						<blockquote class="borderazul">
+							<h4 class="">Colecciones:</h4> <h4><?php echo $stotalcantidad; ?></h4>
+						</blockquote>
+					</div>
+					<div class="col-md-3 col-sm-3 col-xs-6">
+						<blockquote class="borderazul">
+							<h4 class="">Total Invertido:</h4> <h4>Bsf <?php echo number_format($stotalacancelar, 2, ',', '.'); ?></h4>
+						</blockquote>
+					</div>
+					<div class="col-md-3 col-sm-3 col-xs-6">
+						<blockquote class="borderazul">
+							<h4 class="">Total Registrado:</h4> <h4>Bsf <?php echo number_format($totaldepositado, 2, ',', '.'); ?></h4>
+						</blockquote>
+					</div>
+					<div class="col-md-3 col-sm-3 col-xs-6">
+						<blockquote class="borderazul">
+							<h4 class="">Total Aprobado:</h4> <h4>Bsf <?php echo number_format($totalaprobado, 2, ',', '.'); ?></h4>
+						</blockquote>
+					</div>
+			</div>
+			<div class="clearfix"></div>
+			<div class="row">
+				<div class="container">
+					<?php $args=array('post_status' => 'publish', 'post_type'=> 'post', 'post_type'=> 'admin', 'order' => 'DESC', 'posts_per_page' => -1 ); $my_query = new WP_Query($args);
+		        		if( $my_query->have_posts() ) {
+		        			$x=0;
+							while ($my_query->have_posts()) : 
+								$my_query->the_post(); 
+								$id = get_the_ID();						
+						        ${'gerente'.$x} = get_the_terms( $post->ID , 'campaña' );
+						        ${'campana'.$x}=get_the_title();
+						        $gananciavendedorarray = get_the_terms( $post->ID , 'gananciavendedor' ); 
+	      						${'gananciavendedor'.$x}=$gananciavendedorarray[0]->name;
+						        $x++;
+						    endwhile;
+	        			}
+	        		for ($i = 0; $i < $x ; $i++) {
+				        $preciototal=0; 
+				        $totalcosto=0; 
+				        $totalcantidad=0;
+		        		foreach (${'gerente'.$i} as $campana) {
+				        	$args=array('post_status' => 'publish', 'post_type'=> 'post', 'order' => 'ASC', 'posts_per_page' => -1, 'tax_query' => array( array(  'taxonomy' => 'Gerente', 'field' => 'slug', 'terms' => $campana ) ) );
+				        	$my_query = new WP_Query($args);
+				        	if( $my_query->have_posts() ) {
+								while ($my_query->have_posts()) : $my_query->the_post(); $id = get_the_ID();
+
+							        $cantidadarray = get_the_terms( $post->ID , 'cantidad' ); 
+							        $cantidad=$cantidadarray[0]->name; 
+
+							        //Costo del producto
+							        $costoarray = get_the_terms( $post->ID , 'costo' ); 
+							        $costo=$costoarray[0]->name;
+
+							        //Total del producto
+							        $preciototal=$cantidad*$costo; 
+
+							        //Sumatoria de los totales de los productos
+							        $totalcosto=$totalcosto+$preciototal;
+
+							        //Sumatoria de las cantidades de productos 
+							        $totalcantidad=$totalcantidad+$cantidad;
+
+
+							    endwhile;
+				        	} 
+			        	}
+			        	$totalvendedor=${'gananciavendedor'.$i}*$totalcantidad;
+						$total=$totalcosto-$totalvendedor;
+						$totaladepositarquincenal=$total/4;
+			        	?>
+						<div class="panel panel-primary margintop25">
+							<div class="panel-heading">
+								<h4><?php echo ${'campana'.$i}; ?> 
+								<span class="badge"><?php echo $totalcantidad; ?></span></h4>
 							</div>
-							<div class="col-md-10 col-sm-10 col-xs-12">
-							    <select class="form-control" name="busstatus" id="busstatus">
-								    <option value="todos">Todos</option>
-									<option value="aprobado">Aprobado</option>
-									<option value="pendiente">Pendiente</option>
-									<option value="negada">Negado</option>
-							    </select>
+							<div class="panel-body">
+							    <h4>Bsf <?php echo number_format($totaladepositarquincenal, 2, ',', '.'); ?></h4>
 							</div>
 						</div>
-						<div class="row margintop10">
-							<div class="col-md-2 col-sm-2 col-xs-12">
-								<span class="finalinventario">Filtrar por Usuarios: </span>
-							</div>
-							<div class="col-md-10 col-sm-10 col-xs-12">
-							    <select class="form-control" name="buscliente" id="buscliente">
-								    <option value="todos">Todos</option>
-					                <?php $con = mysqli_connect ("localhost","advv","cdavv210416","bdve210416");
-									$result = mysqli_query($con, "SELECT DISTINCT cliente FROM registro ORDER BY cliente");
-									while ($row = mysqli_fetch_array($result)) {
-										echo '<option value="'.$row['cliente'].'"> '.$row['cliente'].' </option>';
-									} ?>
-							    </select>
-		    				</div>
-	    				</div>
-						<div class="clearfix"></div>
-						<div class="row margintop10">
-							<div class="col-md-2 col-sm-2 col-xs-12">
-								<span class="finalinventario">Filtrar por Banco: </span>
-							</div>
-							<div class="col-md-10 col-sm-10 col-xs-12">
-							    <select class="form-control" name="busbanco" id="busbanco">
-								    <option value="todos">Todos</option>
-									<option value="provincial">Provincial</a>
-									<option value="banesco">Banesco</a>
-									<option value="activo">Banco Activo</a>
-									<option value="bicentenario">Banco Bicentenario</a>
-									<option value="venezuela">Banco de Venezuela</a>
-									<option value="banplus">Banco BanPlus</a>
-									<option value="mercantil">Banco Mercantil</a>
-							    </select>
-							</div>
-						</div>
-						<div class="clearfix"></div>
-						<div class="row margintop10">
-							<div class="col-md-2 col-sm-2 col-xs-12">
-								<input class="btn btn-default " type="submit" name="buscar" id="buscar"  value="buscar" />
-							</div>
-						</div>
-					</form>
-					<form class="controls" id="Filters">
-						<div class="clearfix"></div>
-						<div class="row margintop10">
-							<div class="col-md-2 col-sm-2 col-xs-12">
-								<span class="finalinventario">Ordernar por: </span>
-							</div>
-							<div class="col-md-10 col-sm-10 col-xs-12">
-								<button type="button" class="sort btn btn-default" data-sort="default">Default</button>
-							  	<button type="button" class="sort btn btn-default" data-sort="myorder:asc">Anteriores</button>
-							  	<button type="button" class="sort btn btn-default active" data-sort="myorder:desc">Recientes</button>
-							</div>
-			            </div>
-					</form>
-
-	            </div>
-
-
-
-
-
-
-	            <?php if(isset($_POST['buscar'])) { 
-	            	$busstatus=$_POST['busstatus'];
-	            	$buscliente=$_POST['buscliente'];
-	            	$busbanco=$_POST['busbanco'];
-	            	$buscar= ' WHERE ';
-
-					if($buscliente!='todos'){ 
-						$buscar=$buscar."cliente='".$buscliente."' "; 
-					}
-					if($busstatus!='todos'){ 
-						if($buscliente=='todos'){
-							$buscar=$buscar." status='".$busstatus."' "; 
-						}else{
-							$buscar=$buscar." AND status='".$busstatus."' "; 
-						}
-					}
-					if($busbanco!='todos'){
-						if($buscliente=='todos' && $busstatus=='todos'){
-							$buscar=$buscar."  banco='".$busbanco."' "; 
-						}else{
-							$buscar=$buscar." AND banco='".$busbanco."' "; 
-						}
-					}
-					if($busstatus=='todos' && $buscliente=='todos' &&  $busbanco=='todos' ) {$buscar=''; } 
-					?>
-
-                    <div class="pager-list margintop10 marginbot10"></div>
-		      		<div class="inventario margintop25">
-			    		<div class="col-md-2 col-sm-2 col-xs-4"><h4>Fecha</h4></div>
-					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Cliente</h4></div>
-					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Banco</h4></div>
-					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Número de Referencia</h4></div>
-					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Monto</h4></div>
-					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Status</h4></div>
+			        	<?php
+	        		} ?>
+				</div>
+			</div>
+			<?php $ptotalacancelar=$stotalacancelar-$totalpendiente-$totalaprobado; ?>
+			<script type="text/javascript">
+			    google.charts.load('current', {'packages':['corechart']});
+			    google.charts.setOnLoadCallback(drawChart);
+			    function drawChart() {
+			        var data = google.visualization.arrayToDataTable([
+			          ['Información', 'Valor'],
+			          ['Saldo Restante', <?php echo $ptotalacancelar; ?>],
+			          ['Saldo Pendiente', <?php echo $totalpendiente; ?>],
+			          ['Saldo Aprobado', <?php echo $totalaprobado; ?>]
+			        ]);
+			        var options = { title: 'Control de Venta' };
+			        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+				  	chart.draw(data, options);
+			    }
+		    </script>
+		    <div class="row">
+		    	<div class="col-md-12">
+    				<div id="piechart" class="piechart1"></div>'
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<div class="container"><h1 class="text-left">Cambios y Averías</h1></div>
+			<div class="container fondoazul bordertopnegro borderbotnegro text-center margintop10">
+				<div class="row">
+					<div class="col-md-1 col-sm-1 col-xs-4">
+						<h4>Fecha</h4>
 					</div>
+					<div class="col-md-1 col-sm-1 col-xs-4">
+						<h4>Usuario</h4>
+					</div>
+					<div class="col-md-1 col-sm-1 col-xs-4">
+						<h4>Colección</h4>
+					</div>
+					<div class="col-md-1 col-sm-2 col-xs-4">
+						<h4>Motivo</h4>
+					</div>
+					<div class="col-md-3 col-sm-3 col-xs-4">
+						<h4>Descripción</h4>
+					</div>
+					<div class="col-md-1 col-sm-1 col-xs-4">
+						<h4>Cantidad</h4>
+					</div>
+					<div class="col-md-1 col-sm-1 col-xs-4">
+						<h4>Tipo de Cambio</h4>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-4">
+						<h4>Especificación</h4>
+					</div>
+					<div class="col-md-1 col-sm-1 col-xs-4">
+						<h4>Status</h4>
+					</div>
+				</div>
+			</div>
+			<div id="Container"><?php include (TEMPLATEPATH . '/funciones/versolicitudes.php'); ?></div>
+		    <div class="pager-list marginbot10 text-center"></div>
+			<div class="row marginbot10">
+				<div class="text-center">  
+					<span class="finalinventario">Ordernar por: </span>
+					<button type="button" class="sort btn btn-default" data-sort="default">Default</button>
+				  	<button type="button" class="sort btn btn-default" data-sort="myorder:asc">Anteriores</button>
+				  	<button type="button" class="sort btn btn-default active" data-sort="myorder:desc">Recientes</button>
+				</div>
+		    </div>
+			<div class="container">
+			    <div class="text-left">
+					<a class="filter btn btn-default" id="Reset">Mostrar Todos</a>
 					<div class="clearfix"></div>
-					<div id="Container">
-						<?php
-						$result = mysqli_query($con, "SELECT * FROM registro ".$buscar."");
-						while ($row = mysqli_fetch_array($result)) {
-							$iddeposito=$row['id'];
-							$clientedeposito=$row['cliente'];
-							$fechadeposito=$row['fecha'];
-							$bancodeposito=$row['banco'];
-							$referenciadeposito=$row['referencia'];
-							$montodeposito=$row['monto'];
-							$statusdeposito=$row['status'];
-							if ($statusdeposito=='aprobado') {
-								$fondo="btn-success";
-								$aprobado++;
-							} elseif ($statusdeposito=='pendiente') {
-								$fondo="btn-warning";
-								$pendiente++;
-							}elseif ($statusdeposito=='negada') {
-								$fondo="btn-danger";
-								$negado++;
-							}
-							$fechacambiadadep = DateTime::createFromFormat("d/m/Y", $fechadeposito);
-							$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
-							$fechaunixdep=strtotime($fechacambiadadep);
-							?>
-							<div class="mix <?php echo $clientedeposito; ?> <?php echo $bancodeposito; ?> <?php echo $statusdeposito; ?>" data-myorder="<?php echo $fechaunixdep; ?>">
-								<form name="importa<?php echo $iddeposito; ?>" method="post" >
-							        <div class="row text-center bordertopnegro">
-										<div class="col-md-2 col-sm-2 col-xs-12"> 
-											<input placeholder="Fecha"  id="fecha<?php echo $iddeposito; ?>" name="fecha<?php echo $iddeposito; ?>" type="text" class="form-control" value="<?php echo $fechadeposito; ?>">
-										</div>
-										<div class="col-md-2 col-sm-2 col-xs-6 paddingtop10"> 
-											<?php echo $clientedeposito; ?>
-										</div>
-										<div class="col-md-2 col-sm-2 col-xs-6 paddingtop10"> 
-											<?php echo $bancodeposito; ?>
-										</div>
-										<div class="col-md-2 col-sm-2 col-xs-12 paddingtop10"> 
-											<?php echo $referenciadeposito; ?>
-										</div>
-										<div class="col-md-2 col-sm-2 col-xs-12 paddingtop10">
-											Bsf <?php echo number_format($montodeposito, 2, ',', '.'); ?>
-										</div>
-										<div class="col-md-2 col-sm-2 col-xs-12 <?php echo $fondo; ?>">
-											<h6><?php echo $statusdeposito; ?></h6>
-										</div>
-									</div>
-									<div class="row text-center marginbot10 paddingbot10 borderbotnegro">
-											<input class="btn btn-success btnedc" type="submit" name="btn" id="btn"  value="Aprobar" />
-										
-											<input class="btn btn-warning btnedc" type="submit" name="btn" id="btn"  value="Pendiente" />
-										
-											<input class="btn btn-danger btnedc" type="submit" name="btn" id="btn"  value="Negar" />
-										
-											<input class="btn btn-primary btnedc" type="submit" name="btn" id="btn"  value="Editar" />
-										
-											<input class="btn btn-default btnedc" type="submit" name="btn" id="btn"  value="Eliminar" />
-										
-									</div>
-									<input hidden type="text" name="id" id="id" value="<?php echo $iddeposito; ?>">
-								</form>
-							</div>
-							<div class="clearfix"></div>
-						<?php } ?>
-
-					</div>
-                    <div class="pager-list marginbot10"></div>
-
-
-	            <?php } else { ?>
-                    <div class="pager-list margintop10 marginbot10"></div>
-		      		<div class="inventario margintop25">
-			    		<div class="col-md-2 col-sm-2 col-xs-4"><h4>Fecha</h4></div>
-					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Cliente</h4></div>
-					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Banco</h4></div>
-					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Número de Referencia</h4></div>
-					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Monto</h4></div>
-					    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Status</h4></div>
-					</div>
+					<span class="finalinventario">Filtrar por Status: </span>
+					<a class="filter btn btn-default btnfiltro" data-filter=".aprobado">Aprobado</a>
+					<a class="filter btn btn-default btnfiltro" data-filter=".pendiente">Pendiente</a>
+					<a class="filter btn btn-default btnfiltro" data-filter=".negado">Negado</a>
 					<div class="clearfix"></div>
-					<div id="Container">
-						<?php include (TEMPLATEPATH . '/funciones/estadodecuenta.php'); ?>
-					</div>
-                    <div class="pager-list marginbot10"></div>
-                <?php }
-
-			} else { ?>
-					<h3 class="marginbot25">No existen colecciones asignadas</h3>
-				<?php } ?>
-	</div>
-	<div class="clearfix"></div>
-
-<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+					<span class="finalinventario">Filtrar por Usuarios: </span>
+			        <?php $todoslosusuarios = get_users();
+			         foreach ( $todoslosusuarios as $user ) {
+						echo '<a class="filter btn btn-default btnfiltro" data-filter=".'.$user->user_login.'"> '.$user->user_login.' </a>'; 
+					} ?>
+			    </div>
+		    </div>
+		</div>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script>
-	// To keep our code clean and modular, all custom functionality will be contained inside a single object literal called "dropdownFilter".
-
-var dropdownFilter = {
-  
-  // Declare any variables we will need as properties of the object
-  
-  $filters: null,
-  $reset: null,
-  groups: [],
-  outputArray: [],
-  outputString: '',
-  
-  // The "init" method will run on document ready and cache any jQuery objects we will need.
-  
+var buttonFilter = { $filters: null, $reset: null, groups: [], outputArray: [], outputString: '',
   init: function(){
-    var self = this; // As a best practice, in each method we will asign "this" to the variable "self" so that it remains scope-agnostic. We will use it to refer to the parent "dropdownFilter" object so that we can share methods and properties between all parts of the object.
-    
+    var self = this;
     self.$filters = $('#Filters');
     self.$reset = $('#Reset');
     self.$container = $('#Container');
-    
     self.$filters.find('fieldset').each(function(){
-      self.groups.push({
-        $dropdown: $(this).find('select'),
-        active: ''
-      });
+      self.groups.push({ $buttons: $(this).find('.filter'), active: '' });
     });
-    
     self.bindHandlers();
   },
-  
-  // The "bindHandlers" method will listen for whenever a select is changed. 
-  
   bindHandlers: function(){
     var self = this;
-    
-    // Handle select change
-    
-    self.$filters.on('change', 'select', function(e){
+    self.$filters.on('click', '.filter', function(e){
       e.preventDefault();
-      
+      var $button = $(this);
+      $button.hasClass('active') ?
+        $button.removeClass('active') :
+        $button.addClass('active').siblings('.filter').removeClass('active');
       self.parseFilters();
     });
-    
-    // Handle reset click
-    
     self.$reset.on('click', function(e){
       e.preventDefault();
-      
-      self.$filters.find('select').val('');
-      
+      self.$filters.find('.filter').removeClass('active');
       self.parseFilters();
     });
   },
-  
-  // The parseFilters method pulls the value of each active select option
-  
   parseFilters: function(){
     var self = this;
- 
-    // loop through each filter group and grap the value from each one.
-    
-    for(var i = 0, group; group = self.groups[i]; i++){
-      group.active = group.$dropdown.val();
+ 	for(var i = 0, group; group = self.groups[i]; i++){
+      group.active = group.$buttons.filter('.active').attr('data-filter') || '';
     }
-    
     self.concatenate();
   },
-  
-  // The "concatenate" method will crawl through each group, concatenating filters as desired:
-  
   concatenate: function(){
     var self = this;
-    
-    self.outputString = ''; // Reset output string
-    
-    for(var i = 0, group; group = self.groups[i]; i++){
-      self.outputString += group.active;
-    }
-    
-    // If the output string is empty, show all rather than none:
-    
+    self.outputString = '';
+    for(var i = 0, group; group = self.groups[i]; i++){ self.outputString += group.active; }
     !self.outputString.length && (self.outputString = 'all'); 
-    
-    //console.log(self.outputString); 
-    
-    // ^ we can check the console here to take a look at the filter string that is produced
-    
-    // Send the output string to MixItUp via the 'filter' method:
-    
-	  if(self.$container.mixItUp('isLoaded')){
-    	self.$container.mixItUp('filter', self.outputString);
-	  }
+    console.log(self.outputString); 
+    if(self.$container.mixItUp('isLoaded')){ self.$container.mixItUp('filter', self.outputString); }
   }
 };
-  
-// On document ready, initialise our code.
-
-$(function(){
-      
-  // Initialize dropdownFilter code
-      
-  dropdownFilter.init();
-      
-  // Instantiate MixItUp
-      
-  jQuery('#Container').mixItUp({
-    animation: { duration: 200 },
-			pagination: { limit: 50, loop: false, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a ><h4>Siguiente</h4></a>' },
-			controls: { toggleFilterButtons: true, toggleLogic: 'and' }
-  });    
+jQuery(function(){
+  	buttonFilter.init();
+	jQuery('#Container').mixItUp({
+		animation: { duration: 200 },
+		pagination: { limit: 5, loop: true, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a ><h4>Siguiente</h4></a>' },
+		controls: { toggleFilterButtons: true, toggleLogic: 'and' }
+	});
 });
 </script>
 <script>
-	jQuery(document).ready(function() { jQuery("#Reset").click(function () { jQuery(".btnfiltro").removeClass("active"); jQuery("#Reset").removeClass("active"); }); });
+jQuery(document).ready(function() {
+	jQuery("#Reset").click(function () {
+	    jQuery(".btnfiltro").removeClass("active");
+	    jQuery("#Reset").removeClass("active");
+	});
+});
 </script>
-<?php }
+<!--
+/////////////////////////////////////////
+//////////// USUARIOS //////////////////
+///////////////////////////////////////
+-->
+	<?php } elseif( current_user_can('subscriber')) { ?>
+		<div class="container marginbot25">
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<h1>Bienvenido <?php echo $nombrelogged.' '.$apellidologged; ?></h1>
+				</div>
+				<div class="col-md-12 text-center">
+				<?php 
+				$cliente=$usuariologged;
+				include (TEMPLATEPATH . '/funciones/constantes.php');
+				$args=array('post_status' => 'publish', 'post_type'=> 'post', 'order' => 'DESC', 'posts_per_page' => -1, 'tax_query' => array( array(  'taxonomy' => 'Gerente', 'field' => 'slug', 'terms' => $usuariologged ) ) ); $my_query = new WP_Query($args);
+		        if( $my_query->have_posts() ) {
+		        	include (TEMPLATEPATH . '/funciones/inventario.php');
+		        	include (TEMPLATEPATH . '/funciones/pagocuotas.php');  ?>
+					<div class="col-md-12 margintop25">
+						<h2 class="text-left">Información General</h2>
+					</div>
+					<div class="row">
+						<div class="col-md-12 margintop25">
+							<div class="col-md-4 col-sm-4 col-xs-12">
+								<h3 class="borderbotazul">Total Colecciones:</h3> <h4><?php echo $totalcantidad; ?></h4>
+							</div>
+							<div class="col-md-4 col-sm-4 col-xs-12">
+								<h3 class="borderbotazul">Total a Pagar:</h3> <h4>Bsf <?php echo number_format($totalacancelar, 2, ',', '.'); ?></h4>
+							</div>
+							<div class="col-md-4 col-sm-4 col-xs-12">
+								<h3 class="borderbotazul">Total Pagado:</h3> <h4>Bsf <?php echo number_format($totaldepositado, 2, ',', '.'); ?></h4>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12 margintop25">
+						<h2 class="text-left">Fecha Límite de Pago de Cuotas</h2>
+					</div>
+					<div class="row">
+						<div class="col-md-12 margintop25">
+							<div class="col-md-3 col-sm-3 col-xs-6">
+								<h3 class="borderbotazul">Cuota 1:</h3> <h4><?php echo $c1; ?></h4>
+							</div>
+							<div class="col-md-3 col-sm-3 col-xs-6">
+								<h3 class="borderbotazul">Cuota 2:</h3> <h4><?php echo $c2; ?></h4>
+							</div>
+							<div class="col-md-3 col-sm-3 col-xs-6">
+								<h3 class="borderbotazul">Cuota 3:</h3> <h4><?php echo $c3; ?></h4>
+							</div>
+							<div class="col-md-3 col-sm-3 col-xs-6">
+								<h3 class="borderbotazul">Cuota 4:</h3> <h4><?php echo $c4; ?></h4>
+							</div>
+						</div>
+					</div>
+				<?php } else { ?>
+					<h3 class="marginbot25">No posees colecciones asignadas</h3>
+	    		<?php } ?>
+				</div>
+			</div>
+		</div>
+	<?php }
 get_footer(); ?>

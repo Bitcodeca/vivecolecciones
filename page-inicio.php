@@ -95,17 +95,91 @@
 				while ($row = mysqli_fetch_array($result)) { $totalpendiente=$totalpendiente+$row['monto']; }
 				$totaldepositado=$totalaprobado+$totalpendiente; ?>
 					<div class="col-md-3 col-sm-3 col-xs-6">
-						<h3 class="borderbotazul">Colecciones Entregadas:</h3> <h4><?php echo $stotalcantidad; ?></h4>
+						<blockquote class="borderazul panel-footer">
+							<h4 class="">Colecciones:</h4> <h4><?php echo $stotalcantidad; ?></h4>
+						</blockquote>
 					</div>
 					<div class="col-md-3 col-sm-3 col-xs-6">
-						<h3 class="borderbotazul">Total Invertido:</h3> <h4>Bsf <?php echo number_format($stotalacancelar, 2, ',', '.'); ?></h4>
+						<blockquote class="borderazul panel-footer">
+							<h4 class="">Total Invertido:</h4> <h4>Bsf <?php echo number_format($stotalacancelar, 2, ',', '.'); ?></h4>
+						</blockquote>
 					</div>
 					<div class="col-md-3 col-sm-3 col-xs-6">
-						<h3 class="borderbotazul">Total Registrado:</h3> <h4>Bsf <?php echo number_format($totaldepositado, 2, ',', '.'); ?></h4>
+						<blockquote class="borderazul panel-footer">
+							<h4 class="">Total Registrado:</h4> <h4>Bsf <?php echo number_format($totaldepositado, 2, ',', '.'); ?></h4>
+						</blockquote>
 					</div>
 					<div class="col-md-3 col-sm-3 col-xs-6">
-						<h3 class="borderbotazul">Total Aprobado:</h3> <h4>Bsf <?php echo number_format($totalaprobado, 2, ',', '.'); ?></h4>
+						<blockquote class="borderazul panel-footer">
+							<h4 class="">Total Aprobado:</h4> <h4>Bsf <?php echo number_format($totalaprobado, 2, ',', '.'); ?></h4>
+						</blockquote>
 					</div>
+			</div>
+			<div class="clearfix"></div>
+			<div class="row">
+				<div class="container">
+			        	<h3>Ganancia quincenal:</h3>
+					<?php $args=array('post_status' => 'publish', 'post_type'=> 'post', 'post_type'=> 'admin', 'order' => 'ASC', 'posts_per_page' => -1 ); $my_query = new WP_Query($args);
+		        		if( $my_query->have_posts() ) {
+		        			$x=0;
+							while ($my_query->have_posts()) : 
+								$my_query->the_post(); 
+								$id = get_the_ID();						
+						        ${'gerente'.$x} = get_the_terms( $post->ID , 'campaña' );
+						        ${'campana'.$x}=get_the_title();
+						        $gananciavendedorarray = get_the_terms( $post->ID , 'gananciavendedor' ); 
+	      						${'gananciavendedor'.$x}=$gananciavendedorarray[0]->name;
+						        $x++;
+						    endwhile;
+	        			}
+	        		for ($i = 0; $i < $x ; $i++) {
+				        $preciototal=0; 
+				        $totalcosto=0; 
+				        $totalcantidad=0;
+		        		foreach (${'gerente'.$i} as $campana) {
+				        	$args=array('post_status' => 'publish', 'post_type'=> 'post', 'order' => 'ASC', 'posts_per_page' => -1, 'tax_query' => array( array(  'taxonomy' => 'Gerente', 'field' => 'slug', 'terms' => $campana ) ) );
+				        	$my_query = new WP_Query($args);
+				        	if( $my_query->have_posts() ) {
+								while ($my_query->have_posts()) : $my_query->the_post(); $id = get_the_ID();
+
+							        $cantidadarray = get_the_terms( $post->ID , 'cantidad' ); 
+							        $cantidad=$cantidadarray[0]->name; 
+
+							        //Costo del producto
+							        $costoarray = get_the_terms( $post->ID , 'costo' ); 
+							        $costo=$costoarray[0]->name;
+
+							        //Total del producto
+							        $preciototal=$cantidad*$costo; 
+
+							        //Sumatoria de los totales de los productos
+							        $totalcosto=$totalcosto+$preciototal;
+
+							        //Sumatoria de las cantidades de productos 
+							        $totalcantidad=$totalcantidad+$cantidad;
+
+
+							    endwhile;
+				        	} 
+			        	}
+			        	$totalvendedor=${'gananciavendedor'.$i}*$totalcantidad;
+						$total=$totalcosto-$totalvendedor;
+						$totaladepositarquincenal=$total/4;
+			        	?>
+			        	<div class="col-sm-6 col-xs-12">
+							<div class="panel panel-primary margintop25">
+								<div class="panel-heading">
+									<p><?php echo ${'campana'.$i}; ?> 
+									<span class="badge"><?php echo $totalcantidad; ?> colecciones</span></p>
+								</div>
+								<div class="panel-body">
+								    <h4>Bsf <?php echo number_format($totaladepositarquincenal, 2, ',', '.'); ?></h4>
+								</div>
+							</div>
+						</div>
+			        	<?php
+	        		} ?>
+				</div>
 			</div>
 			<div class="clearfix"></div>
 			<?php $ptotalacancelar=$stotalacancelar-$totalpendiente-$totalaprobado; ?>
@@ -276,13 +350,19 @@ jQuery(document).ready(function() {
 					<div class="row">
 						<div class="col-md-12 margintop25">
 							<div class="col-md-4 col-sm-4 col-xs-12">
-								<h3 class="borderbotazul">Total Colecciones:</h3> <h4><?php echo $totalcantidad; ?></h4>
+								<blockquote class="borderazul panel-footer">
+									<h4 class="">Total Colecciones:</h4> <h4><?php echo $totalcantidad; ?></h4>
+								</blockquote>
 							</div>
 							<div class="col-md-4 col-sm-4 col-xs-12">
-								<h3 class="borderbotazul">Total a Pagar:</h3> <h4>Bsf <?php echo number_format($totalacancelar, 2, ',', '.'); ?></h4>
+								<blockquote class="borderazul panel-footer">
+									<h4 class="">Total a Pagar:</h4> <h4>Bsf <?php echo number_format($totalacancelar, 2, ',', '.'); ?></h4>
+								</blockquote>
 							</div>
 							<div class="col-md-4 col-sm-4 col-xs-12">
-								<h3 class="borderbotazul">Total Pagado:</h3> <h4>Bsf <?php echo number_format($totaldepositado, 2, ',', '.'); ?></h4>
+								<blockquote class="borderazul panel-footer">
+									<h4 class="">Total Pagado:</h5> <h4>Bsf <?php echo number_format($totaldepositado, 2, ',', '.'); ?></h4>
+								</blockquote>
 							</div>
 						</div>
 					</div>
@@ -292,16 +372,24 @@ jQuery(document).ready(function() {
 					<div class="row">
 						<div class="col-md-12 margintop25">
 							<div class="col-md-3 col-sm-3 col-xs-6">
-								<h3 class="borderbotazul">Cuota 1:</h3> <h4><?php echo $c1; ?></h4>
+								<blockquote class="borderazul panel-footer">
+									<h4 class="">Cuota 1:</h4> <h4><?php echo $c1; ?></h4>
+								</blockquote>
 							</div>
 							<div class="col-md-3 col-sm-3 col-xs-6">
-								<h3 class="borderbotazul">Cuota 2:</h3> <h4><?php echo $c2; ?></h4>
+								<blockquote class="borderazul panel-footer">
+									<h4 class="">Cuota 2:</h4> <h4><?php echo $c2; ?></h4>
+								</blockquote>
 							</div>
 							<div class="col-md-3 col-sm-3 col-xs-6">
-								<h3 class="borderbotazul">Cuota 3:</h3> <h4><?php echo $c3; ?></h4>
+								<blockquote class="borderazul panel-footer">
+									<h4 class="">Cuota 3:</h4> <h4><?php echo $c3; ?></h4>
+								</blockquote>
 							</div>
 							<div class="col-md-3 col-sm-3 col-xs-6">
-								<h3 class="borderbotazul">Cuota 4:</h3> <h4><?php echo $c4; ?></h4>
+								<blockquote class="borderazul panel-footer">
+									<h4 class="">Cuota 4:</h4> <h4><?php echo $c4; ?></h4>
+								</blockquote>
 							</div>
 						</div>
 					</div>

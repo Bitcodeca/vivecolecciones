@@ -60,8 +60,8 @@ p { font-size: 1.2em;text-align : justify; margin: 0 0 5px;}
 .letraverde { color: #345d13; }
 .letraamarilla { color: #efed14; }
 .fondoblanco { background-color: white; }
-.fondoazul { background-color: #13345d; color: white; }
-.fondorojo { background-color: #5d1334; color: white; }
+.fondoazul { background-color: #337AB7; color: white; }
+.fondorojo { background-color: #c50a2e; color: white; }
 .fondoverde { background-color: #345d13; color: white;  }
 .fondoamarillo { background-color: #efed14; color: black;  }
 .footer { position:relative; z-index:1; background-color:white; min-height:40px; width:100%;border-top: 1px solid black; border-bottom: 1px solid black;}
@@ -83,3 +83,4 @@ p { font-size: 1.2em;text-align : justify; margin: 0 0 5px;}
 .pager { margin: 0px 10px; display: inline-block; font-size: 1.3em; }
 .pager-list .active {font-weight: bolder; color:#13345d; }
 fieldset { border: 0px solid #c0c0c0; margin: 0 0px; padding: 0px; }
+.borderazul { border-color: #337AB7; border-top: 0px;}
