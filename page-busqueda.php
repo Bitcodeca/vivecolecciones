@@ -85,15 +85,11 @@ elseif (current_user_can('administrator')) { ?>
 
 	            </div>
 
-
-
-
-
-
-	            <?php if(isset($_POST['buscar'])) { 
+	            <?php if(isset($_POST['buscar']) || isset($_POST['btn'])) { 
 	            	$busstatus=$_POST['busstatus'];
 	            	$buscliente=$_POST['buscliente'];
 	            	$busbanco=$_POST['busbanco'];
+	            	if (isset($_POST['gerentecont'])){$buscliente=$_POST['gerentecont'];}
 	            	$buscar= ' WHERE ';
 
 					if($buscliente!='todos'){ 
@@ -186,6 +182,9 @@ elseif (current_user_can('administrator')) { ?>
 										
 									</div>
 									<input hidden type="text" name="id" id="id" value="<?php echo $iddeposito; ?>">
+									<input hidden type="text" name="gerentecont" id="gerentecont" value="<?php echo $clientedeposito; ?>">
+									<input hidden type="text" name="busstatus" id="busstatus" value="<?php echo $busstatus; ?>">
+									<input hidden type="text" name="busbanco" id="busbanco" value="<?php echo $busbanco; ?>">
 								</form>
 							</div>
 							<div class="clearfix"></div>
