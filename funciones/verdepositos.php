@@ -17,7 +17,7 @@
 		$fechaunixcamb = DateTime::createFromFormat("d/m/Y", $fecha);
 		$fechaunixcamb=date_format($fechaunixcamb,"Y-m-d");
 		$fechaunixdep=strtotime($fechaunixcamb);
-        echo '<div class="row mix bordertopnegro borderbotnegro paddingbot10 paddingtop10 text-center '.$banco.'"  data-myorder="'.$fechaunixdep.'">';
+        echo '<div class="fondogrispar paddingtopbot10 row mix text-center '.$banco.'"  data-myorder="'.$fechaunixdep.'">';
 		echo     '<div class="col-md-3 col-sm-3 col-xs-6">'.$fecha.'</div>';
 		echo     '<div class="col-md-3 col-sm-3 col-xs-6">'.$banco.'</div>';
 		echo     '<div class="col-md-3 col-sm-3 col-xs-6">'.$referencia.'</div>';

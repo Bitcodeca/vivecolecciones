@@ -180,14 +180,51 @@
 				if(isset($_POST['btn'])) {
 						$id=$_POST['id'];
 						$btn=$_POST['btn'];
-
 						$con = mysqli_connect ("localhost","advv","cdavv210416","bdve210416");
 
 						if ($btn=='Aprobar') {
 
-							$sql = "UPDATE registro SET status='aprobado' WHERE id=$id";
-							mysqli_query($con, $sql);
-							mysqli_close($con);
+							$query = mysqli_query($con, "SELECT * FROM registro WHERE id='".$id."'");
+							while ($row = mysqli_fetch_array($query)) {
+								$referencia=$row['referencia'];
+								$monto=$row['monto'];
+								$fecha=$row['fecha'];
+								$banco=$row['banco'];
+								$cliente=$row['cliente'];
+							}
+
+
+							$d = mysqli_query($con, "SELECT * FROM registro WHERE referencia='".$referencia."' AND banco='".$banco."' AND fecha='".$fecha."' AND monto='".$monto."' AND status='aprobado'");
+							if(mysqli_num_rows($d) != 0){ ?>
+
+								<div class="modal fade" id="myModal"  tabindex="-1" role="dialog">
+								  <div class="modal-dialog" role="document">
+								    <div class="modal-content">
+								      <div class="modal-header">
+								        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								        <h4 class="modal-title letraroja">ATENCIÓN</h4>
+								      </div>
+								      <div class="modal-body">
+								        <p>El depósito se encuentra en uso y aprobado actualmente por el usuario <?php echo $cliente; ?>. ¿Desea aprobar este depósito de igual manera?</p>
+								      </div>
+								      <div class="modal-footer">
+								        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+								        <button type="button"  class="btn btn-primary">Aprobar</button>
+								      </div>
+								    </div><!-- /.modal-content -->
+								  </div><!-- /.modal-dialog -->
+								</div><!-- /.modal -->
+								<script>
+									jQuery(document).ready(function() {
+										$('#myModal').modal('show'); 
+									});
+								</script>
+
+							<?php }elseif (mysqli_num_rows($d) == 0){
+									$sql = "UPDATE registro SET status='aprobado' WHERE id=$id";
+									mysqli_query($con, $sql);
+									mysqli_close($con);
+							}
 
 						} elseif ($btn=='Pendiente') {
 

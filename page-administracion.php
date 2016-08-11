@@ -128,7 +128,7 @@ if(isset($_POST['cerrarfactura'])) {
 						    <div class="modal-content">
 							      <div class="modal-header">
 								        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-								        <h2 class="modal-title" id="myModalLabel"><b>ATENCIÓN</b></h2>
+								        <h2 class="modal-title letraroja" id="myModalLabel"><b>ATENCIÓN</b></h2>
 							      </div>
 						        <form name="cierre" method="post" action="http://vivecolecciones.com.ve/administracion/" >
 							      <div class="modal-body">

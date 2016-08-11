@@ -44,8 +44,7 @@
 							<?php echo $bancodeposito; ?>
 						</div>
 						<div class="col-md-2 col-sm-2 col-xs-12"> 
-							<input placeholder="Fecha"  id="fecha<?php echo $iddeposito; ?>" name="referencia<?php echo $iddeposito; ?>" type="text" class="form-control" value="<?php echo $referenciadeposito; ?>">
-							
+							<input placeholder="referencia"  id="referencia<?php echo $iddeposito; ?>" name="referencia<?php echo $iddeposito; ?>" type="text" class="form-control" value="<?php echo $referenciadeposito; ?>">							
 						</div>
 						<div class="col-md-2 col-sm-2 col-xs-12 paddingtop10">
 							Bsf <?php echo number_format($montodeposito, 2, ',', '.'); ?>

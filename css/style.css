@@ -49,6 +49,7 @@ p { font-size: 1.2em;text-align : justify; margin: 0 0 5px;}
 .paddingbot10{	padding-bottom: 10px; }
 .paddingbot5{	padding-bottom: 5px; }
 .paddingtopbot50{ padding: 50px 0px 50px 0px; }
+.paddingtopbot10{ padding: 10px 0px 10px 0px; }
 .borderbotnegro { border-bottom: 1px solid black; }
 .bordertopnegro { border-top: 1px solid black; }
 .borderbotazul { border-bottom: 4px solid #13345d; }
@@ -56,14 +57,14 @@ p { font-size: 1.2em;text-align : justify; margin: 0 0 5px;}
 .noborder { border:0px; }
 .letrablanca { color: #fff; }
 .letranegra { color: #000 }
-.letraroja { color: #5d1334; }
-.letraverde { color: #345d13; }
-.letraamarilla { color: #efed14; }
+.letraroja { color: #d9534f; }
+.letraverde { color: #5cb85c; }
+.letraamarilla { color: #f0ad4e; }
 .fondoblanco { background-color: white; }
 .fondoazul { background-color: #337AB7; color: white; }
 .fondorojo { background-color: #c50a2e; color: white; }
-.fondoverde { background-color: #345d13; color: white;  }
-.fondoamarillo { background-color: #efed14; color: black;  }
+.fondoverde { background-color: #5cb85c; color: white;  }
+.fondoamarillo { background-color: #f0ad4e; color: black;  }
 .footer { position:relative; z-index:1; background-color:white; min-height:40px; width:100%;border-top: 1px solid black; border-bottom: 1px solid black;}
 .copyright {padding: 10px 0px 0px 0px;font-size:12px;color:black;letter-spacing:3px;font-weight:500;text-align: center;}
 .inventario { width: 100%; position: relative;border-collapse: collapse; border-bottom: 1px solid black}
@@ -84,3 +85,6 @@ p { font-size: 1.2em;text-align : justify; margin: 0 0 5px;}
 .pager-list .active {font-weight: bolder; color:#13345d; }
 fieldset { border: 0px solid #c0c0c0; margin: 0 0px; padding: 0px; }
 .borderazul { border-color: #337AB7; border-top: 0px;}
+.btn-default.active, .btn-default:active, .open>.dropdown-toggle.btn-default { color: #fff;  background-color: #337AB7; border-color: #1e496d; }
+.btn-default:hover, .btn-default:focus, .btn-default:active { color: #fff;  background-color: #4787be; border-color: #337ab7; }
+.fondogrispar:nth-child(even){background-color: #f2f2f2}

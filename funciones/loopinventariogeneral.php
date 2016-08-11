@@ -43,7 +43,7 @@
 
 		        $x++;
 
-		        echo '<div class="row margintop25 text-center"> 
+		        echo '<div class="fondogrispar row paddingtopbot10 text-center"> 
 				     	<div class="col-md-2 col-sm-2 col-xs-4 finalinventario">'.$gerente.'</div> 
 				     	<div class="col-md-2 col-sm-2 col-xs-4">'.$producto.'</div>
 				     	<div class="col-md-2 col-sm-2 col-xs-4">'.$cantidad.'</div>

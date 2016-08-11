@@ -6,7 +6,7 @@ if( current_user_can('administrator')) {
 	} ?>
 	<div class="container"><h1 class="text-left margintop25">Colecciones Actuales</h1></div>
 	<div class="container">
-	    <div class="row fondoazul text-center margintop25 marginbot25">
+	    <div class="row fondoazul text-center margintop25">
 			<div class="col-md-2 col-sm-2 col-xs-4"><h4>Cliente</h4></div>
 			<div class="col-md-2 col-sm-2 col-xs-4"><h4>Producto</h4></div>
 			<div class="col-md-2 col-sm-2 col-xs-4"><h4>Cantidad</h4></div>
