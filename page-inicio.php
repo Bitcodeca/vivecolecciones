@@ -86,13 +86,21 @@
 				
 
 				$con = mysqli_connect ("localhost","advv","cdavv210416","bdve210416");
-				$totaldepositado=0;
-				$totalaprobado=0;
-				$totalpendiente=0;
-				$result = mysqli_query($con, "SELECT * FROM registro WHERE status='aprobado'");
-				while ($row = mysqli_fetch_array($result)) { $totalaprobado=$totalaprobado+$row['monto']; }
-				$result = mysqli_query($con, "SELECT * FROM registro WHERE status='pendiente'");
-				while ($row = mysqli_fetch_array($result)) { $totalpendiente=$totalpendiente+$row['monto']; }
+				$result = mysqli_query($con, "SELECT COUNT( STATUS ), SUM( MONTO ) FROM registro WHERE STATUS = 'aprobado'");
+				$row = mysqli_fetch_assoc($result);
+				$aprobado=$row['COUNT( STATUS )'];
+				$totalaprobado=$row['SUM( MONTO )'];
+				$result = mysqli_query($con, "SELECT COUNT( STATUS ), SUM( MONTO )  FROM registro WHERE STATUS = 'pendiente'");
+				$row = mysqli_fetch_assoc($result);
+				$pendiente=$row['COUNT( STATUS )'];
+				$totalpendiente=$row['SUM( MONTO )'];
+				$result = mysqli_query($con, "SELECT COUNT( STATUS ) FROM registro WHERE STATUS = 'negada'");
+				$row = mysqli_fetch_assoc($result);
+				$negado=$row['COUNT( STATUS )'];
+				$result = mysqli_query($con, "SELECT COUNT( ID ) FROM historial");
+				$row = mysqli_fetch_assoc($result);
+				$historial=$row['COUNT( ID )'];
+
 				$totaldepositado=$totalaprobado+$totalpendiente; ?>
 					<div class="col-md-3 col-sm-3 col-xs-6">
 						<blockquote class="borderazul panel-footer">
@@ -106,12 +114,28 @@
 					</div>
 					<div class="col-md-3 col-sm-3 col-xs-6">
 						<blockquote class="borderazul panel-footer">
-							<h5 class="">Total Registrado:</h5> <h5>Bsf <?php echo number_format($totaldepositado, 2, ',', '.'); ?></h5>
+							<h5 class="">Total Aprobado:</h5> <h5>Bsf <?php echo number_format($totalaprobado, 2, ',', '.'); ?></h5>
 						</blockquote>
-					</div>
+					</div>	
 					<div class="col-md-3 col-sm-3 col-xs-6">
 						<blockquote class="borderazul panel-footer">
-							<h5 class="">Total Aprobado:</h5> <h5>Bsf <?php echo number_format($totalaprobado, 2, ',', '.'); ?></h5>
+							<h5 class="">Total Registrado:</h5> <h5>Bsf <?php echo number_format($totaldepositado, 2, ',', '.'); ?></h5>
+						</blockquote>
+					</div>				
+					<div class="col-xs-12">
+						<blockquote class="borderazul paddingbot50 panel-footer">
+							<div class="col-xs-12 col-sm-6 col-md-3 margintop10">
+								<p class="letraverde fontsize1em">Aprobados: <?php echo $aprobado; ?></p>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-3 margintop10">
+								<p class="letraamarilla fontsize1em">Pendientes: <?php echo $pendiente; ?></p>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-3 margintop10">
+								<p class="letraroja fontsize1em">Negados: <?php echo $negado; ?></p>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-3 margintop10">
+								<p class="fontsize1em">Historial: <?php echo $historial; ?></p>
+							</div>
 						</blockquote>
 					</div>
 			</div>

@@ -22,6 +22,7 @@ h3{ font-size: 1.7em; }
 h4{ font-size: 1.4em; }
 h5{ font-size: 1.2em; }
 p { font-size: 1.2em;text-align : justify; margin: 0 0 5px;}
+.fontsize1em {font-size: 1em;}
 .desktoplg{display:block;}
 .tabletmd{display:none;}
 .movilxs{display:none;}
