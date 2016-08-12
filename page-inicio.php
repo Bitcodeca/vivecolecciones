@@ -96,22 +96,22 @@
 				$totaldepositado=$totalaprobado+$totalpendiente; ?>
 					<div class="col-md-3 col-sm-3 col-xs-6">
 						<blockquote class="borderazul panel-footer">
-							<h4 class="">Colecciones:</h4> <h4><?php echo $stotalcantidad; ?></h4>
+							<h5 class="">Colecciones:</h5> <h5><?php echo $stotalcantidad; ?></h5>
 						</blockquote>
 					</div>
 					<div class="col-md-3 col-sm-3 col-xs-6">
 						<blockquote class="borderazul panel-footer">
-							<h4 class="">Total Invertido:</h4> <h4>Bsf <?php echo number_format($stotalacancelar, 2, ',', '.'); ?></h4>
+							<h5 class="">Total Invertido:</h5> <h5>Bsf <?php echo number_format($stotalacancelar, 2, ',', '.'); ?></h5>
 						</blockquote>
 					</div>
 					<div class="col-md-3 col-sm-3 col-xs-6">
 						<blockquote class="borderazul panel-footer">
-							<h4 class="">Total Registrado:</h4> <h4>Bsf <?php echo number_format($totaldepositado, 2, ',', '.'); ?></h4>
+							<h5 class="">Total Registrado:</h5> <h5>Bsf <?php echo number_format($totaldepositado, 2, ',', '.'); ?></h5>
 						</blockquote>
 					</div>
 					<div class="col-md-3 col-sm-3 col-xs-6">
 						<blockquote class="borderazul panel-footer">
-							<h4 class="">Total Aprobado:</h4> <h4>Bsf <?php echo number_format($totalaprobado, 2, ',', '.'); ?></h4>
+							<h5 class="">Total Aprobado:</h5> <h5>Bsf <?php echo number_format($totalaprobado, 2, ',', '.'); ?></h5>
 						</blockquote>
 					</div>
 			</div>

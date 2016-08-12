@@ -7,11 +7,24 @@
 	$todoslosusuarios = get_users();
 	foreach ( $todoslosusuarios as $user ) {
 		$buscar=$user->user_login;
+		$buscarid=$user->ID;
 		$cliente=$buscar;
 		include (TEMPLATEPATH . '/funciones/constantes.php');
 	 	$args=array('post_status' => 'publish', 'post_type'=> 'post',  'order' => 'ASC', 'posts_per_page' => -1, 'tax_query' => array( array(  'taxonomy' => 'Gerente', 'field' => 'slug', 'terms' => $buscar ) ) ); $my_query = new WP_Query($args);
 	    if( $my_query->have_posts() ) { $totalcosto=0;$totalcantidad=0;
 			$totalcosto=0;$totalcantidad=0;$x=0;
+
+			echo '<div class="panel-group" id="accordion'.$buscarid.'" role="tablist" aria-multiselectable="true">
+			  <div class="panel panel-default">
+			    <div class="panel-heading" role="tab" id="headingOne'.$buscarid.'">
+			      <h4 class="panel-title">
+			        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion'.$buscarid.'" href="#collapseOne'.$buscarid.'" aria-expanded="false" aria-controls="collapseOne'.$buscarid.'">
+			         <h5 class="margintop0 marginbot0">'.$buscar.'</h5>
+			        </a>
+			      </h4>
+			    </div>
+			    <div id="collapseOne'.$buscarid.'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne'.$buscarid.'">
+			      <div class="panel-body paddingtopbot0">';
 			while ($my_query->have_posts()) : $my_query->the_post(); $id = get_the_ID();
 
 		        //Gerente
@@ -42,7 +55,6 @@
 		        $fecha=get_the_date('d/m/Y');
 
 		        $x++;
-
 		        echo '<div class="fondogrispar row paddingtopbot10 text-center"> 
 				     	<div class="col-md-2 col-sm-2 col-xs-4 finalinventario">'.$gerente.'</div> 
 				     	<div class="col-md-2 col-sm-2 col-xs-4">'.$producto.'</div>
@@ -53,6 +65,11 @@
 
 				
 		    endwhile;
+
+		    echo '  </div>
+		    </div>
+		  </div>
+		</div>';
 		    $monto=0;
 			$result = mysqli_query($con, "SELECT * FROM registro WHERE cliente='".$buscar."' AND status='aprobado'");
 			while ($row = mysqli_fetch_array($result)) {
@@ -87,11 +104,11 @@
 
 			$finaltotalacancelar=$totalacancelar+$finaltotalacancelar;
 
-			echo '<div class="row finalinventario bordertopnegro borderbotnegro">
+			echo '<div class="padding015 borderbotnegro"><div class="row fondogris finalinventario">
 	    			<div class="col-md-4 col-sm-4 col-xs-12"><h4>Total: '.$totalcantidad.'</h4></div>
 	    			<div class="col-md-4 col-sm-4 col-xs-12"><h4>Saldo Aprobado Bsf '.number_format($monto, 2, ',', '.').'</h4></div>
 	    			<div class="col-md-4 col-sm-4 col-xs-12"><h4>Saldo Deudor Total Bsf '.number_format($totalacancelar, 2, ',', '.').'</h4></div>
-	    		</div>';
+	    		</div></div>';
 
 		} wp_reset_query();
 	}
