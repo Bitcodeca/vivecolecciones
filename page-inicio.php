@@ -30,19 +30,7 @@
 				$ssubtotalgerencia=0;
 				$stotalacancelar=0;
 				$stotaladepositarquincenal=0;
-				$args=array('post_status' => 'publish', 'post_type'=> 'post', 'post_type'=> 'admin', 'order' => 'ASC', 'posts_per_page' => -1 ); $my_query = new WP_Query($args);
-	        		if( $my_query->have_posts() ) {
-	        			$x=0;
-						while ($my_query->have_posts()) : 
-							$my_query->the_post(); 
-							$id = get_the_ID();						
-					        ${'gerente'.$x} = get_the_terms( $post->ID , 'campaña' );
-					        ${'campana'.$x}=get_the_title();
-					        $gananciavendedorarray = get_the_terms( $post->ID , 'gananciavendedor' ); 
-      						${'gananciavendedor'.$x}=$gananciavendedorarray[0]->name;
-					        $x++;
-					    endwhile;
-        			}
+				
 				foreach ( $todoslosusuarios as $user ) {
 					$buscar=$user->user_login;
 					$cliente=$buscar;
@@ -154,6 +142,19 @@
 			<div class="row">
 	        	<h3>Ganancia quincenal:</h3>
 				<?php
+				$args=array('post_status' => 'publish', 'post_type'=> 'post', 'post_type'=> 'admin', 'order' => 'ASC', 'posts_per_page' => -1 ); $my_query = new WP_Query($args);
+        		if( $my_query->have_posts() ) {
+        			$x=0;
+					while ($my_query->have_posts()) : 
+						$my_query->the_post(); 
+						$id = get_the_ID();						
+				        ${'gerente'.$x} = get_the_terms( $post->ID , 'campaña' );
+				        ${'campana'.$x}=get_the_title();
+				        $gananciavendedorarray = get_the_terms( $post->ID , 'gananciavendedor' ); 
+  						${'gananciavendedor'.$x}=$gananciavendedorarray[0]->name;
+				        $x++;
+				    endwhile;
+    			}
         		for ($i = 0; $i < $x ; $i++) {
 			        $preciototal=0; 
 			        $totalcosto=0; 
@@ -225,66 +226,6 @@
 				</div>
 			</div>
 			<div class="clearfix"></div>
-			<div class="container"><h1 class="text-left">Cambios y Averías</h1></div>
-			<div class="container fondoazul bordertopnegro borderbotnegro text-center margintop10">
-				<div class="row">
-					<div class="col-md-1 col-sm-1 col-xs-4">
-						<h4>Fecha</h4>
-					</div>
-					<div class="col-md-1 col-sm-1 col-xs-4">
-						<h4>Usuario</h4>
-					</div>
-					<div class="col-md-1 col-sm-1 col-xs-4">
-						<h4>Colección</h4>
-					</div>
-					<div class="col-md-1 col-sm-2 col-xs-4">
-						<h4>Motivo</h4>
-					</div>
-					<div class="col-md-3 col-sm-3 col-xs-4">
-						<h4>Descripción</h4>
-					</div>
-					<div class="col-md-1 col-sm-1 col-xs-4">
-						<h4>Cantidad</h4>
-					</div>
-					<div class="col-md-1 col-sm-1 col-xs-4">
-						<h4>Tipo de Cambio</h4>
-					</div>
-					<div class="col-md-2 col-sm-2 col-xs-4">
-						<h4>Especificación</h4>
-					</div>
-					<div class="col-md-1 col-sm-1 col-xs-4">
-						<h4>Status</h4>
-					</div>
-				</div>
-			</div>
-			<div id="Container"><?php include (TEMPLATEPATH . '/funciones/versolicitudes.php'); ?></div>
-		    <div class="pager-list marginbot10 text-center"></div>
-			<div class="row marginbot10">
-				<div class="text-center">  
-					<span class="finalinventario">Ordernar por: </span>
-					<button type="button" class="sort btn btn-default" data-sort="default">Default</button>
-				  	<button type="button" class="sort btn btn-default" data-sort="myorder:asc">Anteriores</button>
-				  	<button type="button" class="sort btn btn-default active" data-sort="myorder:desc">Recientes</button>
-				</div>
-		    </div>
-			<div class="container">
-			    <div class="text-left">
-					<a class="filter btn btn-default" id="Reset">Mostrar Todos</a>
-					<div class="clearfix"></div>
-					<span class="finalinventario">Filtrar por Status: </span>
-					<a class="filter btn btn-default btnfiltro" data-filter=".aprobado">Aprobado</a>
-					<a class="filter btn btn-default btnfiltro" data-filter=".pendiente">Pendiente</a>
-					<a class="filter btn btn-default btnfiltro" data-filter=".negado">Negado</a>
-					<div class="clearfix"></div>
-					<span class="finalinventario">Filtrar por Usuarios: </span>
-			        <?php 
-	                $con = mysqli_connect ("localhost","advv","cdavv210416","bdve210416");
-					$result = mysqli_query($con, "SELECT DISTINCT cliente FROM cambios");
-					while ($row = mysqli_fetch_array($result)) {
-						echo '<a class="filter btn btn-default btnfiltro" data-filter=".'.$row['cliente'].'"> '.$row['cliente'].' </a>';
-					} ?>
-			    </div>
-		    </div>
 		</div>
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script>
