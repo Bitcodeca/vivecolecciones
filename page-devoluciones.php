@@ -1,6 +1,7 @@
 <?php get_header();
-if( current_user_can('subscriber')) { ?>
-	<?php include (TEMPLATEPATH . '/funciones/usuariologged.php');?>
+if( current_user_can('subscriber')) {
+	$go=0;
+	include (TEMPLATEPATH . '/funciones/usuariologged.php'); ?>
 		  <!--/////////////////////////////////////////////////////////////////////////////// -->
 		  <!--/////////////////////////////      GERENTE    //////////////////////////////// -->
 		  <!--///////////////////////////////////////////////////////////////////////////// -->
@@ -48,38 +49,72 @@ if( current_user_can('subscriber')) { ?>
 		            </div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-md-12 margintop25 marginbot25">
-					<h2 class="text-center">Registrar Devolución</h2>
-					<form name="importa" method="post" action="http://vivecolecciones.com.ve/devoluciones/" >
-                        <div class="col-md-12 margintop25">
-							<div class="col-md-3">
-								<input value="<?php echo date("d/m/Y"); ?>" id="fecha" name="fecha" type="text" class="form-control" readonly>
-							</div>
-							<div class="col-md-4">
-							    <select class="form-control" name="coleccion" id="coleccion">
-							    	<option value="">Seleccionar colección</option>
-					                <?php $args=array('post_status' => 'publish', 'post_type'=> 'post',  'order' => 'ASC', 'posts_per_page' => -1, 'tax_query' => array( array(  'taxonomy' => 'Gerente', 'field' => 'slug', 'terms' => $usuariologged ) ) ); $my_query = new WP_Query($args);
-									    if( $my_query->have_posts() ) { 
-											while ($my_query->have_posts()) : $my_query->the_post(); $id = get_the_ID();
-										        $categories = get_the_category(); 
-										        $producto=$categories[0]->name;
-										        echo '<option value="'. $producto.'"> '.$producto.' </option>';
-									        endwhile;
-									    } ?>
-							    </select>
-							</div>
-							<div class="col-md-4">
-								<input placeholder="Cantidad"  id="cantidad" name="cantidad" type="text" class="form-control" required>
-							</div>
-							<input value="<?php echo $usuariologged; ?>" id="cliente" name="cliente" type="text" hidden required>
-							<div class="col-md-1">
-							<input class="btn btn-primary marginauto" type='submit' name='enviar' id="enviar" value="Registrar"/>
-							</div>
+			<?php
+				$args=array('post_status' => 'publish', 'post_type'=> 'post', 'post_type'=> 'admin', 'order' => 'ASC', 'posts_per_page' => -1 ); $my_query = new WP_Query($args);
+        		if( $my_query->have_posts() ) {
+					while ($my_query->have_posts()) : 
+						$my_query->the_post(); 
+						$id = get_the_ID();						
+				        $gocliente = get_the_terms( $post->ID , 'Gerente' );
+				        print_r($gocliente);
+				       	echo "<br>";
+				        foreach ($gocliente as $devolucion) {
+				        	print_r($devolucion);
+				        	if($campana==$usuariologged){$go=1;}
+				        	echo $campana.' ';
+				        }
+				    endwhile;
+    			}
+
+    		if ($go==1) {
+				$args=array('post_status' => 'publish', 'order' => 'ASC', 'post_type'=> 'post', 'posts_per_page' => 1, 'tax_query' => array( array(  'taxonomy' => 'Gerente', 'field' => 'slug', 'terms' => $usuariologged ) ) ); 
+				$my_query = new WP_Query($args);
+	        	if( $my_query->have_posts() ) { ?>
+
+	        		<div class="container">
+						<h1 class="letraroja">El período para registrar devoluciones ha terminado.</h1>
+					</div>
+
+	        	<?php } else { ?>
+					<div class="row">
+						<div class="col-md-12 margintop25 marginbot25">
+							<h2 class="text-center">Registrar Devolución</h2>
+							<form name="importa" method="post" action="http://vivecolecciones.com.ve/devoluciones/" >
+		                        <div class="col-md-12 margintop25">
+									<div class="col-md-3">
+										<input value="<?php echo date("d/m/Y"); ?>" id="fecha" name="fecha" type="text" class="form-control" readonly>
+									</div>
+									<div class="col-md-4">
+									    <select class="form-control" name="coleccion" id="coleccion">
+									    	<option value="">Seleccionar colección</option>
+							                <?php $args=array('post_status' => 'publish', 'post_type'=> 'post',  'order' => 'ASC', 'posts_per_page' => -1, 'tax_query' => array( array(  'taxonomy' => 'Gerente', 'field' => 'slug', 'terms' => $usuariologged ) ) ); $my_query = new WP_Query($args);
+											    if( $my_query->have_posts() ) { 
+													while ($my_query->have_posts()) : $my_query->the_post(); $id = get_the_ID();
+												        $categories = get_the_category(); 
+												        $producto=$categories[0]->name;
+												        echo '<option value="'. $producto.'"> '.$producto.' </option>';
+											        endwhile;
+											    } ?>
+									    </select>
+									</div>
+									<div class="col-md-4">
+										<input placeholder="Cantidad"  id="cantidad" name="cantidad" type="text" class="form-control" required>
+									</div>
+									<input value="<?php echo $usuariologged; ?>" id="cliente" name="cliente" type="text" hidden required>
+									<div class="col-md-1">
+									<input class="btn btn-primary marginauto" type='submit' name='enviar' id="enviar" value="Registrar"/>
+									</div>
+								</div>
+							</form>
 						</div>
-					</form>
-				</div>
-			</div>
+					</div>
+				<?php }
+			} else { ?>
+					<div class="container">
+						<h1 class="letraroja">El período para registrar devoluciones ha terminado.</h1>
+					</div>
+				<?php } ?>
+
 		</div>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script>
@@ -247,74 +282,74 @@ elseif (current_user_can('administrator')) { ?>
 	</div>
 	<div class="clearfix"></div>
 
-<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script>
-var dropdownFilter = {
-  $filters: null,
-  $reset: null,
-  groups: [],
-  outputArray: [],
-  outputString: '',
-  
-  init: function(){
-    var self = this;
-    self.$filters = $('#Filters');
-    self.$reset = $('#Reset');
-    self.$container = $('#Container');
-    self.$filters.find('fieldset').each(function(){
-      self.groups.push({
-        $dropdown: $(this).find('select'),
-        active: ''
-      });
-    });
-    
-    self.bindHandlers();
-  },
-  bindHandlers: function(){
-    var self = this;
-    self.$filters.on('change', 'select', function(e){
-      e.preventDefault();
-      
-      self.parseFilters();
-    });
-    self.$reset.on('click', function(e){
-      e.preventDefault();
-      
-      self.$filters.find('select').val('');
-      
-      self.parseFilters();
-    });
-  },
-  parseFilters: function(){
-    var self = this;
-    for(var i = 0, group; group = self.groups[i]; i++){
-      group.active = group.$dropdown.val();
-    }
-    
-    self.concatenate();
-  },
-  concatenate: function(){
-    var self = this;
-    
-    self.outputString = '';
-    
-    for(var i = 0, group; group = self.groups[i]; i++){
-      self.outputString += group.active;
-    }
-    !self.outputString.length && (self.outputString = 'all'); 
-	  if(self.$container.mixItUp('isLoaded')){
-    	self.$container.mixItUp('filter', self.outputString);
-	  }
-  }
-};
-$(function(){ dropdownFilter.init();
-    jQuery('#Container').mixItUp({
-		animation: { duration: 200 },
-		pagination: { limit: 50, loop: false, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a><h4>Siguiente</h4></a>' },
-		controls: { toggleFilterButtons: true, toggleLogic: 'and' },
-		load: { sort: 'myorder:desc' }
-  });    
-});
-</script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script>
+		var dropdownFilter = {
+		  $filters: null,
+		  $reset: null,
+		  groups: [],
+		  outputArray: [],
+		  outputString: '',
+		  
+		  init: function(){
+		    var self = this;
+		    self.$filters = $('#Filters');
+		    self.$reset = $('#Reset');
+		    self.$container = $('#Container');
+		    self.$filters.find('fieldset').each(function(){
+		      self.groups.push({
+		        $dropdown: $(this).find('select'),
+		        active: ''
+		      });
+		    });
+		    
+		    self.bindHandlers();
+		  },
+		  bindHandlers: function(){
+		    var self = this;
+		    self.$filters.on('change', 'select', function(e){
+		      e.preventDefault();
+		      
+		      self.parseFilters();
+		    });
+		    self.$reset.on('click', function(e){
+		      e.preventDefault();
+		      
+		      self.$filters.find('select').val('');
+		      
+		      self.parseFilters();
+		    });
+		  },
+		  parseFilters: function(){
+		    var self = this;
+		    for(var i = 0, group; group = self.groups[i]; i++){
+		      group.active = group.$dropdown.val();
+		    }
+		    
+		    self.concatenate();
+		  },
+		  concatenate: function(){
+		    var self = this;
+		    
+		    self.outputString = '';
+		    
+		    for(var i = 0, group; group = self.groups[i]; i++){
+		      self.outputString += group.active;
+		    }
+		    !self.outputString.length && (self.outputString = 'all'); 
+			  if(self.$container.mixItUp('isLoaded')){
+		    	self.$container.mixItUp('filter', self.outputString);
+			  }
+		  }
+		};
+		$(function(){ dropdownFilter.init();
+		    jQuery('#Container').mixItUp({
+				animation: { duration: 200 },
+				pagination: { limit: 50, loop: false, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a><h4>Siguiente</h4></a>' },
+				controls: { toggleFilterButtons: true, toggleLogic: 'and' },
+				load: { sort: 'myorder:desc' }
+		  });    
+		});
+	</script>
 <?php }
 get_footer(); ?>
