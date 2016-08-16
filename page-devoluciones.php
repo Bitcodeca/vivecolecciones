@@ -143,6 +143,16 @@ if( current_user_can('subscriber')) { ?>
 elseif (current_user_can('administrator')) { ?>
 	<div class="container text-center margintop25 marginbot25">
 		<?php include (TEMPLATEPATH . '/funciones/usuariologged.php');
+			if(isset($_POST['btn'])) {
+				$btn=$_POST['btn'];
+				$id=$_POST['id'];
+				if ($btn=='Eliminar') {
+					$con = mysqli_connect ("localhost","advv","cdavv210416","bdve210416");
+					$sql = "DELETE FROM devoluciones WHERE id=$id";
+					mysqli_query($con, $sql);
+					mysqli_close($con);
+				}
+			}
 			$args=array('post_status' => 'publish', 'order' => 'ASC', 'post_type'=> 'post', 'posts_per_page' => 1); 
 			$my_query = new WP_Query($args);
         	if( $my_query->have_posts() ) {
@@ -183,10 +193,11 @@ elseif (current_user_can('administrator')) { ?>
 	            </div>
                 <div class="pager-list margintop10 marginbot10"></div>
 	      		<div class="inventario margintop25">
-				    <div class="col-md-3 col-sm-3 col-xs-6"><h4>Fecha</h4></div>
+				    <div class="col-md-2 col-sm-2 col-xs-6"><h4>Fecha</h4></div>
 				    <div class="col-md-3 col-sm-3 col-xs-6"><h4>Cliente</h4></div>
 				    <div class="col-md-3 col-sm-3 col-xs-6"><h4>Colección</h4></div>
-				    <div class="col-md-3 col-sm-3 col-xs-6"><h4>Cantidad</h4></div>
+				    <div class="col-md-2 col-sm-2 col-xs-3"><h4>Cantidad</h4></div>
+				    <div class="col-md-2 col-sm-2 col-xs-3"><h4>Borrar</h4></div>
 				</div>
 				<div class="clearfix"></div>
 				<div id="Container">
@@ -205,17 +216,23 @@ elseif (current_user_can('administrator')) { ?>
 							?>
 							<div class="fondogrispar paddingtopbot10 mix <?php echo $cliente; ?>" data-myorder="<?php echo $fechaunixdep; ?>">
 						        <div class="row text-center">
-									<div class="col-md-3 col-sm-3 col-xs-6"> 
+									<div class="col-md-2 col-sm-2 col-xs-6 paddingtop10"> 
 										<?php echo $fecha; ?>
 									</div>
-									<div class="col-md-3 col-sm-3 col-xs-6"> 
+									<div class="col-md-3 col-sm-3 col-xs-6 paddingtop10"> 
 										<?php echo $cliente; ?>
 									</div>
-									<div class="col-md-3 col-sm-3 col-xs-6"> 
+									<div class="col-md-3 col-sm-3 col-xs-6 paddingtop10"> 
 										<?php echo $coleccion; ?>
 									</div>
-									<div class="col-md-3 col-sm-3 col-xs-6">
+									<div class="col-md-2 col-sm-2 col-xs-3 paddingtop10">
 										<?php echo $cantidad; ?>
+									</div>
+									<div class="col-md-2 col-sm-2 col-xs-3">
+										<form name="importa<?php echo $iddeposito; ?>" method="post" >
+											<input class="btn btn-default btnedc" type="submit" name="btn" id="btn"  value="Eliminar" />
+											<input hidden type="text" name="id" id="id" value="<?php echo $id; ?>">
+										</form>
 									</div>
 								</div>
 							</div>

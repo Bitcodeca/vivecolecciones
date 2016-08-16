@@ -96,8 +96,9 @@
 								</div>
 								<div class="col-md-3">
 									<div class="input-group">
-									  <span class="input-group-addon">Bsf</span>
+									  	<span class="input-group-addon">Bsf</span>
 										<input placeholder="Monto"  id="monto" name="monto" type="number" class="form-control" required>
+										<span class="input-group-addon">,00</span>
 									</div>
 								</div>
 									<input value="<?php echo $usuariologged; ?>" id="usuario" name="usuario" type="text" hidden required>
