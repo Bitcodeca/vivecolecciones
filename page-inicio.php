@@ -30,6 +30,19 @@
 				$ssubtotalgerencia=0;
 				$stotalacancelar=0;
 				$stotaladepositarquincenal=0;
+				$args=array('post_status' => 'publish', 'post_type'=> 'post', 'post_type'=> 'admin', 'order' => 'ASC', 'posts_per_page' => -1 ); $my_query = new WP_Query($args);
+	        		if( $my_query->have_posts() ) {
+	        			$x=0;
+						while ($my_query->have_posts()) : 
+							$my_query->the_post(); 
+							$id = get_the_ID();						
+					        ${'gerente'.$x} = get_the_terms( $post->ID , 'campaña' );
+					        ${'campana'.$x}=get_the_title();
+					        $gananciavendedorarray = get_the_terms( $post->ID , 'gananciavendedor' ); 
+      						${'gananciavendedor'.$x}=$gananciavendedorarray[0]->name;
+					        $x++;
+					    endwhile;
+        			}
 				foreach ( $todoslosusuarios as $user ) {
 					$buscar=$user->user_login;
 					$cliente=$buscar;
@@ -83,7 +96,6 @@
 						$stotaladepositarquincenal=$stotaladepositarquincenal+$totaladepositarquincenal;				    				
 		        	} 
 		        }
-				
 
 				$con = mysqli_connect ("localhost","advv","cdavv210416","bdve210416");
 				$result = mysqli_query($con, "SELECT COUNT( STATUS ), SUM( MONTO ) FROM registro WHERE STATUS = 'aprobado'");
@@ -100,7 +112,6 @@
 				$result = mysqli_query($con, "SELECT COUNT( ID ) FROM historial");
 				$row = mysqli_fetch_assoc($result);
 				$historial=$row['COUNT( ID )'];
-
 				$totaldepositado=$totalaprobado+$totalpendiente; ?>
 					<div class="col-md-3 col-sm-3 col-xs-6">
 						<blockquote class="borderazul panel-footer">
@@ -142,19 +153,7 @@
 			<div class="clearfix"></div>
 			<div class="row">
 	        	<h3>Ganancia quincenal:</h3>
-				<?php $args=array('post_status' => 'publish', 'post_type'=> 'post', 'post_type'=> 'admin', 'order' => 'ASC', 'posts_per_page' => -1 ); $my_query = new WP_Query($args);
-	        		if( $my_query->have_posts() ) {
-	        			$x=0;
-						while ($my_query->have_posts()) : 
-							$my_query->the_post(); 
-							$id = get_the_ID();						
-					        ${'gerente'.$x} = get_the_terms( $post->ID , 'campaña' );
-					        ${'campana'.$x}=get_the_title();
-					        $gananciavendedorarray = get_the_terms( $post->ID , 'gananciavendedor' ); 
-      						${'gananciavendedor'.$x}=$gananciavendedorarray[0]->name;
-					        $x++;
-					    endwhile;
-        			}
+				<?php
         		for ($i = 0; $i < $x ; $i++) {
 			        $preciototal=0; 
 			        $totalcosto=0; 

@@ -271,6 +271,10 @@ elseif (current_user_can('administrator')) { ?>
 	<script>
 		jQuery(document).ready(function() { jQuery("#Reset").click(function () { jQuery(".btnfiltro").removeClass("active"); jQuery("#Reset").removeClass("active"); }); });
 	</script>
+
+	<!--////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+	<!--//////////////////////////////////////       CONTRIBUTOR     //////////////////////////////////////////// -->
+	<!--//////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 <?php } elseif (current_user_can('contributor')) { ?>
 	<div class="container text-center margintop25 marginbot25">
 		<?php include (TEMPLATEPATH . '/funciones/usuariologged.php');
