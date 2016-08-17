@@ -70,7 +70,7 @@
 		      	<div class="col-md-12">
 			      	<?php
 	      			$con = mysqli_connect ("localhost","advv","cdavv210416","bdve210416");
-					$result = mysqli_query($con, "SELECT * FROM registro WHERE cliente='".$cliente."' AND status='aprobado' ORDER BY id");
+					$result = mysqli_query($con, "SELECT * FROM registro WHERE cliente='".$cliente."' AND status='aprobado' ORDER BY banco, id");
 					while ($row = mysqli_fetch_array($result)) {
 						$iddeposito=$row['id'];
 						$clientedeposito=$row['cliente'];

@@ -101,26 +101,21 @@
 				$row = mysqli_fetch_assoc($result);
 				$historial=$row['COUNT( ID )'];
 				$totaldepositado=$totalaprobado+$totalpendiente; ?>
-					<div class="col-md-3 col-sm-3 col-xs-6">
+					<div class="col-md-4 col-sm-4 col-xs-6">
 						<blockquote class="borderazul panel-footer">
 							<h5 class="">Colecciones:</h5> <h5><?php echo $stotalcantidad; ?></h5>
 						</blockquote>
 					</div>
-					<div class="col-md-3 col-sm-3 col-xs-6">
+					<div class="col-md-4 col-sm-4 col-xs-6">
 						<blockquote class="borderazul panel-footer">
 							<h5 class="">Total Invertido:</h5> <h5>Bsf <?php echo number_format($stotalacancelar, 2, ',', '.'); ?></h5>
 						</blockquote>
 					</div>
-					<div class="col-md-3 col-sm-3 col-xs-6">
+					<div class="col-md-4 col-sm-4 col-xs-12">
 						<blockquote class="borderazul panel-footer">
 							<h5 class="">Total Aprobado:</h5> <h5>Bsf <?php echo number_format($totalaprobado, 2, ',', '.'); ?></h5>
 						</blockquote>
-					</div>	
-					<div class="col-md-3 col-sm-3 col-xs-6">
-						<blockquote class="borderazul panel-footer">
-							<h5 class="">Total Registrado:</h5> <h5>Bsf <?php echo number_format($totaldepositado, 2, ',', '.'); ?></h5>
-						</blockquote>
-					</div>				
+					</div>			
 					<div class="col-xs-12">
 						<blockquote class="borderazul paddingbot50 panel-footer">
 							<div class="col-xs-12 col-sm-6 col-md-3 margintop10">

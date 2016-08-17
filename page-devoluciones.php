@@ -19,7 +19,7 @@ if( current_user_can('subscriber')) {
 					        <h4 class="modal-title letraroja text-center">ATENCIÓN</h4>
 					      </div>
 					      <div class="modal-body">
-					        <h1 class="letraverde">¡Gracias! Se ha registrado exitosamente la devolución.</h1>
+					        <h1 class="letraverde text-center">¡Gracias! Se ha registrado exitosamente la devolución.</h1>
 					      </div>
 					      <div class="modal-footer">
 					        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -50,21 +50,13 @@ if( current_user_can('subscriber')) {
 				</div>
 			</div>
 			<?php
-				$args=array('post_status' => 'publish', 'post_type'=> 'post', 'post_type'=> 'admin', 'order' => 'ASC', 'posts_per_page' => -1 ); $my_query = new WP_Query($args);
+				$args=array('post_status' => 'publish', 'post_type'=> 'post', 'post_type'=> 'admin', 'order' => 'ASC', 'posts_per_page' => -1, 'tax_query' => array( array(  'taxonomy' => 'Gerente', 'field' => 'slug', 'terms' => $usuariologged ) ) ); $my_query = new WP_Query($args);
         		if( $my_query->have_posts() ) {
 					while ($my_query->have_posts()) : 
 						$my_query->the_post(); 
-						$id = get_the_ID();						
-				        $gocliente = get_the_terms( $post->ID , 'Gerente' );
-				        print_r($gocliente);
-				       	echo "<br>";
-				        foreach ($gocliente as $devolucion) {
-				        	print_r($devolucion);
-				        	if($campana==$usuariologged){$go=1;}
-				        	echo $campana.' ';
-				        }
+					    $go=1;
 				    endwhile;
-    			}
+    			}		        
 
     		if ($go==1) {
 				$args=array('post_status' => 'publish', 'order' => 'ASC', 'post_type'=> 'post', 'posts_per_page' => 1, 'tax_query' => array( array(  'taxonomy' => 'Gerente', 'field' => 'slug', 'terms' => $usuariologged ) ) ); 
@@ -85,17 +77,7 @@ if( current_user_can('subscriber')) {
 										<input value="<?php echo date("d/m/Y"); ?>" id="fecha" name="fecha" type="text" class="form-control" readonly>
 									</div>
 									<div class="col-md-4">
-									    <select class="form-control" name="coleccion" id="coleccion">
-									    	<option value="">Seleccionar colección</option>
-							                <?php $args=array('post_status' => 'publish', 'post_type'=> 'post',  'order' => 'ASC', 'posts_per_page' => -1, 'tax_query' => array( array(  'taxonomy' => 'Gerente', 'field' => 'slug', 'terms' => $usuariologged ) ) ); $my_query = new WP_Query($args);
-											    if( $my_query->have_posts() ) { 
-													while ($my_query->have_posts()) : $my_query->the_post(); $id = get_the_ID();
-												        $categories = get_the_category(); 
-												        $producto=$categories[0]->name;
-												        echo '<option value="'. $producto.'"> '.$producto.' </option>';
-											        endwhile;
-											    } ?>
-									    </select>
+										<input placeholder="Colección"  id="coleccion" name="coleccion" type="text" class="form-control" required>
 									</div>
 									<div class="col-md-4">
 										<input placeholder="Cantidad"  id="cantidad" name="cantidad" type="text" class="form-control" required>
