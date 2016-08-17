@@ -63,72 +63,72 @@ elseif (current_user_can('administrator')) { ?>
 
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script>
-var dropdownFilter = {
-  $filters: null,
-  $reset: null,
-  groups: [],
-  outputArray: [],
-  outputString: '',
-  
-  init: function(){
-    var self = this;
-    self.$filters = $('#Filters');
-    self.$reset = $('#Reset');
-    self.$container = $('#Container');
-    self.$filters.find('fieldset').each(function(){
-      self.groups.push({
-        $dropdown: $(this).find('select'),
-        active: ''
-      });
-    });
-    
-    self.bindHandlers();
-  },
-  bindHandlers: function(){
-    var self = this;
-    self.$filters.on('change', 'select', function(e){
-      e.preventDefault();
-      
-      self.parseFilters();
-    });
-    self.$reset.on('click', function(e){
-      e.preventDefault();
-      
-      self.$filters.find('select').val('');
-      
-      self.parseFilters();
-    });
-  },
-  parseFilters: function(){
-    var self = this;
-    for(var i = 0, group; group = self.groups[i]; i++){
-      group.active = group.$dropdown.val();
-    }
-    
-    self.concatenate();
-  },
-  concatenate: function(){
-    var self = this;
-    
-    self.outputString = '';
-    
-    for(var i = 0, group; group = self.groups[i]; i++){
-      self.outputString += group.active;
-    }
-    !self.outputString.length && (self.outputString = 'all'); 
-	  if(self.$container.mixItUp('isLoaded')){
-    	self.$container.mixItUp('filter', self.outputString);
+	var dropdownFilter = {
+	  $filters: null,
+	  $reset: null,
+	  groups: [],
+	  outputArray: [],
+	  outputString: '',
+	  
+	  init: function(){
+	    var self = this;
+	    self.$filters = $('#Filters');
+	    self.$reset = $('#Reset');
+	    self.$container = $('#Container');
+	    self.$filters.find('fieldset').each(function(){
+	      self.groups.push({
+	        $dropdown: $(this).find('select'),
+	        active: ''
+	      });
+	    });
+	    
+	    self.bindHandlers();
+	  },
+	  bindHandlers: function(){
+	    var self = this;
+	    self.$filters.on('change', 'select', function(e){
+	      e.preventDefault();
+	      
+	      self.parseFilters();
+	    });
+	    self.$reset.on('click', function(e){
+	      e.preventDefault();
+	      
+	      self.$filters.find('select').val('');
+	      
+	      self.parseFilters();
+	    });
+	  },
+	  parseFilters: function(){
+	    var self = this;
+	    for(var i = 0, group; group = self.groups[i]; i++){
+	      group.active = group.$dropdown.val();
+	    }
+	    
+	    self.concatenate();
+	  },
+	  concatenate: function(){
+	    var self = this;
+	    
+	    self.outputString = '';
+	    
+	    for(var i = 0, group; group = self.groups[i]; i++){
+	      self.outputString += group.active;
+	    }
+	    !self.outputString.length && (self.outputString = 'all'); 
+		  if(self.$container.mixItUp('isLoaded')){
+	    	self.$container.mixItUp('filter', self.outputString);
+		  }
 	  }
-  }
-};
-$(function(){ dropdownFilter.init();
-    jQuery('#Container').mixItUp({
-		animation: { duration: 200 },
-		pagination: { limit: 50, loop: false, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a><h4>Siguiente</h4></a>' },
-		controls: { toggleFilterButtons: true, toggleLogic: 'and' },
-		load: { sort: 'myorder:desc' }
-  });    
-});
+	};
+	$(function(){ dropdownFilter.init();
+	    jQuery('#Container').mixItUp({
+			animation: { duration: 200 },
+			pagination: { limit: 50, loop: false, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a><h4>Siguiente</h4></a>' },
+			controls: { toggleFilterButtons: true, toggleLogic: 'and' },
+			load: { sort: 'myorder:desc' }
+	  });    
+	});
 </script>
 <?php }
 get_footer(); ?>

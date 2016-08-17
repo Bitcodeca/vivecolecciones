@@ -7,13 +7,73 @@
 			<?php
 				if(isset($_POST['enviar'])) {
 					include (TEMPLATEPATH . '/funciones/registrarproblema.php');
-					if ($status=='aprobado') {
-						 echo '<h1 class="letraverde">Registre este depósito normalmente, no es problemático.</h1>';
-					} elseif ($status=='pendiente') {
-						  echo '<h1 class="letraamarilla">Se ha introducido el depósito problemático. En la brevedad posible se analizará.</h1>';
-					} elseif ($status=='negada') {
-						echo '<h1 class="letraroja">Ya ha introducido el mismo registro. Intente con uno diferente.</h1>';
-					}
+					if ($status=='aprobado') { ?>
+						<div class="modal fade" id="myModal"  tabindex="-1" role="dialog">
+								  <div class="modal-dialog" role="document">
+								    <div class="modal-content">
+								      <div class="modal-header">
+								        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								        <h4 class="modal-title letraroja">ATENCIÓN</h4>
+								      </div>
+								      <div class="modal-body">
+								        <h1 class="letraverde">Registre este depósito normalmente, no es problemático.</h1>
+								      </div>
+								      <div class="modal-footer">
+								        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+								      </div>
+								    </div><!-- /.modal-content -->
+								  </div><!-- /.modal-dialog -->
+								</div><!-- /.modal -->
+								<script>
+									jQuery(document).ready(function() {
+										$('#myModal').modal('show'); 
+									});
+								</script>
+					<?php } elseif ($status=='pendiente') { ?>
+						<div class="modal fade" id="myModal"  tabindex="-1" role="dialog">
+								  <div class="modal-dialog" role="document">
+								    <div class="modal-content">
+								      <div class="modal-header">
+								        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								        <h4 class="modal-title letraroja">ATENCIÓN</h4>
+								      </div>
+								      <div class="modal-body">
+								        <h1 class="letraamarilla">Se ha introducido el depósito problemático. En la brevedad posible se analizará.</h1>
+								      </div>
+								      <div class="modal-footer">
+								        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+								      </div>
+								    </div><!-- /.modal-content -->
+								  </div><!-- /.modal-dialog -->
+								</div><!-- /.modal -->
+								<script>
+									jQuery(document).ready(function() {
+										$('#myModal').modal('show'); 
+									});
+								</script>
+					<?php } elseif ($status=='negada') { ?>
+						<div class="modal fade" id="myModal"  tabindex="-1" role="dialog">
+								  <div class="modal-dialog" role="document">
+								    <div class="modal-content">
+								      <div class="modal-header">
+								        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								        <h4 class="modal-title letraroja">ATENCIÓN</h4>
+								      </div>
+								      <div class="modal-body">
+								        <h1 class="letraroja">Ya ha introducido el mismo registro. Intente con uno diferente.</h1>
+								      </div>
+								      <div class="modal-footer">
+								        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+								      </div>
+								    </div><!-- /.modal-content -->
+								  </div><!-- /.modal-dialog -->
+								</div><!-- /.modal -->
+								<script>
+									jQuery(document).ready(function() {
+										$('#myModal').modal('show'); 
+									});
+								</script>
+					<?php }
 				}
 			?>
 				<div class="col-md-12 margintop25">

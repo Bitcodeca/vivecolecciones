@@ -91,7 +91,10 @@ p { font-size: 1.2em;text-align : justify; margin: 0 0 5px;}
 .pager-list .active {font-weight: bolder; color:#13345d; }
 fieldset { border: 0px solid #c0c0c0; margin: 0 0px; padding: 0px; }
 .borderazul { border-color: #337AB7; border-top: 0px;}
+.borderrojo { border-color: #c50a2e !important; border-top: 0px;}
 .btn-default.active, .btn-default:active, .open>.dropdown-toggle.btn-default { color: #fff;  background-color: #337AB7; border-color: #1e496d; }
 .btn-default:hover, .btn-default:focus, .btn-default:active { color: #fff;  background-color: #4787be; border-color: #337ab7;}
 .fondogrispar:nth-child(even){background-color: #f2f2f2}
 .panel-group { margin-top: 20px; margin-bottom: 0px; }
+.chip { display: inline-block; height: 32px; font-size: 14px; font-weight: 500; color: #fff; line-height: 32px; padding: 0 12px; border-radius: 16px; background-color: #337AB7; margin-bottom: 5px; margin-right: 5px; float: right; margin-top: 10px;}
+.chip img { float: right; margin: 0px 0px 0px 8px; height: 32px; width: 32px; border-radius: 50%;}

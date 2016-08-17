@@ -39,7 +39,13 @@
                 </div>
             </div>
         </nav>
-        <div class="container hidden-print"><h4 class="text-right">Usuario: <?php echo $usuariologged ?></h4></div>
+        <div class="container hidden-print">
+            <a href="http://vivecolecciones.com.ve/account/">
+                <div class="chip">
+                    <?php include (TEMPLATEPATH . '/funciones/usuariologged.php'); echo $nombrelogged.' '.$apellidologged; echo $grvimg; ?>
+                </div>
+            </a>
+        </div>
 <?php } else { ?>
     <div class="container paddingtop75 paddingbot75">
         <div class="row">
