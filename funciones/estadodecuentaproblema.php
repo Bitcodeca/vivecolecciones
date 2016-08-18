@@ -31,7 +31,7 @@
 				$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
 				$fechaunixdep=strtotime($fechacambiadadep);
 			?>
-			<div class="mix <?php echo $clientedeposito; ?> <?php echo $bancodeposito; ?> <?php echo $statusdeposito; ?>" data-myorder="<?php echo $fechaunixdep; ?>">
+			<div class="fondogrispar mix <?php echo $clientedeposito; ?> <?php echo $bancodeposito; ?> <?php echo $statusdeposito; ?>" data-myorder="<?php echo $fechaunixdep; ?>">
 				<form name="importa<?php echo $iddeposito; ?>" method="post" action="http://vivecolecciones.com.ve/depositos-problemas/" >
 			        <div class="row text-center bordertopnegro">
 						<div class="col-md-2 col-sm-2 col-xs-12"> 

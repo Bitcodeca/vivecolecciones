@@ -269,11 +269,10 @@
 								        <h4 class="modal-title letraroja">ATENCIÓN</h4>
 								      </div>
 								      <div class="modal-body">
-								        <p>El depósito se encuentra en uso y aprobado actualmente por el usuario <?php echo $cliente; ?>. ¿Desea aprobar este depósito de igual manera?</p>
+								        <p>El depósito se encuentra en uso y aprobado actualmente por el usuario <?php echo $cliente; ?>.</p>
 								      </div>
 								      <div class="modal-footer">
 								        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-								        <button type="button"  class="btn btn-primary">Aprobar</button>
 								      </div>
 								    </div><!-- /.modal-content -->
 								  </div><!-- /.modal-dialog -->
@@ -319,7 +318,7 @@
 						}
 				}
 	        	?>
-      			<h1 class="marginbot10 text-left">Pagos Recibidos</h1>
+      			<h1 class="marginbot10 text-left">Depósitos Problemas</h1>
 	            <div class="text-left">
 					<div class="clearfix"></div>
 					<form class="controls" id="Filters">

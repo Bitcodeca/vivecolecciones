@@ -100,13 +100,22 @@
 				$result = mysqli_query($con, "SELECT COUNT( ID ) FROM historial");
 				$row = mysqli_fetch_assoc($result);
 				$historial=$row['COUNT( ID )'];
+				$result = mysqli_query($con, "SELECT COUNT( ID ) FROM denuncias");
+				$row = mysqli_fetch_assoc($result);
+				$denuncias=$row['COUNT( ID )'];
+				$result = mysqli_query($con, "SELECT COUNT( ID ) FROM cambios");
+				$row = mysqli_fetch_assoc($result);
+				$cambios=$row['COUNT( ID )'];
+				$result = mysqli_query($con, "SELECT COUNT( ID ) FROM devoluciones");
+				$row = mysqli_fetch_assoc($result);
+				$devoluciones=$row['COUNT( ID )'];
 				$totaldepositado=$totalaprobado+$totalpendiente; ?>
-					<div class="col-md-4 col-sm-4 col-xs-6">
+					<div class="col-md-4 col-sm-4 col-xs-12">
 						<blockquote class="borderazul panel-footer">
 							<h5 class="">Colecciones:</h5> <h5><?php echo $stotalcantidad; ?></h5>
 						</blockquote>
 					</div>
-					<div class="col-md-4 col-sm-4 col-xs-6">
+					<div class="col-md-4 col-sm-4 col-xs-12">
 						<blockquote class="borderazul panel-footer">
 							<h5 class="">Total Invertido:</h5> <h5>Bsf <?php echo number_format($stotalacancelar, 2, ',', '.'); ?></h5>
 						</blockquote>
@@ -117,18 +126,30 @@
 						</blockquote>
 					</div>			
 					<div class="col-xs-12">
-						<blockquote class="borderazul paddingbot50 panel-footer">
-							<div class="col-xs-12 col-sm-6 col-md-3 margintop10">
-								<p class="letraverde fontsize1em">Aprobados: <?php echo $aprobado; ?></p>
+						<blockquote class="borderazul displayinlineblock panel-footer">
+
+							<div class="col-xs-12 col-sm-3 col-md-3 margintop10">
+								<p class="letraverde fontsize1em text-center">Aprobados: <?php echo $aprobado; ?></p>
 							</div>
-							<div class="col-xs-12 col-sm-6 col-md-3 margintop10">
-								<p class="letraamarilla fontsize1em">Pendientes: <?php echo $pendiente; ?></p>
+							<div class="col-xs-12 col-sm-3 col-md-3 margintop10">
+								<p class="letraamarilla fontsize1em text-center">Pendientes: <?php echo $pendiente; ?></p>
 							</div>
-							<div class="col-xs-12 col-sm-6 col-md-3 margintop10">
-								<p class="letraroja fontsize1em">Negados: <?php echo $negado; ?></p>
+							<div class="col-xs-12 col-sm-3 col-md-3 margintop10">
+								<p class="letraroja fontsize1em text-center">Negados: <?php echo $negado; ?></p>
 							</div>
-							<div class="col-xs-12 col-sm-6 col-md-3 margintop10">
-								<p class="fontsize1em">Historial: <?php echo $historial; ?></p>
+							<div class="col-xs-12 col-sm-3 col-md-3 margintop10">
+								<p class="fontsize1em text-center">Historial: <?php echo $historial; ?></p>
+							</div>
+
+
+							<div class="col-xs-12 col-sm-4 col-md-4 paddingtopbot10">
+								<p class="fontsize1em text-center">Devoluciones: <?php echo $devoluciones; ?></p>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-md-4 paddingtopbot10">
+								<p class="fontsize1em text-center">Cambios y Averías: <?php echo $cambios; ?></p>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-md-4 paddingtopbot10">
+								<p class="fontsize1em text-center">Denuncias: <?php echo $denuncias; ?></p>
 							</div>
 						</blockquote>
 					</div>
