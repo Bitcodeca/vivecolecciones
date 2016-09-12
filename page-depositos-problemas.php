@@ -126,7 +126,9 @@
 							<a class="filter btn btn-default btnfiltro" data-filter=".bicentenario">Banco Bicentenario</a>
 							<a class="filter btn btn-default btnfiltro" data-filter=".venezuela">Banco de Venezuela</a>
 							<a class="filter btn btn-default btnfiltro" data-filter=".banplus">Banco BanPlus</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".mercantil">Banco Mercantil</a>  
+							<a class="filter btn btn-default btnfiltro" data-filter=".mercantil">Banco Mercantil</a>
+							<a class="filter btn btn-default btnfiltro" data-filter=".bancaribe">Bancaribe</a>
+							<a class="filter btn btn-default btnfiltro" data-filter=".bnc">BNC</a>  
 		            </div>
 				</div>
 			</div>
@@ -149,6 +151,8 @@
 										<option value="venezuela">Banco de Venezuela</option>
 										<option value="banplus">Banco BanPlus</option>
 										<option value="mercantil">Banco Mercantil</option>
+										<option value="bancaribe">Bancaribe</option>
+										<option value="bnc">BNC</option>
 									</select>
 								</div>
 								<div class="col-md-3">
@@ -355,6 +359,8 @@
 									    <option value=".venezuela">Banco de Venezuela</option>
 									    <option value=".banplus">BanPlus</option>
 									    <option value=".mercantil">Mercantil</option>
+									    <option value=".bancaribe">Bancaribe</option>
+									    <option value=".bnc">BNC</option>
 								    </select>
 							    </fieldset> 
 							</div>

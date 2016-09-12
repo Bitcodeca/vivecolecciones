@@ -92,6 +92,8 @@ if(isset($_POST['cerrarfactura'])) {
 							<a class="filter btn btn-default btnfiltro" data-filter=".venezuela">Banco de Venezuela</a>
 							<a class="filter btn btn-default btnfiltro" data-filter=".banplus">Banco BanPlus</a>
 							<a class="filter btn btn-default btnfiltro" data-filter=".mercantil">Banco Mercantil</a>  
+							<a class="filter btn btn-default btnfiltro" data-filter=".bancaribe">Bancaribe</a>  
+							<a class="filter btn btn-default btnfiltro" data-filter=".bnc">BNC</a>  
 						</div>
 					</div>
 					<div class="clearfix"></div>

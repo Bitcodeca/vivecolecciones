@@ -1,7 +1,7 @@
 <?php
 	$con = mysqli_connect ("localhost","advv","cdavv210416","bdve210416");
 	$montototal=0;
-	$bancoarray = array(mercantil, provincial, banesco, activo, bicentenario, venezuela, banplus);
+	$bancoarray = array(mercantil, provincial, banesco, activo, bicentenario, venezuela, banplus, bancaribe, bnc);
 
 	$resultgeneral = mysqli_query($con, "SELECT * FROM registro WHERE cliente='".$buscar."' LIMIT 1 ");
 	while ($row = mysqli_fetch_array($resultgeneral)) {

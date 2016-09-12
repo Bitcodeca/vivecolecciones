@@ -4,7 +4,7 @@
 	$aprobado=0;
 	$pendiente=0;
 	$negado=0;
-	$bancoarray = array(mercantil, provincial, banesco, activo, bicentenario, venezuela, banplus);
+	$bancoarray = array(mercantil, provincial, banesco, activo, bicentenario, venezuela, banplus, bancaribe, bnc);
 
 	foreach ( $todoslosusuarios as $user ) {
 		$buscar=$user->user_login;

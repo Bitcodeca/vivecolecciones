@@ -59,6 +59,8 @@ elseif (current_user_can('administrator')) { ?>
 									<option value="venezuela">Banco de Venezuela</a>
 									<option value="banplus">Banco BanPlus</a>
 									<option value="mercantil">Banco Mercantil</a>
+									<option value="bancaribe">Bancaribe</a>
+									<option value="bnc">BNC</a>
 							    </select>
 							</div>
 						</div>
@@ -331,6 +333,8 @@ elseif (current_user_can('administrator')) { ?>
 									<option value="venezuela">Banco de Venezuela</a>
 									<option value="banplus">Banco BanPlus</a>
 									<option value="mercantil">Banco Mercantil</a>
+									<option value="bancaribe">Bancaribe</a>
+									<option value="bnc">BNC</a>
 							    </select>
 							</div>
 						</div>

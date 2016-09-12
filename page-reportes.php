@@ -283,6 +283,8 @@
 									<a class="filter2 btn btn-default btnfiltro2" data-filter=".venezuela">Banco de Venezuela</a>
 									<a class="filter2 btn btn-default btnfiltro2" data-filter=".banplus">Banco BanPlus</a>
 									<a class="filter2 btn btn-default btnfiltro2" data-filter=".mercantil">Banco Mercantil</a>  
+									<a class="filter2 btn btn-default btnfiltro2" data-filter=".bancaribe">Bancaribe</a>
+									<a class="filter2 btn btn-default btnfiltro2" data-filter=".bnc">BNC</a>  
 				            </div>
 
 							<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -609,6 +611,8 @@
 									<a class="filter2 btn btn-default btnfiltro2" data-filter=".venezuela">Banco de Venezuela</a>
 									<a class="filter2 btn btn-default btnfiltro2" data-filter=".banplus">Banco BanPlus</a>
 									<a class="filter2 btn btn-default btnfiltro2" data-filter=".mercantil">Banco Mercantil</a>  
+									<a class="filter2 btn btn-default btnfiltro2" data-filter=".bancaribe">Bancaribe</a>
+									<a class="filter2 btn btn-default btnfiltro2" data-filter=".bnc">BNC</a>  
 				            </div>
 
 							<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
