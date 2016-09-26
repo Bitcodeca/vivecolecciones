@@ -1,6 +1,6 @@
 <?php 
 	$con = mysqli_connect ("localhost","advv","cdavv210416","bdve210416");
-	$bancoarray = array(mercantil, provincial, banesco, activo, bicentenario, venezuela, banplus, bancaribe, bnc);
+	$bancoarray = array(mercantil, provincial, banesco, activo, bicentenario, venezuela, banplus, bancaribe, bnc, venezolano);
 	foreach ($bancoarray as $ordenbanco) {
 		$result = mysqli_query($con, "SELECT * FROM registro WHERE cliente='".$cliente."' AND banco LIKE '%".$ordenbanco."%' ");
 		while ($row = mysqli_fetch_array($result)) {

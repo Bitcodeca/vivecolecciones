@@ -129,6 +129,7 @@
 							<a class="filter btn btn-default btnfiltro" data-filter=".mercantil">Banco Mercantil</a>
 							<a class="filter btn btn-default btnfiltro" data-filter=".bancaribe">Bancaribe</a>
 							<a class="filter btn btn-default btnfiltro" data-filter=".bnc">BNC</a>  
+							<a class="filter btn btn-default btnfiltro" data-filter=".venezolano">Venezolano de Crédito</a>  
 		            </div>
 				</div>
 			</div>
@@ -153,6 +154,7 @@
 										<option value="mercantil">Banco Mercantil</option>
 										<option value="bancaribe">Bancaribe</option>
 										<option value="bnc">BNC</option>
+										<option value="venezolano">Venezolano de Crédito</option>
 									</select>
 								</div>
 								<div class="col-md-3">
@@ -361,6 +363,7 @@
 									    <option value=".mercantil">Mercantil</option>
 									    <option value=".bancaribe">Bancaribe</option>
 									    <option value=".bnc">BNC</option>
+									    <option value=".venezolano">Venezolano de Crédito</option>
 								    </select>
 							    </fieldset> 
 							</div>

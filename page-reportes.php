@@ -285,6 +285,7 @@
 									<a class="filter2 btn btn-default btnfiltro2" data-filter=".mercantil">Banco Mercantil</a>  
 									<a class="filter2 btn btn-default btnfiltro2" data-filter=".bancaribe">Bancaribe</a>
 									<a class="filter2 btn btn-default btnfiltro2" data-filter=".bnc">BNC</a>  
+									<a class="filter2 btn btn-default btnfiltro2" data-filter=".venezolano">Venezolano de Crédito</a>  
 				            </div>
 
 							<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -526,7 +527,7 @@
 			        		<div id="Container2">
 								<?php 
 									$con = mysqli_connect ("localhost","advv","cdavv210416","bdve210416");
-									$bancoarray = array(mercantil, provincial, banesco, activo, bicentenario, venezuela, banplus);
+									$bancoarray = array(mercantil, provincial, banesco, activo, bicentenario, venezuela, banplus,venezolano);
 									foreach ($bancoarray as $ordenbanco) {
 										$result = mysqli_query($con, "SELECT * FROM registro WHERE cliente='".$cliente."' AND banco LIKE '%".$ordenbanco."%' ");
 										while ($row = mysqli_fetch_array($result)) {
@@ -613,6 +614,7 @@
 									<a class="filter2 btn btn-default btnfiltro2" data-filter=".mercantil">Banco Mercantil</a>  
 									<a class="filter2 btn btn-default btnfiltro2" data-filter=".bancaribe">Bancaribe</a>
 									<a class="filter2 btn btn-default btnfiltro2" data-filter=".bnc">BNC</a>  
+									<a class="filter2 btn btn-default btnfiltro2" data-filter=".venezolano">Venezolano de Crédito</a>  
 				            </div>
 
 							<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
