@@ -1,221 +1,125 @@
 <?php get_header();
-	if( current_user_can('subscriber')) {
-		include (TEMPLATEPATH . '/funciones/usuariologged.php'); ?>
-		<div class="container">
-			<div class="row">
-			<?php
-				if(isset($_POST['enviar'])) {
-					include (TEMPLATEPATH . '/funciones/registrardenuncia.php');
-					if ($status=='aprobado') { ?>
-						<div class="modal fade" id="myModal"  tabindex="-1" role="dialog">
-						  <div class="modal-dialog" role="document">
-						    <div class="modal-content">
-						      <div class="modal-header">
-						        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						        <h4 class="modal-title letraroja text-center">ATENCIÓN</h4>
-						      </div>
-						      <div class="modal-body">
-						        <h1 class="letraverde text-center">Se ha registrado la denuncia.</h1>
-						      </div>
-						      <div class="modal-footer">
-						        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-						      </div>
-						    </div><!-- /.modal-content -->
-						  </div><!-- /.modal-dialog -->
-						</div><!-- /.modal -->
-						<script>
-							jQuery(document).ready(function() {
-								$('#myModal').modal('show'); 
-							});
-						</script>
-						<?php
-					} elseif ($status=='negada') { ?>
-						<div class="modal fade" id="myModal"  tabindex="-1" role="dialog">
-								  <div class="modal-dialog" role="document">
-								    <div class="modal-content">
-								      <div class="modal-header">
-								        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-								        <h4 class="modal-title letraroja text-center">ATENCIÓN</h4>
-								      </div>
-								      <div class="modal-body">
-								        <h1 class="letraverde text-center">Ya esta persona ha sido denunciada.</h1>
-								      </div>
-								      <div class="modal-footer">
-								        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-								      </div>
-								    </div><!-- /.modal-content -->
-								  </div><!-- /.modal-dialog -->
-								</div><!-- /.modal -->
-								<script>
-									jQuery(document).ready(function() {
-										$('#myModal').modal('show'); 
-									});
-								</script>
-								<?php
-					} 
-				}
-			?>
-			</div>	
-			<div class="row">
-				<div class="col-xs-12">
-					<h2 class="text-center">Registrar Denuncia</h2>
-					<blockquote class="borderrojo panel-footer">
-						<p>Esta sección es netamente informativa de uso interno para facilitar a personas prestadas a estafas por incumplimiento de pagos.</p>
-					</blockquote>
+if ( is_user_logged_in() ) {
+	$user_logged=user_logged();
+	if($user_logged['rol']=='administrator'){
+	    require_once 'api/vive-db.php';
+	    if (mysqli_connect_errno()) { ?>
+			<h1>ERROR DE CONEXIÓN</h1>
+	    <?php } else { ?>
+
+			<div class="container-fluid margintop25 marginbot25">	
+	    		<div class="row">
+					<div class="col-md-12">
+						<div class="card-panel z-depth-2 hoverable">
+					     	<h1 class="center-align">Denuncias</h1>
+
+
+						</div>
+					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="margintop25 marginbot25">
-					<form name="importa" method="post" action="http://vivecolecciones.com.ve/denuncias/" >
-                        <div class="margintop25">
-							<div class="col-md-12">
-								<label>Fecha</label>
-								<input value="<?php echo date("d/m/Y"); ?>" id="fecha" name="fecha" type="text" class="form-control" readonly>
-							</div>
-							<div class="col-md-12">
-								<label>Nombre y apellido</label>
-								<input placeholder="Nombre y apellido"  id="nombre" name="nombre" type="text" class="form-control" required>
-							</div>
-							<div class="col-md-12">
-								<label>Cédula</label>
-								<input placeholder="Cédula"  id="cedula" name="cedula" type="number" class="form-control">
-							</div>
-							<div class="col-md-12">
-								<label>Localidad</label>
-								<input placeholder="localidad"  id="localidad" name="localidad" type="text" class="form-control" required>
-							</div>
-							<div class="col-md-12">
-								<label>Comentario</label>
-                				<textarea id="message" name="message" class="form-control" rows="10" style="resize: vertical;" placeholder="Comentario"  required></textarea>
-							</div>
-								<input value="<?php echo $usuariologged; ?>" id="cliente" name="cliente" type="text" hidden required>
-							<div class="col-md-12 margintop25 marginbot25 text-center">
-								<input class="btn btn-primary marginauto" type='submit' name='enviar' id="enviar" value="Denunciar"/>
+	    <?php }
+	} elseif ($user_logged['rol']=='Gerente') {
+		require_once 'api/vive-db.php';
+	    if (mysqli_connect_errno()) { ?>
+			<h1>ERROR DE CONEXIÓN</h1>
+	    <?php
+	    }
+	    else {
+			$gerente_logged=$user_logged["login"]; ?>
+			<div class="container margintop25 marginbot25">	
+	    		<div class="row">
+					<div class="col-md-12">
+						<div class="card-panel z-depth-2 hoverable">
+					     	<h1 class="center-align">Denuncias</h1>
+
+							<div ng-controller="ContactController">
+								<form ng-submit="submit(contactform)" role="form" method="post" name="contactform" action="" class="margintop25" >
+									<div class="row marginbot0">
+										<div class="input-field col-xs-12 col-sm-4 col-sm-offset-4">
+											<h4>Nombre y Apellido</h4>
+											<span ng-class="{ 'has-error': contactform.nombre.$invalid && submitted }">
+								        		<input type="text" placeholder="NOMBRE Y APELLIDO" name="nombre"  id="nombre"  class="inputfield" ng-model="formData.nombre" min="0" required>
+								        	</span>
+								        </div>
+							        </div>
+									<div class="row marginbot0">
+										<div class="input-field col-xs-12 col-sm-4 col-sm-offset-4">
+											<h4>Cédula</h4>
+											<span ng-class="{ 'has-error': contactform.cedula.$invalid && submitted }">
+								        		<input type="number" placeholder="CÉDULA" name="cedula"  id="cedula"  class="inputfield" ng-model="formData.cedula" min="0" required>
+								        	</span>
+								        </div>
+							        </div>
+									<div class="row marginbot0">
+										<div class="input-field col-xs-12 col-sm-4 col-sm-offset-4">
+											<h4>Localidad</h4>
+											<span ng-class="{ 'has-error': contactform.localidad.$invalid && submitted }">
+								        		<input type="text" placeholder="LOCALIDAD" name="localidad"  id="localidad"  class="inputfield" ng-model="formData.localidad" min="0" required>
+								        	</span>
+								        </div>
+							        </div>
+									<div class="row marginbot0">
+										<div class="input-field col-xs-12 col-sm-4 col-sm-offset-4">
+											<h4>Comentario</h4>
+											<span ng-class="{ 'has-error': contactform.comentario.$invalid && submitted }">
+								        		<input type="text" placeholder="COMENTARIO" name="comentario"  id="comentario"  class="inputfield" ng-model="formData.comentario" min="0" required>
+								        	</span>
+								        </div>
+							        </div>
+									
+									<input type="hidden" name="usuario" id="usuario" ng-model="formData.usuario" ng-init="formData.usuario='<?php echo $gerente_logged; ?>'" />
+									
+									<div class="row center-align">
+										<button  type="submit" ng-disabled="submitButtonDisabled" class="btn btn-radius fondo3 waves-effect waves-light margintop25" type="submit">
+											<i class="material-icons medium left">&#xE2C3;</i>
+											REGISTRAR DENUNCIA
+										</button>
+									</div>
+								</form>
+								<p ng-class="result" style="padding: 15px; margin: 0;">{{ resultMessage }}</p>
 							</div>
 						</div>
-					</form>
+					</div>
 				</div>
 			</div>
-		</div>
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<?php }
-	elseif( current_user_can('administrator')) { 
-		if(isset($_POST['btn'])) { 
-			$con = mysqli_connect ("localhost","advv","cdavv210416","bdve210416");
-			$sql = "DELETE FROM denuncias WHERE id=$id";
-			mysqli_query($con, $sql);
-			mysqli_close($con);
-		} ?>
-		<div class="container">
-  			<h1 class="marginbot10 text-left">Denuncias</h1>
-            <div class="text-left">
-				<form class="controls" id="Filters">
-					<div class="clearfix"></div>
-					<div class="row margintop50">
-						<div class="col-md-2 col-sm-2 col-xs-12">
-							<span class="finalinventario">Ordernar por: </span>
-						</div>
-						<div class="col-md-10 col-sm-10 col-xs-12">
-							<button type="button" class="sort btn btn-default" data-sort="default">Default</button>
-						  	<button type="button" class="sort btn btn-default" data-sort="myorder:asc">Anteriores</button>
-						  	<button type="button" class="sort btn btn-default active" data-sort="myorder:desc">Recientes</button>
-						</div>
-		            </div>
-				</form>
-            </div>
-            <div class="pager-list margintop10 marginbot10"></div>
-      		<div class="inventario margintop25">
-				<div class="col-md-2 col-sm-2 col-xs-6"> 
-					<h4>Fecha</h4>
-				</div>
-				<div class="col-md-2 col-sm-2 col-xs-6"> 
-					<h4>Gerente</h4>
-				</div>
-				<div class="col-md-2 col-sm-2 col-xs-6"> 
-					<h4>Localidad</h4>
-				</div>
-				<div class="col-md-2 col-sm-2 col-xs-12"> 
-					<h4>Denunciado</h4>
-				</div>
-				<div class="col-md-2 col-sm-2 col-xs-12">
-					<h4>Cédula</h4>
-				</div>
-				<div class="col-md-2 col-sm-2 col-xs-12">
-					<h4>Observación</h4>
-				</div>
-			</div>
-			<div class="clearfix"></div>
-			<div id="Container"><?php include (TEMPLATEPATH . '/funciones/denuncias.php'); ?></div>
-            <div class="pager-list marginbot10"></div>
-        </div>
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-		<script>
-			var dropdownFilter = {
-			  $filters: null,
-			  $reset: null,
-			  groups: [],
-			  outputArray: [],
-			  outputString: '',
-			  
-			  init: function(){
-			    var self = this;
-			    self.$filters = $('#Filters');
-			    self.$reset = $('#Reset');
-			    self.$container = $('#Container');
-			    self.$filters.find('fieldset').each(function(){
-			      self.groups.push({
-			        $dropdown: $(this).find('select'),
-			        active: ''
-			      });
-			    });
-			    
-			    self.bindHandlers();
-			  },
-			  bindHandlers: function(){
-			    var self = this;
-			    self.$filters.on('change', 'select', function(e){
-			      e.preventDefault();
-			      
-			      self.parseFilters();
-			    });
-			    self.$reset.on('click', function(e){
-			      e.preventDefault();
-			      
-			      self.$filters.find('select').val('');
-			      
-			      self.parseFilters();
-			    });
-			  },
-			  parseFilters: function(){
-			    var self = this;
-			    for(var i = 0, group; group = self.groups[i]; i++){
-			      group.active = group.$dropdown.val();
-			    }
-			    
-			    self.concatenate();
-			  },
-			  concatenate: function(){
-			    var self = this;
-			    
-			    self.outputString = '';
-			    
-			    for(var i = 0, group; group = self.groups[i]; i++){
-			      self.outputString += group.active;
-			    }
-			    !self.outputString.length && (self.outputString = 'all'); 
-				  if(self.$container.mixItUp('isLoaded')){
-			    	self.$container.mixItUp('filter', self.outputString);
-				  }
-			  }
-			};
-			$(function(){ dropdownFilter.init();
-			    jQuery('#Container').mixItUp({
-					animation: { duration: 200 },
-					pagination: { limit: 50, loop: false, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a><h4>Siguiente</h4></a>' },
-					controls: { toggleFilterButtons: true, toggleLogic: 'and' },
-					load: { sort: 'myorder:desc' }
-			  });    
-			});
-		</script>
-	<?php }
-get_footer(); ?>
+			<?php 
+		}
+	}
+} else {  
+		header("Location: http://app.vivecolecciones.com.ve/"); /* Redirect browser */
+		exit(); 
+ } get_footer(); ?>
+ <script>
+	app.controller('ContactController', function ($scope, $http, $compile) {
+	    $scope.result = 'hidden'
+	    $scope.resultMessage;
+	    $scope.formData; //formData is an object holding the name, email, subject, and message
+	    $scope.submitButtonDisabled = false;
+	    $scope.submitted = false; //used so that form errors are shown only after the form has been submitted
+	    $scope.submit = function(contactform) {
+	        $scope.submitted = true;
+	        $scope.submitButtonDisabled = true;
+	        if (contactform.$valid) {
+	            $http({
+	                method  : 'POST',
+	                url     : '<?php site_url(); ?>/wp-content/themes/Vivev2/api/agregar-denuncia.php',
+	                data    : jQuery.param($scope.formData),
+	                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+	            }).success(function(data){
+	                console.log(data);
+	                if (data.success) {
+	                    $scope.submitButtonDisabled = true;
+	                    $scope.resultMessage = window.alert(data.message);
+	                    $scope.result='';
+	                } else {
+	                    $scope.submitButtonDisabled = false;
+	                    $scope.resultMessage = window.alert(data.message);
+	                    $scope.result='bg-danger';
+	                }
+	            });
+	        }
+	    }
+	    $scope.inputCounter=0;
+	});
+</script>

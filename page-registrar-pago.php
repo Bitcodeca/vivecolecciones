@@ -1,216 +1,317 @@
 <?php get_header();
-	if( current_user_can('subscriber')) {
-		include (TEMPLATEPATH . '/funciones/usuariologged.php'); ?>
-		<div class="container">
-			<div class="row">
-			<?php
-				if(isset($_POST['enviar'])) {
-					include (TEMPLATEPATH . '/funciones/registrar.php');
-					if ($status=='aprobado') { ?>
-						<div class="modal fade" id="myModal"  tabindex="-1" role="dialog">
-								  <div class="modal-dialog" role="document">
-								    <div class="modal-content">
-								      <div class="modal-header">
-								        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-								        <h4 class="modal-title letraroja text-center">ATENCIÓN</h4>
-								      </div>
-								      <div class="modal-body">
-								        <h1 class="letraverde">¡Gracias! Se ha realizado exitosamente el registro del depósito.</h1>
-								      </div>
-								      <div class="modal-footer">
-								        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-								      </div>
-								    </div><!-- /.modal-content -->
-								  </div><!-- /.modal-dialog -->
-								</div><!-- /.modal -->
-								<script>
-									jQuery(document).ready(function() {
-										$('#myModal').modal('show'); 
-									});
-								</script>
-								<?php
-					} elseif ($status=='pendiente') { ?>
-						<div class="modal fade" id="myModal"  tabindex="-1" role="dialog">
-								  <div class="modal-dialog" role="document">
-								    <div class="modal-content">
-								      <div class="modal-header">
-								        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-								        <h4 class="modal-title letraroja text-center">ATENCIÓN</h4>
-								      </div>
-								      <div class="modal-body">
-								        <h1 class="letraamarilla">Por favor registrar este depósito en la sección de Depósitos Problemas.</h1>
-								      </div>
-								      <div class="modal-footer">
-								        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-								        <a href="http://www.vivecolecciones.com.ve/depositos-problemas/"><button type="button"  class="btn btn-primary">Ir a Depósitos Problemas</button></a>
-								      </div>
-								    </div><!-- /.modal-content -->
-								  </div><!-- /.modal-dialog -->
-								</div><!-- /.modal -->
-								<script>
-									jQuery(document).ready(function() {
-										$('#myModal').modal('show'); 
-									});
-								</script>
-						  <?php
-					} elseif ($status=='negada') { ?>
-						<div class="modal fade" id="myModal"  tabindex="-1" role="dialog">
-								  <div class="modal-dialog" role="document">
-								    <div class="modal-content">
-								      <div class="modal-header">
-								        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-								        <h4 class="modal-title letraroja text-center">ATENCIÓN</h4>
-								      </div>
-								      <div class="modal-body">
-								        <h1 class="letraroja">Ya ha introducido el mismo registro. Intente con uno diferente.</h1>
-								      </div>
-								      <div class="modal-footer">
-								        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-								      </div>
-								    </div><!-- /.modal-content -->
-								  </div><!-- /.modal-dialog -->
-								</div><!-- /.modal -->
-								<script>
-									jQuery(document).ready(function() {
-										$('#myModal').modal('show'); 
-									});
-								</script>
-						  <?php
-					}
-				}
-			?>
-				<div class="col-md-12 margintop25">
-					<h2 class="text-center">Historial de Pagos</h2>
-					<div id="Container"><?php include (TEMPLATEPATH . '/funciones/verdepositos.php');?></div>
-                    <div class="pager-list marginbot10 text-center"></div>
-					<div class="row marginbot10">
-						<div class="text-center">  
-							<span class="finalinventario">Ordernar por: </span>
-							<button type="button" class="sort btn btn-default" data-sort="default">Default</button>
-						  	<button type="button" class="sort btn btn-default" data-sort="myorder:asc">Anteriores</button>
-						  	<button type="button" class="sort btn btn-default active" data-sort="myorder:desc">Recientes</button>
-						</div>
-		            </div>
-		            <div class="text-left">
-							<span class="finalinventario">Filtrar por Banco: </span>
-							<div class="clearfix"></div>
-							<a class="filter btn btn-default btnfiltro" data-filter="*">Todos</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".provincial">Provincial</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".banesco">Banesco</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".activo">Banco Activo</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".bicentenario">Banco Bicentenario</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".venezuela">Banco de Venezuela</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".banplus">Banco BanPlus</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".mercantil">Banco Mercantil</a> 
-							<a class="filter btn btn-default btnfiltro" data-filter=".bancaribe">Bancaribe</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".bnc">BNC</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".venezolano">Venezolano de Crédito</a>  
-		            </div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-12 margintop25 marginbot25">
-					<h2 class="text-center">Registrar Depósito</h2>
-					<h1 class="letranegra text-center">Introducir montos sin decimales</h1>
-					<form name="importa" method="post" action="http://vivecolecciones.com.ve/registrar-pago/" >
-                            <div class="col-md-12 margintop25">
-								<div class="col-md-2">
-									<input placeholder="Fecha"  id="fecha" name="fecha" type="text" class="form-control" required>
-								</div>
-								<div class="col-md-3">
-									<select id="banco" name="banco" style="width: 100%; padding: 8px;" required>
-										<option value="" hidden>Seleccionar Banco</option>
-										<option value="provincial">Provincial</option>
-										<option value="banesco">Banesco</option>
-										<option value="activo">Banco Activo</option>
-										<option value="bicentenario">Banco Bicentenario</option>
-										<option value="venezuela">Banco de Venezuela</option>
-										<option value="banplus">Banco BanPlus</option>
-										<option value="mercantil">Banco Mercantil</option>
-										<option value="bancaribe">Bancaribe</option>
-										<option value="bnc">BNC</option>
-										<option value="venezolano">Venezolano de Crédito</option>
-									</select>
-								</div>
-								<div class="col-md-3">
-									<input placeholder="Número de Referencia"  id="referencia" name="referencia" type="text" class="form-control" required>
-								</div>
-								<div class="col-md-3">
-									<div class="input-group">
-									  	<span class="input-group-addon">Bsf</span>
-										<input placeholder="Monto"  id="monto" name="monto" type="number" class="form-control" required>
-										<span class="input-group-addon">,00</span>
-									</div>
-								</div>
-									<input value="<?php echo $usuariologged; ?>" id="usuario" name="usuario" type="text" hidden required>
-								<div class="col-md-1">
-									<input class="btn btn-primary marginauto" type='submit' name='enviar' id="enviar" value="Registrar"/>
-								</div>
+if ( is_user_logged_in() ) {
+	$user_logged=user_logged();
+	if($user_logged['rol']=='administrator'){
+	    require_once 'api/vive-db.php';
+	    if (mysqli_connect_errno()) { ?>
+			<h1>ERROR DE CONEXIÓN</h1>
+	    <?php } else {  ?>
+
+			    	<div class="container margintop25 marginbot25">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div class="card-panel z-depth-2 hoverable">
+								<h1 class="center-align imprimir">Registrar Pago</h1>
+
+
 							</div>
-						</form>
+						</div>
+					</div>
+
+	    <?php }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//																			GERENTE																				  //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	} elseif ($user_logged['rol']=='Gerente') {
+		require_once 'api/vive-db.php';
+	    if (mysqli_connect_errno()) { ?>
+			<h1>ERROR DE CONEXIÓN</h1>
+	    <?php
+	    }
+	    else {
+			$gerente_logged=$user_logged["login"];
+	    	?>
+			<div class="container margintop25 marginbot25" ng-controller="customersCtrl">	
+	    		<div class="row">
+					<div class="col-md-12">
+						<div class="card-panel z-depth-2 hoverable">
+					     	<h1 class="center-align">Registrar Pago</h1>
+
+							<div ng-app="contactApp">
+						     	<div class="row margintop25">
+							     	<div class="col-xs-12 col-md-2">
+										<div class="input-field">
+											<h4>Fecha</h4>
+											<input type="date" class="datepicker" id="fec" name="fec">
+										</div>
+							     	</div>
+							     	<div class="col-xs-12 col-md-2">
+										<h4>Banco</h4>
+										<select name="ban" id="ban" required>
+											<option value="" disabled selected>Selecciona el status</option>
+											<?php
+												$bancos=bancos();
+												foreach ($bancos as $opcion) { ?>
+													<option value="<?php echo $opcion; ?>"><?php echo $opcion; ?></opcion>
+												<?php
+												}
+											?>
+										</select>
+							     	</div>
+							     	<div class="col-xs-12 col-md-3">
+										<div class="input-field">
+											<h4>Referencia</h4>
+							        		<input type="number" placeholder="Referencia" name="ref"  id="ref" required>
+										</div>
+							     	</div>
+							     	<div class="col-xs-12 col-md-2">
+										<div class="input-field">
+											<h4>Monto</h4>
+							        		<input type="number" placeholder="Monto" name="mon"  id="mon" required>
+										</div>
+							     	</div>
+							     	<div class="col-xs-12 col-md-3">
+										<div class="input-field">
+											<h4>Campaña</h4>
+											<select name="cam" id="cam" required>
+												<option value="" disabled selected>Selecciona la Campaña</option>
+												<?php
+													$stmt = $mysqli->prepare('SELECT DISTINCT cam FROM vive_fac WHERE usuario = ? ORDER BY cam ASC');
+													$stmt->bind_param('s', $gerente_logged);
+													$stmt->execute();
+													$stmt->bind_result($cam);
+													$stmt->store_result();
+												    while ($stmt->fetch()) {
+														?>
+														<option value="<?php echo $cam; ?>">Campaña #<?php echo $cam; ?></option>
+														<?php
+												    }
+													$stmt->close();
+												?>
+												<label>Seleccionar</label>
+											</select>
+										</div>
+							     	</div>
+									<div class="row center-align">
+										<button  ng-disabled="reg_Button" ng-click="reg_PUSH()" class="btn btn-radius fondo3 waves-effect waves-light">
+											<i class="material-icons medium right">cloud_upload</i>
+											REGISTRAR
+										</button>
+									</div>
+						     	</div>
+					     	</div>
+
+							<div class="divider margintop25"></div>
+					     	<h1 class="center-align">Pagos Aprobados</h1>
+				        	<div class="">
+								<table class="striped responsive-table">
+							        <thead>
+							          <tr>
+							              <th data-field="id">Fecha</th>
+							              <th data-field="name">Banco</th>
+							              <th data-field="price">Referencia</th>
+							              <th data-field="price">Monto</th>
+							              <th data-field="price">Campaña</th>
+							          </tr>
+							        </thead>
+
+							        <tbody id="Container">
+											<tr id="{{ $index }}" class="mix variable" data-myorder="{{ x.Fechaunixdep }}"  data-name="{{ x.Banco }}" data-cam="{{ x.Cam }}" ng-repeat="x in pulldata">
+										        <td>{{ x.Fecha }}</td>
+										        <td>{{ x.Banco }}</td>
+										        <td>{{ x.Referencia }}</td>
+										        <td>Bsf {{ x.Monto }}</td>
+										        <td>{{ x.Cam }}</td>
+										    </tr>
+							        </tbody>
+							    </table>
+					            <div class="row margintop25">
+					                <div class="pager-list center-align marginbot25 margintop25"></div>
+					            </div>
+								<div class="row">
+									<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="default">Default</button>
+								  	<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="myorder:asc">Fechas anteriores</button>
+								  	<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius active" data-sort="myorder:desc">Fechas recientes</button>
+							  	</div>
+							  	<div class="row">
+								  	<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="name:asc">Ordenar por Banco (A-Z)</button>
+	    							<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="name:desc">Ordenar por Banco (Z-A)</button>
+							  	</div>
+							  	<div class="row">
+								  	<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="cam:asc">Ordenar por campaña (A-Z)</button>
+	    							<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="cam:desc">Ordenar por campaña (Z-A)</button>
+							  	</div>
+						    </div>
+
+						    <div class="divider"></div>
+					     	<h1 class="center-align">Pagos Problemas</h1>
+				        	<div class="" id="Container2">
+								<table class="striped responsive-table">
+							        <thead>
+							          <tr>
+							              <th data-field="id">Status</th>
+							              <th data-field="id">Fecha</th>
+							              <th data-field="name">Banco</th>
+							              <th data-field="price">Referencia</th>
+							              <th data-field="price">Monto</th>
+							              <th data-field="price">Campaña</th>
+							              <th data-field="price">Comentarios</th>
+							          </tr>
+							        </thead>
+
+							        <tbody>
+										<?php
+											$stmt = $mysqli->prepare('SELECT status, fecha, banco, referencia, monto, cam, comentario FROM vive_pen WHERE usuario = ?');
+											$stmt->bind_param('s', $gerente_logged);
+											$stmt->execute();
+											$stmt->bind_result($status, $fecha, $banco, $referencia, $monto, $cam, $comentario);
+											$stmt->store_result();
+										    while ($stmt->fetch()) {
+										    	if($status=='aprobado'){$clase='fondo3';}elseif($status=='vacio'){$clase='grey lighten-5';}elseif($status=='pendiente'){$clase='yellow';}elseif($status=='negado'){$clase='fondo5';}
+												$fechacambiadadep = DateTime::createFromFormat("d/m/Y", $fecha);
+												$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
+												$fechaunixdep=strtotime($fechacambiadadep);
+												?>
+												<tr class="mix" data-myorder="<?php echo $fechaunixdep; ?>"  data-name="<?php echo $banco; ?>" data-cam="<?php echo $cam; ?>">
+											    	<td class="<?php echo $clase; ?>"><?php echo $status; ?></td>
+											        <td><?php echo $fecha; ?></td>
+											        <td><?php echo $banco; ?></td>
+											        <td><?php echo $referencia; ?></td>
+											        <td>Bsf <?php if (is_numeric($monto)){$valor=formato($monto); echo $valor;}else{echo $monto;} ?></td>
+											        <td><?php echo $cam; ?></td>
+											        <td><?php echo $comentario; ?></td>
+											    </tr>
+												<?php
+										    }
+											$stmt->close();
+										?>
+							        </tbody>
+							    </table>
+					            <div class="row margintop25">
+					                <div class="pager-list2 center-align marginbot25 margintop25"></div>
+					            </div>
+								<div class="row">
+									<button type="button" class="sort2 btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="default">Default</button>
+								  	<button type="button" class="sort2 btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="myorder:asc">Fechas anteriores</button>
+								  	<button type="button" class="sort2 btn hoverable fondo3 waves-effect waves-light btn-radius active" data-sort="myorder:desc">Fechas recientes</button>
+							  	</div>
+							  	<div class="row">
+								  	<button type="button" class="sort2 btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="name:asc">Ordenar por Banco (A-Z)</button>
+	    							<button type="button" class="sort2 btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="name:desc">Ordenar por Banco (Z-A)</button>
+							  	</div>
+							  	<div class="row">
+								  	<button type="button" class="sort2 btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="cam:asc">Ordenar por campaña (A-Z)</button>
+	    							<button type="button" class="sort2 btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="cam:desc">Ordenar por campaña (Z-A)</button>
+							  	</div>
+							</div>
+
+
+
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+			<?php
+		}
+	} ?>
+<?php
+} else {  
+		header("Location: http://app.vivecolecciones.com.ve/"); /* Redirect browser */
+		exit(); 
+ } get_footer(); ?>
 <script>
-	var buttonFilter = { $filters: null, $reset: null, groups: [], outputArray: [], outputString: '',
-	  init: function(){
-	    var self = this;
-	    self.$filters = $('#Filters');
-	    self.$reset = $('#Reset');
-	    self.$container = $('#Container');
-	    self.$filters.find('fieldset').each(function(){
-	      self.groups.push({ $buttons: $(this).find('.filter'), active: '' });
-	    });
-	    self.bindHandlers();
-	  },
-	  bindHandlers: function(){
-	    var self = this;
-	    self.$filters.on('click', '.filter', function(e){
-	      e.preventDefault();
-	      var $button = $(this);
-	      $button.hasClass('active') ?
-	        $button.removeClass('active') :
-	        $button.addClass('active').siblings('.filter').removeClass('active');
-	      self.parseFilters();
-	    });
-	    self.$reset.on('click', function(e){
-	      e.preventDefault();
-	      self.$filters.find('.filter').removeClass('active');
-	      self.parseFilters();
-	    });
-	  },
-	  parseFilters: function(){
-	    var self = this;
-	 	for(var i = 0, group; group = self.groups[i]; i++){
-	      group.active = group.$buttons.filter('.active').attr('data-filter') || '';
-	    }
-	    self.concatenate();
-	  },
-	  concatenate: function(){
-	    var self = this;
-	    self.outputString = '';
-	    for(var i = 0, group; group = self.groups[i]; i++){ self.outputString += group.active; }
-	    !self.outputString.length && (self.outputString = 'all'); 
-	    console.log(self.outputString); 
-	    if(self.$container.mixItUp('isLoaded')){ self.$container.mixItUp('filter', self.outputString); }
-	  }
-	};
-	jQuery(function(){
-	  	buttonFilter.init();
-		jQuery('#Container').mixItUp({
-			animation: { duration: 200 },
-			pagination: { limit: 50, loop: false, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a ><h4>Siguiente</h4></a>' }
+	jQuery(document).ready(function() {
+	    jQuery('.collapsible').collapsible();
+	  });
+</script>
+<script>
+	jQuery(document).ready(function() {
+	    jQuery('select').material_select();
+	    jQuery('.datepicker').pickadate({
+	    	monthsFull: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+			monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+			weekdaysFull: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+			weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+		    selectMonths: true, // Creates a dropdown to control month
+		    selectYears: 0, // Creates a dropdown of 15 years to control year
+		    format: 'dd/mm/yyyy',
+		    today: 'Hoy',
+			clear: 'Borrar',
+			close: 'Cerrar',
 		});
+		function checkWidth() {
+            var w = jQuery(window).width();
+            if (w>992){
+		        jQuery('#Container').mixItUp({
+		        	layout: { display: 'table-row' },
+		            animation: { duration: 200 },
+		            pagination: { limit: 15, loop: true, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a ><h4>Siguiente</h4></a>' },
+		            selectors: { sort: '.sort', pagersWrapper: '.pager-list' }
+		        });
+		        jQuery('#Container2').mixItUp({
+		        	layout: { display: 'table-row' },
+		            animation: { duration: 200 },
+		            pagination: { limit: 15, loop: true, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a ><h4>Siguiente</h4></a>' },
+		            selectors: { sort: '.sort2', pagersWrapper: '.pager-list2' }
+		        });
+            } else {
+		        jQuery('#Container').mixItUp({
+		        	layout: { display: 'inline-block' },
+		            animation: { duration: 200 },
+		            pagination: { limit: 15, loop: true, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a ><h4>Siguiente</h4></a>' },
+		            selectors: { sort: '.sort', pagersWrapper: '.pager-list' }
+		        });
+		        jQuery('#Container2').mixItUp({
+		        	layout: { display: 'inline-block' },
+		            animation: { duration: 200 },
+		            pagination: { limit: 15, loop: true, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a ><h4>Siguiente</h4></a>' },
+		            selectors: { sort: '.sort2', pagersWrapper: '.pager-list2' }
+		        });
+            } 
+        }
+        checkWidth();
+        jQuery(window).resize(checkWidth);
+	  });
+</script>
+<script>
+	app.controller('customersCtrl', function($scope, $http, $timeout) { 
+
+		$scope.reg_PUSH = function() {
+			var usuario = '<?php echo $gerente_logged; ?>';
+			var fec = jQuery('#fec').val();
+			var mon = jQuery('#mon').val();
+			var ref = jQuery('#ref').val();
+			var ban = jQuery('#ban').val();
+			var cam = jQuery('#cam').val();
+			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/registrar-pago.php", {params:{"usuario": usuario, "fec": fec, "mon": mon, "ref": ref, "ban": ban, "cam": cam }})
+			.then(function (data) {
+                if (data.data.success) {
+                    window.alert(data.data.message);
+					$scope.reg_PULL();
+					jQuery('#ref').val('');
+					jQuery('#fec').val('');
+					jQuery('#mon').val('');
+					jQuery('#ban').val('');
+                } else {
+                    window.alert(data.data.message);
+                }
+				$scope.reg_Button = true;
+				$timeout(function() { $scope.reg_Button = false; }, 2000)
+			}); 
+		}
+		
+		$scope.reg_PULL = function() {
+			var usuario = '<?php echo $gerente_logged; ?>';
+			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/gerente-depositos-pull.php", {params:{"usuario": usuario }})
+			.then(function (response) {
+				$scope.pulldata = response.data.records;
+				var $users = jQuery('.variable');
+				jQuery('#Container').mixItUp('append', $users , null);
+				jQuery('#Container').mixItUp('sort', 'name:asc');
+			}); 
+		}
+
+		$scope.reg_PULL();
 	});
 </script>
-		<script>
-		  jQuery(function() {
-		    jQuery( "#fecha" ).datepicker({
-        		dateFormat: 'dd/mm/yy',
-        		maxDate: "0d"
-    		});
-		  });
-		  </script>
-	<?php }
-get_footer(); ?>

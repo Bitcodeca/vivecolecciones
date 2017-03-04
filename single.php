@@ -1,3 +1,6 @@
-<?php get_header(); ?>
+<?php get_header(); 
 
-<?php get_footer(); ?>
+        header("Location: http://app.vivecolecciones.com.ve/"); /* Redirect browser */
+        exit();
+        
+ get_footer(); ?>

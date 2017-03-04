@@ -1,337 +1,290 @@
 <?php get_header();
-if( current_user_can('subscriber')) {
-	$go=0;
-	include (TEMPLATEPATH . '/funciones/usuariologged.php'); ?>
-		  <!--/////////////////////////////////////////////////////////////////////////////// -->
-		  <!--/////////////////////////////      GERENTE    //////////////////////////////// -->
-		  <!--///////////////////////////////////////////////////////////////////////////// -->
+if ( is_user_logged_in() ) {
+	$user_logged=user_logged();
+	if($user_logged['rol']=='administrator'){
+	    require_once 'api/vive-db.php';
+	    if (mysqli_connect_errno()) { ?>
+			<h1>ERROR DE CONEXIÓN</h1>
+	    <?php } else { ?>
+		    	<div class="container-fluid margintop25 marginbot25">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<div class="card-panel z-depth-2 hoverable">
+							<h1 class="center-align">Devoluciones</h1>
+								<div class="row">
+									<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="default">Default</button>
+								  	<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="fecha:asc">Fechas anteriores</button>
+								  	<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius active" data-sort="fecha:desc">Fechas recientes</button>
+							  	</div>
+						  	<div class="row">
+							  	<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="name:asc">Ordenar por Nombre (A-Z)</button>
+    							<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="name:desc">Ordenar por Nombre (Z-A)</button>
+						  	</div>
+				        	<div class="imprimir" id="Container">
+								<table class="striped responsive-table">
+							        <thead>
+							          <tr>
+							              <th data-field="id">Gerente</th>
+							              <th data-field="id">Fecha</th>
+							              <th data-field="id">Colección</th>
+							              <th data-field="id">Cantidad</th>
+							          </tr>
+							        </thead>
 
-		<div class="container">
-			<div class="row">
-			<?php
-				if(isset($_POST['enviar'])) {
-					include (TEMPLATEPATH . '/funciones/registrardevolucion.php'); ?>
-					<div class="modal fade" id="myModal"  tabindex="-1" role="dialog">
-					  <div class="modal-dialog" role="document">
-					    <div class="modal-content">
-					      <div class="modal-header">
-					        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					        <h4 class="modal-title letraroja text-center">ATENCIÓN</h4>
-					      </div>
-					      <div class="modal-body">
-					        <h1 class="letraverde text-center">¡Gracias! Se ha registrado exitosamente la devolución.</h1>
-					      </div>
-					      <div class="modal-footer">
-					        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-					      </div>
-					    </div><!-- /.modal-content -->
-					  </div><!-- /.modal-dialog -->
-					</div><!-- /.modal -->
-					<script>
-						jQuery(document).ready(function() {
-							$('#myModal').modal('show'); 
-						});
-					</script>
-					<?php
-				}
-			?>
-				<div class="col-md-12 margintop25">
-					<h2 class="text-center">Historial de Devoluciones</h2>
-					<div id="Container"><?php include (TEMPLATEPATH . '/funciones/verdevoluciones.php');?></div>
-                    <div class="pager-list marginbot10 text-center"></div>
-					<div class="row marginbot10">
-						<div class="text-center">  
-							<span class="finalinventario">Ordernar por: </span>
-							<button type="button" class="sort btn btn-default" data-sort="default">Default</button>
-						  	<button type="button" class="sort btn btn-default" data-sort="myorder:asc">Anteriores</button>
-						  	<button type="button" class="sort btn btn-default active" data-sort="myorder:desc">Recientes</button>
+							        <tbody>
+
+										<?php 
+										$query = "SELECT * FROM vive_dev";
+										$result = mysqli_query ($mysqli, $query);
+										if(mysqli_num_rows($result) != 0) {
+											while ($row = mysqli_fetch_assoc($result)) { 
+													$fechacambiadadep = DateTime::createFromFormat("d/m/Y", $row['fec']);
+													$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
+													$fechaunixdep=strtotime($fechacambiadadep);
+												?>
+												<tr class="mix" data-name="<?php echo $row['usuario']; ?>" data-fecha="<?php echo $fechaunixdep; ?>">
+											        <td><?php echo $row['usuario']; ?></td>
+											        <td><?php echo $row['fec']; ?></td>
+											        <td><?php echo $row['art']; ?></td>
+											        <td><?php echo $row['can']; ?></td>
+											    </tr>
+											<?php
+											}
+										} else {
+											?>
+											<h3 class="center-align">No hay devoluciones registradas</h3>
+											<?php
+										}
+										?>
+							        </tbody>
+							    </table>
+
+
+				            </div>
+				            <div class="row">
+				                <div class="pager-list center-align marginbot25 margintop25"></div>
+				            </div>
+				            <div class="row marginbotmenos40">
+								<button onclick="imprimir()" class="btn hoverable fondo3 waves-effect waves-light btn-radius"><i class="material-icons left">print</i> Imprimir</button>
+				            </div>
+							<script>
+								function imprimir() {
+								    window.print();
+								}
+							</script>
 						</div>
-		            </div>
+					</div>
+				</div>
+	    <?php }
+	} 
+	elseif ($user_logged['rol']=='Gerente') {
+		require_once 'api/vive-db.php';
+	    if (mysqli_connect_errno()) {
+	    	?>
+			<h1>ERROR DE CONEXIÓN</h1>
+	    	<?php
+	    }
+	    else {
+			$gerente_logged=$user_logged["login"];
+	    	?>
+			<div class="container margintop25 marginbot25">	
+	    		<div class="row">
+					<div class="col-md-12">
+						<div class="card-panel z-depth-2 hoverable">
+					     	<h1 class="center-align">Devoluciones</h1>
+
+							<?php
+								$stmt = $mysqli->prepare("SELECT id FROM vive_dev_con WHERE usuario=?");
+					            $stmt->bind_param("s", $gerente_logged);
+					            $stmt->execute();
+					            $stmt->store_result();
+					            $numberofrows = $stmt->num_rows;
+					            if($numberofrows>0){
+									?>
+
+									<div ng-controller="ContactController">
+										<form ng-submit="submit(contactform)" role="form" method="post" name="contactform" action="" class="margintop25" >
+											
+											<div class="row">
+
+												<div class="input-field col-xs-12 col-sm-6">
+													<h4>Colección</h4>
+													<span ng-class="{ 'has-error': contactform.art.$invalid && submitted }">
+										        		<input type="text" placeholder="Colección" name="art"  id="art"  class="inputfield" ng-model="formData.art" required>
+										        	</span>
+										        </div>
+
+												<div class="input-field col-xs-12 col-sm-6">
+													<h4>Cantidad</h4>
+													<span ng-class="{ 'has-error': contactform.can.$invalid && submitted }">
+										        		<input type="number" placeholder="Cantidad" name="can"  id="can"  class="inputfield" ng-model="formData.can" min="1" required>
+										        	</span>
+										        </div>
+
+									        <input type="hidden" name="usuario" id="usuario" ng-model="formData.usuario" ng-init="formData.usuario='<?php echo $gerente_logged; ?>'" />
+
+									        <div class="row">
+							                    <div ng-app="myApp" class="">
+							                        <div add-input class="center-align">
+							                            <button type="button" class="btn btn-radius waves-effect waves-light fondo3" id="agregarproducto"><i class="material-icons left">add</i>Agregar Campo</button>
+							                        </div>
+							                    </div>
+											</div>
+											
+											<div class="row center-align">
+												<button  type="submit" ng-disabled="submitButtonDisabled" class="btn btn-radius fondo3 waves-effect waves-light margintop25" type="submit">
+													<i class="material-icons medium left">&#xE2C3;</i>
+													REGISTRAR DEVOLUCIÓN
+												</button>
+											</div>
+										<p ng-class="result" style="padding: 15px; margin: 0;">{{ resultMessage }}</p>
+										</form>
+									</div>
+									<?php
+								}
+								else{
+							    	?>
+									<h1 class="center-align">No puede ingresar una devolución</h1>
+							    	<?php
+								}
+            					$stmt->close();
+							?>
+
+							<div class="divider margintop25"></div>
+					     	<h1 class="center-align">Devoluciones Registradas</h1>
+				        	<div class="imprimir" id="Container">
+								<table class="striped responsive-table">
+							        <thead>
+							          <tr>
+							              <th data-field="id">Fecha</th>
+							              <th data-field="name">Colección</th>
+							              <th data-field="price">Cantidad</th>
+							          </tr>
+							        </thead>
+
+							        <tbody>
+										<?php
+											$stmt = $mysqli->prepare('SELECT fec, art, can FROM vive_dev WHERE usuario = ?');
+											$stmt->bind_param('s', $gerente_logged);
+											$stmt->execute();
+											$stmt->bind_result($fec, $art, $can);
+											$stmt->store_result();
+										    while ($stmt->fetch()) {
+												$fechacambiadadep = DateTime::createFromFormat("d/m/Y", $fec);
+												$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
+												$fechaunixdep=strtotime($fechacambiadadep);
+												?>
+												<tr class="mix" data-myorder="<?php echo $fechaunixdep; ?>" >
+											        <td><?php echo $fec; ?></td>
+											        <td><?php echo $art; ?></td>
+											        <td><?php echo $can; ?></td>
+											    </tr>
+												<?php
+										    }
+											$stmt->close();
+										?>
+							        </tbody>
+							    </table>
+					            <div class="row margintop25">
+					                <div class="pager-list center-align marginbot25 margintop25"></div>
+					            </div>
+								<div class="row">
+									<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="default">Default</button>
+								  	<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="myorder:asc">Fechas anteriores</button>
+								  	<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius active" data-sort="myorder:desc">Fechas recientes</button>
+							  	</div>
+						    </div>
+
+
+						</div>
+					</div>
 				</div>
 			</div>
 			<?php
-				$args=array('post_status' => 'publish', 'post_type'=> 'post', 'post_type'=> 'admin', 'order' => 'ASC', 'posts_per_page' => -1, 'tax_query' => array( array(  'taxonomy' => 'Gerente', 'field' => 'slug', 'terms' => $usuariologged ) ) ); $my_query = new WP_Query($args);
-        		if( $my_query->have_posts() ) {
-					while ($my_query->have_posts()) : 
-						$my_query->the_post(); 
-					    $go=1;
-				    endwhile;
-    			}		        
+		}
+	}  ?>
+	<?php
+} else {  
+		header("Location: http://app.vivecolecciones.com.ve/"); /* Redirect browser */
+		exit(); 
+ } get_footer(); ?>
+<script>
+	jQuery(document).ready(function() {
+		function checkWidth() {
+            var w = jQuery(window).width();
+            if (w>992){
+		        jQuery('#Container').mixItUp({
+		        	layout: { display: 'table-row' },
+		            animation: { duration: 200 },
+		            pagination: { limit: 12, loop: true, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a ><h4>Siguiente</h4></a>' },
+		            selectors: { sort: '.sort', pagersWrapper: '.pager-list' }
+		        });
+            } else {
+		        jQuery('#Container').mixItUp({
+		        	layout: { display: 'inline-block' },
+		            animation: { duration: 200 },
+		            pagination: { limit: 12, loop: true, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a ><h4>Siguiente</h4></a>' },
+		            selectors: { sort: '.sort', pagersWrapper: '.pager-list' }
+		        });
+            } 
+        }
+        checkWidth();
+        jQuery(window).resize(checkWidth);
+	  });
+</script>
+<script>
+	app.controller('ContactController', function ($scope, $http, $compile, $element) {
+	    $scope.result = 'hidden'
+	    $scope.resultMessage;
+	    $scope.formData; //formData is an object holding the name, email, subject, and message
+	    $scope.submitButtonDisabled = false;
+	    $scope.submitted = false; //used so that form errors are shown only after the form has been submitted
+	    $scope.submit = function(contactform) {
+	        $scope.submitted = true;
+	        $scope.submitButtonDisabled = true;
+	        if (contactform.$valid) {
+	            $http({
+	                method  : 'POST',
+	                url     : '<?php site_url(); ?>/wp-content/themes/Vivev2/api/registrar-devolucion.php',
+	                data    : jQuery.param($scope.formData),
+	                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+	            }).success(function(data){
+	                console.log(data);
+	                if (data.success) {
+	                    $scope.submitButtonDisabled = true;
+	                    $scope.resultMessage = window.alert(data.message);
+	                    $scope.result='';
+	                } else {
+	                    $scope.submitButtonDisabled = false;
+	                    $scope.resultMessage = window.alert(data.message);
+	                    $scope.result='bg-danger';
+	                }
+	            });
+	        }
+	    }
+	    $scope.inputCounter=0;
+	});
+	app.directive('addInput', ['$compile', function ($compile,$scope) { 
+		return {
+		    restrict: 'A',
+		    link: function (scope, element, attrs) {
+		        element.find('button').bind('click', function () {
+		            var input = angular.element('<div class="row">' +
 
-    		if ($go==1) {
-				$args=array('post_status' => 'publish', 'order' => 'ASC', 'post_type'=> 'post', 'posts_per_page' => 1, 'tax_query' => array( array(  'taxonomy' => 'Gerente', 'field' => 'slug', 'terms' => $usuariologged ) ) ); 
-				$my_query = new WP_Query($args);
-	        	if( $my_query->have_posts() ) { ?>
+						'<div class="input-field col-xs-12 col-sm-6">' +
+							'<h4>Colección</h4>' +
+				        		'<input type="text" placeholder="Colección" name="art' + scope.inputCounter + '"  id="art' + scope.inputCounter + '"  class="inputfield" ng-model="formData.art' + scope.inputCounter + '" required>' +
+				        '</div>' +
+						'<div class="input-field col-xs-12 col-sm-6">' +
+							'<h4>Cantidad</h4>' +
+				        		'<input type="number" placeholder="Cantidad" name="can' + scope.inputCounter + '"  id="can' + scope.inputCounter + '"  class="inputfield" ng-model="formData.can' + scope.inputCounter + '" min="1" required>' +
+				        '</div>');
+		            var compile = $compile(input)(scope);
 
-	        		<div class="container">
-						<h1 class="letraroja">El período para registrar devoluciones ha terminado.</h1>
-					</div>
-
-	        	<?php } else { ?>
-					<div class="row">
-						<div class="col-md-12 margintop25 marginbot25">
-							<h2 class="text-center">Registrar Devolución</h2>
-							<form name="importa" method="post" action="http://vivecolecciones.com.ve/devoluciones/" >
-		                        <div class="col-md-12 margintop25">
-									<div class="col-md-3">
-										<input value="<?php echo date("d/m/Y"); ?>" id="fecha" name="fecha" type="text" class="form-control" readonly>
-									</div>
-									<div class="col-md-4">
-										<input placeholder="Colección"  id="coleccion" name="coleccion" type="text" class="form-control" required>
-									</div>
-									<div class="col-md-4">
-										<input placeholder="Cantidad"  id="cantidad" name="cantidad" type="text" class="form-control" required>
-									</div>
-									<input value="<?php echo $usuariologged; ?>" id="cliente" name="cliente" type="text" hidden required>
-									<div class="col-md-1">
-									<input class="btn btn-primary marginauto" type='submit' name='enviar' id="enviar" value="Registrar"/>
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
-				<?php }
-			} else { ?>
-					<div class="container">
-						<h1 class="letraroja">El período para registrar devoluciones ha terminado.</h1>
-					</div>
-				<?php } ?>
-
-		</div>
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<script>
-		var buttonFilter = { $filters: null, $reset: null, groups: [], outputArray: [], outputString: '',
-		  init: function(){
-		    var self = this;
-		    self.$filters = $('#Filters');
-		    self.$reset = $('#Reset');
-		    self.$container = $('#Container');
-		    self.$filters.find('fieldset').each(function(){
-		      self.groups.push({ $buttons: $(this).find('.filter'), active: '' });
-		    });
-		    self.bindHandlers();
-		  },
-		  bindHandlers: function(){
-		    var self = this;
-		    self.$filters.on('click', '.filter', function(e){
-		      e.preventDefault();
-		      var $button = $(this);
-		      $button.hasClass('active') ?
-		        $button.removeClass('active') :
-		        $button.addClass('active').siblings('.filter').removeClass('active');
-		      self.parseFilters();
-		    });
-		    self.$reset.on('click', function(e){
-		      e.preventDefault();
-		      self.$filters.find('.filter').removeClass('active');
-		      self.parseFilters();
-		    });
-		  },
-		  parseFilters: function(){
-		    var self = this;
-		 	for(var i = 0, group; group = self.groups[i]; i++){
-		      group.active = group.$buttons.filter('.active').attr('data-filter') || '';
+		            element.append(compile);
+		            scope.inputCounter++;
+		            scope.$apply();
+		        });
 		    }
-		    self.concatenate();
-		  },
-		  concatenate: function(){
-		    var self = this;
-		    self.outputString = '';
-		    for(var i = 0, group; group = self.groups[i]; i++){ self.outputString += group.active; }
-		    !self.outputString.length && (self.outputString = 'all'); 
-		    console.log(self.outputString); 
-		    if(self.$container.mixItUp('isLoaded')){ self.$container.mixItUp('filter', self.outputString); }
-		  }
-		};
-		jQuery(function(){
-		  	buttonFilter.init();
-			jQuery('#Container').mixItUp({
-				animation: { duration: 200 },
-				pagination: { limit: 50, loop: false, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a ><h4>Siguiente</h4></a>' }
-			});
-		});
-	</script>
-
-
-		  <!--/////////////////////////////////////////////////////////////////////////////// -->
-		  <!--///////////////////////////      ADMINISTRADOR    //////////////////////////// -->
-		  <!--///////////////////////////////////////////////////////////////////////////// -->
-<?php }
-elseif (current_user_can('administrator')) { ?>
-	<div class="container text-center margintop25 marginbot25">
-		<?php include (TEMPLATEPATH . '/funciones/usuariologged.php');
-			if(isset($_POST['btn'])) {
-				$btn=$_POST['btn'];
-				$id=$_POST['id'];
-				if ($btn=='Eliminar') {
-					$con = mysqli_connect ("localhost","advv","cdavv210416","bdve210416");
-					$sql = "DELETE FROM devoluciones WHERE id=$id";
-					mysqli_query($con, $sql);
-					mysqli_close($con);
-				}
-			}
-			$args=array('post_status' => 'publish', 'order' => 'ASC', 'post_type'=> 'post', 'posts_per_page' => 1); 
-			$my_query = new WP_Query($args);
-        	if( $my_query->have_posts() ) {
-        		$todoslosusuarios = get_users();
-	        	?>
-      			<h1 class="marginbot10 text-left">Devoluciones</h1>
-	            <div class="text-left">
-					<form class="controls" id="Filters">
-						<div class="row margintop50">
-							<div class="col-md-2 col-sm-2 col-xs-12">
-								<span class="finalinventario">Filtrar por Usuarios: </span>
-							</div>
-							<div class="col-md-10 col-sm-10 col-xs-12">
-								<fieldset>
-								    <select class="form-control" id="Filters" name="Filters">
-									    <option value="">Todos</option>
-						                <?php $con = mysqli_connect ("localhost","advv","cdavv210416","bdve210416");
-										$result = mysqli_query($con, "SELECT DISTINCT cliente FROM devoluciones ORDER BY cliente");
-										while ($row = mysqli_fetch_array($result)) {
-											echo '<option value=".'.$row['cliente'].'"> '.$row['cliente'].' </option>';
-										} ?>
-								    </select>
-							    </fieldset>
-		    				</div>
-	    				</div>
-						<div class="clearfix"></div>
-						<div class="row margintop10">
-							<div class="col-md-2 col-sm-2 col-xs-12">
-								<span class="finalinventario">Ordernar por: </span>
-							</div>
-							<div class="col-md-10 col-sm-10 col-xs-12">
-								<button type="button" class="sort btn btn-default" data-sort="default">Default</button>
-							  	<button type="button" class="sort btn btn-default" data-sort="myorder:asc">Anteriores</button>
-							  	<button type="button" class="sort btn btn-default active" data-sort="myorder:desc">Recientes</button>
-							</div>
-			            </div>
-					</form>
-	            </div>
-                <div class="pager-list margintop10 marginbot10"></div>
-	      		<div class="inventario margintop25">
-				    <div class="col-md-2 col-sm-2 col-xs-6"><h4>Fecha</h4></div>
-				    <div class="col-md-3 col-sm-3 col-xs-6"><h4>Cliente</h4></div>
-				    <div class="col-md-3 col-sm-3 col-xs-6"><h4>Colección</h4></div>
-				    <div class="col-md-2 col-sm-2 col-xs-3"><h4>Cantidad</h4></div>
-				    <div class="col-md-2 col-sm-2 col-xs-3"><h4>Borrar</h4></div>
-				</div>
-				<div class="clearfix"></div>
-				<div id="Container">
-					<?php
-						$con = mysqli_connect ("localhost","advv","cdavv210416","bdve210416");
-						$result = mysqli_query($con, "SELECT * FROM devoluciones");
-						while ($row = mysqli_fetch_array($result)) {
-							$id=$row['id'];
-							$cliente=$row['cliente'];
-							$fecha=$row['fecha'];
-							$cantidad=$row['cantidad'];
-							$coleccion=$row['coleccion'];
-							$fechaunixcamb = DateTime::createFromFormat("d/m/Y", $fecha);
-							$fechaunixcamb=date_format($fechaunixcamb,"Y-m-d");
-							$fechaunixdep=strtotime($fechaunixcamb);
-							?>
-							<div class="fondogrispar paddingtopbot10 mix <?php echo $cliente; ?>" data-myorder="<?php echo $fechaunixdep; ?>">
-						        <div class="row text-center">
-									<div class="col-md-2 col-sm-2 col-xs-6 paddingtop10"> 
-										<?php echo $fecha; ?>
-									</div>
-									<div class="col-md-3 col-sm-3 col-xs-6 paddingtop10"> 
-										<?php echo $cliente; ?>
-									</div>
-									<div class="col-md-3 col-sm-3 col-xs-6 paddingtop10"> 
-										<?php echo $coleccion; ?>
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-3 paddingtop10">
-										<?php echo $cantidad; ?>
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-3">
-										<form name="importa<?php echo $iddeposito; ?>" method="post" >
-											<input class="btn btn-default btnedc" type="submit" name="btn" id="btn"  value="Eliminar" />
-											<input hidden type="text" name="id" id="id" value="<?php echo $id; ?>">
-										</form>
-									</div>
-								</div>
-							</div>
-							<div class="clearfix"></div>
-							<?php }
-					?>
-				</div>
-                <div class="pager-list marginbot10"></div>
-			<?php } else { ?>
-				<h3 class="marginbot25">No existen devoluciones</h3>
-			<?php } ?>
-	</div>
-	<div class="clearfix"></div>
-
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<script>
-		var dropdownFilter = {
-		  $filters: null,
-		  $reset: null,
-		  groups: [],
-		  outputArray: [],
-		  outputString: '',
-		  
-		  init: function(){
-		    var self = this;
-		    self.$filters = $('#Filters');
-		    self.$reset = $('#Reset');
-		    self.$container = $('#Container');
-		    self.$filters.find('fieldset').each(function(){
-		      self.groups.push({
-		        $dropdown: $(this).find('select'),
-		        active: ''
-		      });
-		    });
-		    
-		    self.bindHandlers();
-		  },
-		  bindHandlers: function(){
-		    var self = this;
-		    self.$filters.on('change', 'select', function(e){
-		      e.preventDefault();
-		      
-		      self.parseFilters();
-		    });
-		    self.$reset.on('click', function(e){
-		      e.preventDefault();
-		      
-		      self.$filters.find('select').val('');
-		      
-		      self.parseFilters();
-		    });
-		  },
-		  parseFilters: function(){
-		    var self = this;
-		    for(var i = 0, group; group = self.groups[i]; i++){
-		      group.active = group.$dropdown.val();
-		    }
-		    
-		    self.concatenate();
-		  },
-		  concatenate: function(){
-		    var self = this;
-		    
-		    self.outputString = '';
-		    
-		    for(var i = 0, group; group = self.groups[i]; i++){
-		      self.outputString += group.active;
-		    }
-		    !self.outputString.length && (self.outputString = 'all'); 
-			  if(self.$container.mixItUp('isLoaded')){
-		    	self.$container.mixItUp('filter', self.outputString);
-			  }
-		  }
-		};
-		$(function(){ dropdownFilter.init();
-		    jQuery('#Container').mixItUp({
-				animation: { duration: 200 },
-				pagination: { limit: 50, loop: false, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a><h4>Siguiente</h4></a>' },
-				controls: { toggleFilterButtons: true, toggleLogic: 'and' },
-				load: { sort: 'myorder:desc' }
-		  });    
-		});
-	</script>
-<?php }
-get_footer(); ?>
+		}
+	}]);
+ </script>

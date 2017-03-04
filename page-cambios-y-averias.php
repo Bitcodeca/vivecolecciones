@@ -1,441 +1,358 @@
 <?php get_header();
-	include (TEMPLATEPATH . '/funciones/usuariologged.php');
-	if( current_user_can('administrator')) { ?>
-		<!--////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
-		<!--/////////////////////////////////////       ADMINISTRADOR     /////////////////////////////////////////// -->
-		<!--//////////////////////////////////////////////////////////////////////////////////////////////////////// -->
-		<div class="container text-center margintop25 marginbot25">
-			<?php include (TEMPLATEPATH . '/funciones/usuariologged.php');
-				if(isset($_POST['btn'])) {
-					$btn=$_POST['btn'];
-					$id=$_POST['id'];
-					if ($btn=='Eliminar') {
-						$con = mysqli_connect ("localhost","advv","cdavv210416","bdve210416");
-						$sql = "DELETE FROM cambios WHERE id=$id";
-						mysqli_query($con, $sql);
-						mysqli_close($con);
-					}
-				}
-				$args=array('post_status' => 'publish', 'order' => 'ASC', 'post_type'=> 'post', 'posts_per_page' => 1); 
-				$my_query = new WP_Query($args);
-	        	if( $my_query->have_posts() ) {
-	        		$todoslosusuarios = get_users();
-		        	?>
-	      			<h1 class="marginbot10 text-left">Cambios y Averías</h1>
-		            <div class="text-left">
-						<form class="controls" id="Filters">
-							<div class="row margintop50">
-								<div class="col-md-2 col-sm-2 col-xs-12">
-									<span class="finalinventario">Filtrar por Usuarios: </span>
-								</div>
-								<div class="col-md-10 col-sm-10 col-xs-12">
-									<fieldset>
-									    <select class="form-control" id="Filters" name="Filters">
-										    <option value="">Todos</option>
-							                <?php $con = mysqli_connect ("localhost","advv","cdavv210416","bdve210416");
-											$result = mysqli_query($con, "SELECT DISTINCT cliente FROM cambios ORDER BY cliente");
-											while ($row = mysqli_fetch_array($result)) {
-												echo '<option value=".'.$row['cliente'].'"> '.$row['cliente'].' </option>';
-											} ?>
-									    </select>
-								    </fieldset>
-			    				</div>
-		    				</div>
-							<div class="clearfix"></div>
-							<div class="row margintop10">
-								<div class="col-md-2 col-sm-2 col-xs-12">
-									<span class="finalinventario">Ordernar por: </span>
-								</div>
-								<div class="col-md-10 col-sm-10 col-xs-12">
-									<button type="button" class="sort btn btn-default" data-sort="default">Default</button>
-								  	<button type="button" class="sort btn btn-default" data-sort="myorder:asc">Anteriores</button>
-								  	<button type="button" class="sort btn btn-default active" data-sort="myorder:desc">Recientes</button>
-								</div>
+if ( is_user_logged_in() ) {
+	$user_logged=user_logged();
+	if($user_logged['rol']=='administrator'){
+	    require_once 'api/vive-db.php';
+	    if (mysqli_connect_errno()) {
+	    	?>
+			<h1>ERROR DE CONEXIÓN</h1>
+	    	<?php
+	    } else { ?>
+		    	<div class="container-fluid margintop25 marginbot25">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<div class="card-panel z-depth-2 hoverable">
+							<h1 class="center-align">Cambios y Averías</h1>
+								<div class="row">
+									<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="default">Default</button>
+								  	<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="fecha:asc">Fechas anteriores</button>
+								  	<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius active" data-sort="fecha:desc">Fechas recientes</button>
+							  	</div>
+						  	<div class="row">
+							  	<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="name:asc">Ordenar por Nombre (A-Z)</button>
+    							<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="name:desc">Ordenar por Nombre (Z-A)</button>
+						  	</div>
+				        	<div class="imprimir" id="Container">
+								<table class="striped responsive-table">
+							        <thead>
+							          <tr>
+							              <th data-field="id">Gerente</th>
+							              <th data-field="id">Fecha</th>
+							              <th data-field="id">Colección</th>
+							              <th data-field="id">Motivo</th>
+							              <th data-field="id">Descripción</th>
+							              <th data-field="id">Cantidad</th>
+							              <th data-field="id">Especificación</th>
+							              <th data-field="id">Status</th>
+							          </tr>
+							        </thead>
+
+							        <tbody>
+
+										<?php 
+										$query = "SELECT * FROM vive_cya";
+										$result = mysqli_query ($mysqli, $query);
+										if(mysqli_num_rows($result) != 0) {
+											while ($row = mysqli_fetch_assoc($result)) { 
+													$fechacambiadadep = DateTime::createFromFormat("d/m/Y", $row['fec']);
+													$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
+													$fechaunixdep=strtotime($fechacambiadadep);
+												?>
+												<tr class="mix" data-name="<?php echo $row['usuario']; ?>" data-fecha="<?php echo $fechaunixdep; ?>">
+											        <td><?php echo $row['usuario']; ?></td>
+											        <td><?php echo $row['fec']; ?></td>
+											        <td><?php echo $row['art']; ?></td>
+											        <td><?php echo $row['mot']; ?></td>
+											        <td><?php echo $row['des']; ?></td>
+											        <td><?php echo $row['can']; ?></td>
+											        <td><?php echo $row['esp']; ?></td>
+											        <td><?php echo $row['status']; ?></td>
+											    </tr>
+											<?php
+											}
+										} else {
+											?>
+											<h3 class="center-align">No hay cambios o averías registradas</h3>
+											<?php
+										}
+										?>
+							        </tbody>
+							    </table>
+
+
 				            </div>
-						</form>
-		            </div>
-	                <div class="pager-list margintop10 marginbot10"></div>
-		      		<div class="inventario margintop25">
-					    <div class="col-md-1 col-sm-1 col-xs-4">
-							<h4>Fecha</h4>
-						</div>
-						<div class="col-md-1 col-sm-1 col-xs-4">
-							<h4>Usuario</h4>
-						</div>
-						<div class="col-md-1 col-sm-1 col-xs-4">
-							<h4>Colección</h4>
-						</div>
-						<div class="col-md-1 col-sm-2 col-xs-4">
-							<h4>Motivo</h4>
-						</div>
-						<div class="col-md-3 col-sm-3 col-xs-4">
-							<h4>Descripción</h4>
-						</div>
-						<div class="col-md-1 col-sm-1 col-xs-4">
-							<h4>Cantidad</h4>
-						</div>
-						<div class="col-md-1 col-sm-1 col-xs-4">
-							<h4>Tipo de Cambio</h4>
-						</div>
-						<div class="col-md-2 col-sm-2 col-xs-4">
-							<h4>Especificación</h4>
-						</div>
-						<div class="col-md-1 col-sm-1 col-xs-4">
-							<h4>Status</h4>
+				            <div class="row">
+				                <div class="pager-list center-align marginbot25 margintop25"></div>
+				            </div>
+				            <div class="row">
+								<button onclick="imprimir()" class="btn hoverable fondo3 waves-effect waves-light btn-radius"><i class="material-icons left">print</i> Imprimir</button>
+				            </div>
+							<script>
+								function imprimir() {
+								    window.print();
+								}
+							</script>
 						</div>
 					</div>
-					<div class="clearfix"></div>
-					<div id="Container"><?php include (TEMPLATEPATH . '/funciones/versolicitudes.php'); ?></div>
-	                <div class="pager-list marginbot10"></div>
-				<?php } else { ?>
-					<h3 class="marginbot25">No existen devoluciones</h3>
-				<?php } ?>
-		</div>
-		<div class="clearfix"></div>
-
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<script>
-		var dropdownFilter = {
-		  $filters: null,
-		  $reset: null,
-		  groups: [],
-		  outputArray: [],
-		  outputString: '',
-		  
-		  init: function(){
-		    var self = this;
-		    self.$filters = $('#Filters');
-		    self.$reset = $('#Reset');
-		    self.$container = $('#Container');
-		    self.$filters.find('fieldset').each(function(){
-		      self.groups.push({
-		        $dropdown: $(this).find('select'),
-		        active: ''
-		      });
-		    });
-		    
-		    self.bindHandlers();
-		  },
-		  bindHandlers: function(){
-		    var self = this;
-		    self.$filters.on('change', 'select', function(e){
-		      e.preventDefault();
-		      
-		      self.parseFilters();
-		    });
-		    self.$reset.on('click', function(e){
-		      e.preventDefault();
-		      
-		      self.$filters.find('select').val('');
-		      
-		      self.parseFilters();
-		    });
-		  },
-		  parseFilters: function(){
-		    var self = this;
-		    for(var i = 0, group; group = self.groups[i]; i++){
-		      group.active = group.$dropdown.val();
-		    }
-		    
-		    self.concatenate();
-		  },
-		  concatenate: function(){
-		    var self = this;
-		    
-		    self.outputString = '';
-		    
-		    for(var i = 0, group; group = self.groups[i]; i++){
-		      self.outputString += group.active;
-		    }
-		    !self.outputString.length && (self.outputString = 'all'); 
-			  if(self.$container.mixItUp('isLoaded')){
-		    	self.$container.mixItUp('filter', self.outputString);
-			  }
-		  }
-		};
-		$(function(){ dropdownFilter.init();
-		    jQuery('#Container').mixItUp({
-				animation: { duration: 200 },
-				pagination: { limit: 50, loop: false, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a><h4>Siguiente</h4></a>' },
-				controls: { toggleFilterButtons: true, toggleLogic: 'and' },
-				load: { sort: 'myorder:desc' }
-		  });    
-		});
-	</script>
-	<!--////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
-	<!--////////////////////////////////////////       CLIENTE     ////////////////////////////////////////////// -->
-	<!--//////////////////////////////////////////////////////////////////////////////////////////////////////// -->
-	<?php } elseif( current_user_can('subscriber')) {
-		$cliente=$usuariologged;
-		include (TEMPLATEPATH . '/funciones/constantes.php');
-		$bot=0;
-		if(isset($gerentearray)) {
-			if (!empty($gerentearray)) {
-				foreach ($gerentearray as $gerente) {
-					$variable=$gerente->name;
-					if ($variable == $usuariologged) { $bot=1; 
-						if(isset($_POST['btn'])) {
-							include (TEMPLATEPATH . '/funciones/cambios.php'); ?>
-							<h1 class="text-center letraverde">¡Gracias! Se procesará la solicitud en la brevedad posible.</h1>
-						<?php } ?>
-						<div class="row margintop25">
-							<h2 class="text-center">Historial de Solicitudes</h2>
-							<div class="container fondoazul bordertopnegro borderbotnegro text-center margintop25">
-								<div class="row">
-									<div class="col-md-1 col-sm-1 col-xs-6">
-										<h4>Fecha</h4>
-									</div>
-									<div class="col-md-1 col-sm-1 col-xs-6">
-										<h4>Colección</h4>
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<h4>Motivo</h4>
-									</div>
-									<div class="col-md-3 col-sm-3 col-xs-6">
-										<h4>Descripción</h4>
-									</div>
-									<div class="col-md-1 col-sm-1 col-xs-6">
-										<h4>Cantidad</h4>
-									</div>
-									<div class="col-md-1 col-sm-1 col-xs-6">
-										<h4>Tipo de Cambio</h4>
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<h4>Especificación</h4>
-									</div>
-									<div class="col-md-1 col-sm-1 col-xs-6">
-										<h4>Status</h4>
-									</div>
-								</div>
-							</div>
-							<div class="clearfix margintop10"></div>
-							<div id="Container"><?php include (TEMPLATEPATH . '/funciones/versolicitudes.php');?></div>
-							<div class="container">
-			                    <div class="pager-list marginbot10 text-center"></div>
-								<div class="row marginbot10">
-									<div class="text-center">  
-										<span class="finalinventario">Ordernar por: </span>
-										<button type="button" class="sort btn btn-default" data-sort="default">Default</button>
-									  	<button type="button" class="sort btn btn-default" data-sort="myorder:asc">Anteriores</button>
-									  	<button type="button" class="sort btn btn-default active" data-sort="myorder:desc">Recientes</button>
-									</div>
-					            </div>
-					            <div class="text-left">
-										<span class="finalinventario">Filtrar por Status: </span>
-										<div class="clearfix"></div>
-										<a class="filter btn btn-default btnfiltro" data-filter="*">Todos</a>
-										<a class="filter btn btn-default btnfiltro" data-filter=".aprobado">Aprobado</a> 
-										<a class="filter btn btn-default btnfiltro" data-filter=".pendiente">Pendiente</a>
-										<a class="filter btn btn-default btnfiltro" data-filter=".negado">Negado</a>
-					            </div>
-							</div>
-						</div>
-						<div class="container">
-							<div class="row margintop25">
-								<h2 class="text-center">Reporte de Cambios y Averías</h2>
-							</div>
-							<div class="clearfix"></div>
-
-							<form name="importa<?php echo $iddeposito; ?>" method="post" action="http://vivecolecciones.com.ve/cambios-y-averias/" >
-								<div class="row margintop25">
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<h4>Colección</h4>
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<h4>Motivo</h4>
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<h4>Descripción</h4>
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<h4>Cantidad</h4>
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<h4>Tipo de Cambio</h4>
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<h4>Especifique</h4>
-									</div>
-								</div>
-								<div class="clearfix"></div>
-								<div class="row marginbot25">
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Colección"  id="coleccion1" name="coleccion1" type="text" class="form-control" required>
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Motivo"  id="motivo1" name="motivo1" type="text" class="form-control" required>
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Descripción"  id="descripcion1" name="descripcion1" type="text" class="form-control" required>
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Cantidad"  id="cantidad1" name="cantidad1" type="number" class="form-control" required>
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Tipo de Cambio"  id="tipo1" name="tipo1" type="text" class="form-control" required>
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Especifique"  id="especifique1" name="especifique1" type="text" class="form-control" required>
-									</div>
-								</div>
-								<div class="clearfix"></div>
-								<div class="row marginbot25">
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Colección"  id="coleccion2" name="coleccion2" type="text" class="form-control" >
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Motivo"  id="motivo2" name="motivo2" type="text" class="form-control">
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Descripción"  id="descripcion2" name="descripcion2" type="text" class="form-control" >
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Cantidad"  id="cantidad2" name="cantidad2" type="number" class="form-control" >
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Tipo de Cambio"  id="tipo2" name="tipo2" type="text" class="form-control" >
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Especifique"  id="especifique2" name="especifique2" type="text" class="form-control">
-									</div>
-								</div>
-								<div class="clearfix"></div>
-								<div class="row marginbot25">
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Colección"  id="coleccion3" name="coleccion3" type="text" class="form-control">
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Motivo"  id="motivo3" name="motivo3" type="text" class="form-control" >
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Descripción"  id="descripcion3" name="descripcion3" type="text" class="form-control" >
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Cantidad"  id="cantidad3" name="cantidad3" type="number" class="form-control" >
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Tipo de Cambio"  id="tipo3" name="tipo3" type="text" class="form-control" >
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Especifique"  id="especifique3" name="especifique3" type="text" class="form-control" >
-									</div>
-								</div>
-								<div class="clearfix"></div>
-								<div class="row marginbot25">
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Colección"  id="coleccion4" name="coleccion4" type="text" class="form-control" >
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Motivo"  id="motivo4" name="motivo4" type="text" class="form-control" >
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Descripción"  id="descripcion4" name="descripcion4" type="text" class="form-control" >
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Cantidad"  id="cantidad4" name="cantidad4" type="number" class="form-control">
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Tipo de Cambio"  id="tipo4" name="tipo4" type="text" class="form-control">
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Especifique"  id="especifique4" name="especifique4" type="text" class="form-control" >
-									</div>
-								</div>
-								<div class="clearfix"></div>
-								<div class="row marginbot25">
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Colección"  id="coleccion5" name="coleccion5" type="text" class="form-control" >
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Motivo"  id="motivo5" name="motivo5" type="text" class="form-control" >
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Descripción"  id="descripcion5" name="descripcion5" type="text" class="form-control" >
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Cantidad"  id="cantidad5" name="cantidad5" type="number" class="form-control" >
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Tipo de Cambio"  id="tipo5" name="tipo5" type="text" class="form-control" >
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-6">
-										<input placeholder="Especifique"  id="especifique5" name="especifique5" type="text" class="form-control" >
-									</div>
-								</div>
-								<div class="clearfix"></div>
-						        <div class="col-md-12 marginbot25 text-center">
-									<input class="btn btn-primary btnedc" type="submit" name="btn" id="btn"  value="Enviar" />
-						        </div>
-						    </form>
-						</div>
-						<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-						<script>
-							var buttonFilter = { $filters: null, $reset: null, groups: [], outputArray: [], outputString: '',
-							  init: function(){
-							    var self = this;
-							    self.$filters = $('#Filters');
-							    self.$reset = $('#Reset');
-							    self.$container = $('#Container');
-							    self.$filters.find('fieldset').each(function(){
-							      self.groups.push({ $buttons: $(this).find('.filter'), active: '' });
-							    });
-							    self.bindHandlers();
-							  },
-							  bindHandlers: function(){
-							    var self = this;
-							    self.$filters.on('click', '.filter', function(e){
-							      e.preventDefault();
-							      var $button = $(this);
-							      $button.hasClass('active') ?
-							        $button.removeClass('active') :
-							        $button.addClass('active').siblings('.filter').removeClass('active');
-							      self.parseFilters();
-							    });
-							    self.$reset.on('click', function(e){
-							      e.preventDefault();
-							      self.$filters.find('.filter').removeClass('active');
-							      self.parseFilters();
-							    });
-							  },
-							  parseFilters: function(){
-							    var self = this;
-							 	for(var i = 0, group; group = self.groups[i]; i++){
-							      group.active = group.$buttons.filter('.active').attr('data-filter') || '';
-							    }
-							    self.concatenate();
-							  },
-							  concatenate: function(){
-							    var self = this;
-							    self.outputString = '';
-							    for(var i = 0, group; group = self.groups[i]; i++){ self.outputString += group.active; }
-							    !self.outputString.length && (self.outputString = 'all'); 
-							    console.log(self.outputString); 
-							    if(self.$container.mixItUp('isLoaded')){ self.$container.mixItUp('filter', self.outputString); }
-							  }
-							};
-							jQuery(function(){
-							  	buttonFilter.init();
-								jQuery('#Container').mixItUp({
-									animation: { duration: 200 },
-									pagination: { limit: 5, loop: true, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a ><h4>Siguiente</h4></a>' }
-								});
-							});
-						</script>
-					<?php }
-				} if ($bot==0) { ?>
-						<div class="container">
-							<h1 class="letraroja">El período para registrar cambios y averías ha terminado.</h1>
-						</div>
-				<?php }
-			} else { ?>
-				<div class="container">
-					<h1 class="letraroja">El período para registrar cambios y averías ha terminado.</h1>
 				</div>
-			<?php }
-		} else { ?>
-			<div class="container">
-				<h1 class="letraroja">El período para registrar cambios y averías ha terminado.</h1>
-			</div>
-		<?php }
+	    <?php }
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//																			GERENTE																				  //
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	}
- get_footer(); ?>
+	elseif ($user_logged['rol']=='Gerente') {
+		require_once 'api/vive-db.php';
+	    if (mysqli_connect_errno()) {
+	    	?>
+			<h1>ERROR DE CONEXIÓN</h1>
+	    	<?php
+	    }
+	    else {
+			$gerente_logged=$user_logged["login"];
+	    	?>
+			<div class="container-fluid margintop25 marginbot25">	
+	    		<div class="row">
+					<div class="col-md-12">
+						<div class="card-panel z-depth-2 hoverable">
+					     	<h1 class="center-align">Cambios y Averías</h1>
+
+							<?php
+								$stmt = $mysqli->prepare("SELECT id FROM vive_cya_con WHERE usuario=?");
+					            $stmt->bind_param("s", $gerente_logged);
+					            $stmt->execute();
+					            $stmt->store_result();
+					            $numberofrows = $stmt->num_rows;
+					            if($numberofrows>0){
+									?>
+
+									<div ng-controller="ContactController">
+										<form ng-submit="submit(contactform)" role="form" method="post" name="contactform" action="" class="margintop25" >
+											
+											<div class="row">
+
+												<div class="input-field col-xs-12 col-sm-2">
+													<h4>Colección</h4>
+													<span ng-class="{ 'has-error': contactform.art.$invalid && submitted }">
+										        		<input type="text" placeholder="Colección" name="art"  id="art"  class="inputfield" ng-model="formData.art" required>
+										        	</span>
+										        </div>
+
+												<div class="input-field col-xs-12 col-sm-2">
+													<h4>Motivo</h4>
+													<span ng-class="{ 'has-error': contactform.mot.$invalid && submitted }">
+										        		<input type="text" placeholder="Motivo" name="mot"  id="mot"  class="inputfield" ng-model="formData.mot" required>
+										        	</span>
+										        </div>
+
+												<div class="input-field col-xs-12 col-sm-3">
+													<h4>Descripción</h4>
+													<span ng-class="{ 'has-error': contactform.des.$invalid && submitted }">
+										        		<input type="text" placeholder="Descripción" name="des"  id="des"  class="inputfield" ng-model="formData.des" required>
+										        	</span>
+										        </div>
+
+												<div class="input-field col-xs-12 col-sm-2">
+													<h4>Cantidad</h4>
+													<span ng-class="{ 'has-error': contactform.can.$invalid && submitted }">
+										        		<input type="number" placeholder="Cantidad" name="can"  id="can"  class="inputfield" ng-model="formData.can" min="1" required>
+										        	</span>
+										        </div>
+
+												<div class="input-field col-xs-12 col-sm-3">
+													<h4>Especifique</h4>
+													<span ng-class="{ 'has-error': contactform.esp.$invalid && submitted }">
+										        		<input type="text" placeholder="Especifique" name="esp"  id="esp"  class="inputfield" ng-model="formData.esp" required>
+										        	</span>
+										        </div>
+
+									        </div>
+
+									        <input type="hidden" name="usuario" id="usuario" ng-model="formData.usuario" ng-init="formData.usuario='<?php echo $gerente_logged; ?>'" />
+
+									        <div class="row">
+							                    <div ng-app="myApp" class="">
+							                        <div add-input class="center-align">
+							                            <button type="button" class="btn btn-radius waves-effect waves-light fondo3" id="agregarproducto"><i class="material-icons left">add</i>Agregar Campo</button>
+							                        </div>
+							                    </div>
+											</div>
+											
+											<div class="row center-align">
+												<button  type="submit" ng-disabled="submitButtonDisabled" class="btn btn-radius fondo3 waves-effect waves-light margintop25" type="submit">
+													<i class="material-icons medium left">&#xE2C3;</i>
+													REGISTRAR CAMBIO Y AVERÍA
+												</button>
+											</div>
+										<p ng-class="result" style="padding: 15px; margin: 0;">{{ resultMessage }}</p>
+										</form>
+									</div>
+									<?php
+								}
+								else{
+							    	?>
+									<h1 class="center-align">No puede ingresar un cambio o avería</h1>
+							    	<?php
+								}
+            					$stmt->close();
+							?>
+
+							<div class="divider margintop25"></div>
+					     	<h1 class="center-align">Cambios y Averías Registradas</h1>
+				        	<div class="imprimir" id="Container">
+								<table class="striped responsive-table">
+							        <thead>
+							          <tr>
+							              <th data-field="id">Status</th>
+							              <th data-field="id">Fecha</th>
+							              <th data-field="name">Colección</th>
+							              <th data-field="price">Motivo</th>
+							              <th data-field="price">Descripción</th>
+							              <th data-field="price">Cantidad</th>
+							              <th data-field="price">Especificación</th>
+							          </tr>
+							        </thead>
+
+							        <tbody>
+										<?php
+											$stmt = $mysqli->prepare('SELECT fec, art, mot, des, can, esp, status FROM vive_cya WHERE usuario = ?');
+											$stmt->bind_param('s', $gerente_logged);
+											$stmt->execute();
+											$stmt->bind_result($fec, $art, $mot, $des, $can, $esp, $status);
+											$stmt->store_result();
+										    while ($stmt->fetch()) {
+												$fechacambiadadep = DateTime::createFromFormat("d/m/Y", $fec);
+												$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
+												$fechaunixdep=strtotime($fechacambiadadep);
+												?>
+												<tr class="mix" data-myorder="<?php echo $fechaunixdep; ?>"  data-name="<?php echo $status; ?>">
+											        <td><?php echo $status; ?></td>
+											        <td><?php echo $fec; ?></td>
+											        <td><?php echo $art; ?></td>
+											        <td><?php echo $mot; ?></td>
+											        <td><?php echo $des; ?></td>
+											        <td><?php echo $can; ?></td>
+											        <td><?php echo $esp; ?></td>
+											    </tr>
+												<?php
+										    }
+											$stmt->close();
+										?>
+							        </tbody>
+							    </table>
+					            <div class="row margintop25">
+					                <div class="pager-list center-align marginbot25 margintop25"></div>
+					            </div>
+								<div class="row">
+									<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="default">Default</button>
+								  	<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="myorder:asc">Fechas anteriores</button>
+								  	<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius active" data-sort="myorder:desc">Fechas recientes</button>
+							  	</div>
+							  	<div class="row">
+								  	<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="name:asc">Ordenar por Status (A-Z)</button>
+	    							<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="name:desc">Ordenar por Status (Z-A)</button>
+							  	</div>
+						    </div>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<?php
+		}
+	}  ?>
+	<?php
+}
+else {  
+		header("Location: http://app.vivecolecciones.com.ve/"); /* Redirect browser */
+		exit(); 
+ } get_footer(); ?>
+<script>
+	jQuery(document).ready(function() {
+		function checkWidth() {
+            var w = jQuery(window).width();
+            if (w>992){
+		        jQuery('#Container').mixItUp({
+		        	layout: { display: 'table-row' },
+		            animation: { duration: 200 },
+		            pagination: { limit: 12, loop: true, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a ><h4>Siguiente</h4></a>' },
+		            selectors: { sort: '.sort', pagersWrapper: '.pager-list' }
+		        });
+            } else {
+		        jQuery('#Container').mixItUp({
+		        	layout: { display: 'inline-block' },
+		            animation: { duration: 200 },
+		            pagination: { limit: 12, loop: true, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a ><h4>Siguiente</h4></a>' },
+		            selectors: { sort: '.sort', pagersWrapper: '.pager-list' }
+		        });
+            } 
+        }
+        checkWidth();
+        jQuery(window).resize(checkWidth);
+	  });
+</script>
+
+<script>
+	app.controller('ContactController', function ($scope, $http, $compile, $element) {
+	    $scope.result = 'hidden'
+	    $scope.resultMessage;
+	    $scope.formData; //formData is an object holding the name, email, subject, and message
+	    $scope.submitButtonDisabled = false;
+	    $scope.submitted = false; //used so that form errors are shown only after the form has been submitted
+	    $scope.submit = function(contactform) {
+	        $scope.submitted = true;
+	        $scope.submitButtonDisabled = true;
+	        if (contactform.$valid) {
+	            $http({
+	                method  : 'POST',
+	                url     : '<?php site_url(); ?>/wp-content/themes/Vivev2/api/registrar-cya.php',
+	                data    : jQuery.param($scope.formData),
+	                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+	            }).success(function(data){
+	                console.log(data);
+	                if (data.success) {
+	                    $scope.submitButtonDisabled = true;
+	                    $scope.resultMessage = window.alert(data.message);
+	                    $scope.result='';
+	                } else {
+	                    $scope.submitButtonDisabled = false;
+	                    $scope.resultMessage = window.alert(data.message);
+	                    $scope.result='bg-danger';
+	                }
+	            });
+	        }
+	    }
+	    $scope.inputCounter=0;
+	});
+	app.directive('addInput', ['$compile', function ($compile,$scope) { 
+		return {
+		    restrict: 'A',
+		    link: function (scope, element, attrs) {
+		        element.find('button').bind('click', function () {
+		            var input = angular.element('<div class="row">' +
+
+						'<div class="input-field col-xs-12 col-sm-2">' +
+							'<h4>Colección</h4>' +
+				        		'<input type="text" placeholder="Colección" name="art' + scope.inputCounter + '"  id="art' + scope.inputCounter + '"  class="inputfield" ng-model="formData.art' + scope.inputCounter + '" required>' +
+				        '</div>' +
+
+						'<div class="input-field col-xs-12 col-sm-2">' +
+							'<h4>Motivo</h4>' +
+				        		'<input type="text" placeholder="Motivo" name="mot' + scope.inputCounter + '"  id="mot' + scope.inputCounter + '"  class="inputfield" ng-model="formData.mot' + scope.inputCounter + '" required>' +
+				        '</div>' +
+
+						'<div class="input-field col-xs-12 col-sm-3">' +
+							'<h4>Descripción</h4>' +
+				        		'<input type="text" placeholder="Descripción" name="des' + scope.inputCounter + '"  id="des' + scope.inputCounter + '"  class="inputfield" ng-model="formData.des' + scope.inputCounter + '" required>' +
+				        '</div>' +
+
+						'<div class="input-field col-xs-12 col-sm-2">' +
+							'<h4>Cantidad</h4>' +
+				        		'<input type="number" placeholder="Cantidad" name="can' + scope.inputCounter + '"  id="can' + scope.inputCounter + '"  class="inputfield" ng-model="formData.can' + scope.inputCounter + '" min="1" required>' +
+				        '</div>' +
+
+						'<div class="input-field col-xs-12 col-sm-3">' +
+							'<h4>Especifique</h4>' +
+				        		'<input type="text" placeholder="Especifique" name="esp' + scope.inputCounter + '"  id="esp' + scope.inputCounter + '"  class="inputfield" ng-model="formData.esp' + scope.inputCounter + '" required>' +
+				        '</div>');
+		            var compile = $compile(input)(scope);
+
+		            element.append(compile);
+		            scope.inputCounter++;
+		            scope.$apply();
+		        });
+		    }
+		}
+	}]);
+ </script>

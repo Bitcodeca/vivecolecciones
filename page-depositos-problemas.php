@@ -1,474 +1,344 @@
 <?php get_header();
+if ( is_user_logged_in() ) {
+	$user_logged=user_logged();
+	if($user_logged['rol']=='administrator'){
+	    require_once 'api/vive-db.php';
+	    if (mysqli_connect_errno()) { ?>
+			<h1>ERROR DE CONEXIÓN</h1>
+	    <?php } else { ?>
 
-	if( current_user_can('subscriber')) {
-		include (TEMPLATEPATH . '/funciones/usuariologged.php'); ?>
-		<div class="container">
-			<div class="row">
-			<?php
-				if(isset($_POST['enviar'])) {
-					include (TEMPLATEPATH . '/funciones/registrarproblema.php');
-					if ($status=='aprobado') { ?>
-						<div class="modal fade" id="myModal"  tabindex="-1" role="dialog">
-								  <div class="modal-dialog" role="document">
-								    <div class="modal-content">
-								      <div class="modal-header">
-								        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-								        <h4 class="modal-title letraroja">ATENCIÓN</h4>
-								      </div>
-								      <div class="modal-body">
-								        <h1 class="letraverde">Registre este depósito normalmente, no es problemático.</h1>
-								      </div>
-								      <div class="modal-footer">
-								        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-								      </div>
-								    </div><!-- /.modal-content -->
-								  </div><!-- /.modal-dialog -->
-								</div><!-- /.modal -->
-								<script>
-									jQuery(document).ready(function() {
-										$('#myModal').modal('show'); 
-									});
-								</script>
-					<?php } elseif ($status=='pendiente') { ?>
-						<div class="modal fade" id="myModal"  tabindex="-1" role="dialog">
-								  <div class="modal-dialog" role="document">
-								    <div class="modal-content">
-								      <div class="modal-header">
-								        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-								        <h4 class="modal-title letraroja">ATENCIÓN</h4>
-								      </div>
-								      <div class="modal-body">
-								        <h1 class="letraamarilla">Se ha introducido el depósito problemático. En la brevedad posible se analizará.</h1>
-								      </div>
-								      <div class="modal-footer">
-								        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-								      </div>
-								    </div><!-- /.modal-content -->
-								  </div><!-- /.modal-dialog -->
-								</div><!-- /.modal -->
-								<script>
-									jQuery(document).ready(function() {
-										$('#myModal').modal('show'); 
-									});
-								</script>
-					<?php } elseif ($status=='negada') { ?>
-						<div class="modal fade" id="myModal"  tabindex="-1" role="dialog">
-								  <div class="modal-dialog" role="document">
-								    <div class="modal-content">
-								      <div class="modal-header">
-								        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-								        <h4 class="modal-title letraroja">ATENCIÓN</h4>
-								      </div>
-								      <div class="modal-body">
-								        <h1 class="letraroja">Ya ha introducido el mismo registro. Intente con uno diferente.</h1>
-								      </div>
-								      <div class="modal-footer">
-								        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-								      </div>
-								    </div><!-- /.modal-content -->
-								  </div><!-- /.modal-dialog -->
-								</div><!-- /.modal -->
-								<script>
-									jQuery(document).ready(function() {
-										$('#myModal').modal('show'); 
-									});
-								</script>
+			<div class="container-fluid margintop25 marginbot25">	
+	    		<div class="row">
+					<div class="col-md-12">
+						<div class="card-panel z-depth-2 hoverable">
+					     	<h1 class="center-align">Depósitos Problemas</h1>
+
+
+
+
+
+<?php
+if(isset($_POST['btn'])){
+	if($_POST['btn']=='borrar'){
+		$iddep=$_POST['id'];
+		$query2 = "DELETE FROM vive_pen WHERE id=$iddep";
+		if ($mysqli->query( $query2 ) === TRUE) { ?>
+			<div id="<?php echo 'btn'.$iddep; ?>" class="modal">
+				<div class="modal-content">
+					<h4>DEPÓSITO BORRADO</h4>
+				</div>
+				<div class="modal-footer">
+					<a href="#!" class=" modal-action modal-close btn hoverable fondo3 waves-effect waves-light btn-radius">Cerrar</a>
+				</div>
+			</div> 
+		<?php }
+	}
+	if($_POST['btn']=='editar') {
+		$iddep=$_POST['id'];
+		$usuariodep=$_POST['usuario'];
+		$fechadep=$_POST['fecha'];
+		$referenciadep=$_POST['referencia'];
+		$montodep=$_POST['monto'];
+		$bancodep=$_POST['banco'.$iddep];
+		$statusdep=$_POST['status'.$iddep];
+		$camdep=$_POST['cam'.$iddep];
+		$comentariodep=$_POST['comentario'];
+
+		if($statusdep=='Aprobado'){
+			
+			$query = "SELECT * from vive_dep WHERE fecha='$fechadep' AND referencia='$referenciadep' AND monto='$montodep' AND banco='$bancodep' AND usuario='vacio'";
+			$result = mysqli_query($mysqli, $query);
+			if(mysqli_num_rows($result) != 0) {
+				while ($row4 = mysqli_fetch_assoc($result)) {
+					$idaprobado=$row4['id'];
+				}
+				$query2 = "DELETE FROM vive_pen WHERE id=$iddep";
+                if( $mysqli->query( $query2 ) ){
+					$query2 = "UPDATE vive_dep SET status='$statusdep', cam='$camdep', usuario='$usuariodep' WHERE id=$idaprobado";
+            		if( $mysqli->query( $query2 ) ){ ?>
+						<div id="<?php echo 'btn'.$iddep; ?>" class="modal">
+							<div class="modal-content">
+								<h4>DEPÓSITO APROBADO</h4>
+							</div>
+							<div class="modal-footer">
+								<a href="#!" class=" modal-action modal-close btn hoverable fondo3 waves-effect waves-light btn-radius">Cerrar</a>
+							</div>
+						</div> 
 					<?php }
-				}
-			?>
-				<div class="col-md-12 margintop25">
-					<h2 class="text-center">Depósitos Problemas en Análisis</h2>
-					<div id="Container">
-						<?php
-							$con = mysqli_connect ("localhost","advv","cdavv210416","bdve210416");
-							$result = mysqli_query($con, "SELECT * FROM registro WHERE cliente='".$usuariologged."' AND status='pendiente'");
-						 	echo '<div class="row margintop25 fondoazul text-center">';
-							echo			    '<div class="col-md-3 col-sm-3 col-xs-6"><h4>Fecha</h4></div>';
-							echo			    '<div class="col-md-3 col-sm-3 col-xs-6"><h4>Banco</h4></div>'	;	
-							echo			    '<div class="col-md-3 col-sm-3 col-xs-6"><h4># Referencia</h4></div>';
-							echo			    '<div class="col-md-3 col-sm-3 col-xs-6"><h4>Monto</h4></div>';
-							echo '</div>';
-							while ($row = mysqli_fetch_array($result)) {
-								$banco=$row['banco'];
-								$fecha=$row['fecha'];
-								$referencia=$row['referencia'];
-								$monto=$row['monto'];
-								$status=$row['status'];
-								$cliente=$row['cliente'];
-								$fechaunixcamb = DateTime::createFromFormat("d/m/Y", $fecha);
-								$fechaunixcamb=date_format($fechaunixcamb,"Y-m-d");
-								$fechaunixdep=strtotime($fechaunixcamb);
-						        echo '<div class="row mix bordertopnegro borderbotnegro paddingbot10 paddingtop10 text-center '.$banco.'"  data-myorder="'.$fechaunixdep.'">';
-								echo     '<div class="col-md-3 col-sm-3 col-xs-6">'.$fecha.'</div>';
-								echo     '<div class="col-md-3 col-sm-3 col-xs-6">'.$banco.'</div>';
-								echo     '<div class="col-md-3 col-sm-3 col-xs-6">'.$referencia.'</div>';
-								echo     '<div class="col-md-3 col-sm-3 col-xs-6">Bsf '.$monto.'</div>';
-								echo '</div>'; 
-							}
-						?>
+                }
+			} else { ?>
+				<div id="<?php echo 'btn'.$iddep; ?>" class="modal">
+					<div class="modal-content">
+						<h4>ERROR</h4>
+						<h5>No se puede aprobar el depósito si no se encuentra en la base de datos</h5>
 					</div>
-                    <div class="pager-list marginbot10 text-center"></div>
-					<div class="row marginbot10">
-						<div class="text-center">  
-							<span class="finalinventario">Ordernar por: </span>
-							<button type="button" class="sort btn btn-default" data-sort="default">Default</button>
-						  	<button type="button" class="sort btn btn-default" data-sort="myorder:asc">Anteriores</button>
-						  	<button type="button" class="sort btn btn-default active" data-sort="myorder:desc">Recientes</button>
-						</div>
-		            </div>
-		            <div class="text-left">
-							<span class="finalinventario">Filtrar por Banco: </span>
-							<div class="clearfix"></div>
-							<a class="filter btn btn-default btnfiltro" data-filter="*">Todos</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".provincial">Provincial</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".banesco">Banesco</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".activo">Banco Activo</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".bicentenario">Banco Bicentenario</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".venezuela">Banco de Venezuela</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".banplus">Banco BanPlus</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".mercantil">Banco Mercantil</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".bancaribe">Bancaribe</a>
-							<a class="filter btn btn-default btnfiltro" data-filter=".bnc">BNC</a>  
-							<a class="filter btn btn-default btnfiltro" data-filter=".venezolano">Venezolano de Crédito</a>  
-		            </div>
+					<div class="modal-footer">
+						<a href="#!" class=" modal-action modal-close btn hoverable fondo3 waves-effect waves-light btn-radius">Cerrar</a>
+					</div>
+				</div> 
+			<?php
+			}
+
+		}else{
+			$query2 = "UPDATE vive_pen SET fecha='$fechadep', referencia='$referenciadep', monto='$montodep', banco='$bancodep', status='$statusdep', cam='$camdep', comentario='$comentariodep' WHERE id=$iddep";
+			if ($mysqli->query( $query2 ) === TRUE) { ?>
+				<div id="<?php echo 'btn'.$iddep; ?>" class="modal">
+					<div class="modal-content">
+						<h4>DEPÓSITO MODIFICADO</h4>
+					</div>
+					<div class="modal-footer">
+						<a href="#!" class=" modal-action modal-close btn hoverable fondo3 waves-effect waves-light btn-radius">Cerrar</a>
+					</div>
+				</div> 
+			<?php } else {
+				 printf("Error: %s\n", $mysqli->error);
+			}
+		}
+
+
+	}
+}
+// Establish Connection to the Database
+$con = mysqli_connect("localhost","bitcode_bitvcv2","IRV$#eTDk]u4","bitcode_vcv2150117");//Records per page
+$per_page=20;
+
+$actual_link = "$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+$actual_link = explode("/", $actual_link);
+end($actual_link);
+$ultimo=prev($actual_link);
+
+if (is_numeric($ultimo)) {
+
+$page = $ultimo;
+
+}
+
+else {
+
+$page=1;
+
+}
+
+// Page will start from 0 and Multiple by Per Page
+$start_from = ($page-1) * $per_page;
+
+//Selecting the data from table but with limit
+$query = "SELECT * FROM vive_pen WHERE status='Pendiente' LIMIT $start_from, $per_page";
+$result = mysqli_query ($con, $query);
+
+?>
+  <table class="striped responsive-table">
+        <thead>
+          <tr>
+              <th data-field="id">Fecha</th>
+              <th data-field="id">Usuario</th>
+              <th data-field="name">Banco</th>
+              <th data-field="price">Referencia</th>
+              <th data-field="price">Monto</th>
+              <th data-field="price">Campaña</th>
+              <th data-field="price">Acción</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+<?php
+while ($row = mysqli_fetch_assoc($result)) {
+?>
+    <tr>
+        <td><?php echo $row['fecha']; ?></td>
+        <td><?php echo $row['usuario']; ?></td>
+        <td><?php echo $row['banco']; ?></td>
+        <td><?php echo $row['referencia']; ?></td>
+        <td>Bsf <?php if (is_numeric($row['monto'])){$valor=formato($row['monto']); echo $valor;}else{echo $row['monto'];} ?></td>
+        <td><?php echo $row['cam']; ?></td>
+        <td>
+        	<a class="btn hoverable fondo3 waves-effect waves-light btn-radius" href="#<?php echo $row['id']; ?>">EDITAR</a>
+		</td>
+    </tr>
+	<div id="<?php echo $row['id']; ?>" class="modal">
+		<form role="form" method="post" name="<?php echo $row['id']; ?>" action="" >
+			<div class="modal-content">
+				<h4 class="bold">MODIFICAR</h4>
+				<div class="input-field col-xs-12">
+					<h4>Fecha</h4>
+					<input type="date" class="datepicker" id="fecha" name="fecha" data-value="<?php echo $row['fecha'];?>">
 				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-12 margintop25 marginbot25">
-					<h2 class="text-center">Registrar Depósito Problemático</h2>
-					<h1 class="letranegra text-center">Introducir montos sin decimales</h1>
-					<form name="importa" method="post" action="http://vivecolecciones.com.ve/depositos-problemas/" >
-                            <div class="col-md-12 margintop25">
-								<div class="col-md-2">
-									<input placeholder="Fecha"  id="fecha" name="fecha" type="text" class="form-control" required>
-								</div>
-								<div class="col-md-3">
-									<select id="banco" name="banco" style="width: 100%; padding: 8px;" required>
-										<option value="" hidden>Seleccionar Banco</option>
-										<option value="provincial">Provincial</option>
-										<option value="banesco">Banesco</option>
-										<option value="activo">Banco Activo</option>
-										<option value="bicentenario">Banco Bicentenario</option>
-										<option value="venezuela">Banco de Venezuela</option>
-										<option value="banplus">Banco BanPlus</option>
-										<option value="mercantil">Banco Mercantil</option>
-										<option value="bancaribe">Bancaribe</option>
-										<option value="bnc">BNC</option>
-										<option value="venezolano">Venezolano de Crédito</option>
-									</select>
-								</div>
-								<div class="col-md-3">
-									<input placeholder="Número de Referencia"  id="referencia" name="referencia" type="text" class="form-control" required>
-								</div>
-								<div class="col-md-3">
-									<div class="input-group">
-									  	<span class="input-group-addon">Bsf</span>
-										<input placeholder="Monto"  id="monto" name="monto" type="number" class="form-control" required>
-										<span class="input-group-addon">,00</span>
-									</div>
-								</div>
-									<input value="<?php echo $usuariologged; ?>" id="usuario" name="usuario" type="text" hidden required>
-								<div class="col-md-1">
-									<input class="btn btn-primary marginauto" type='submit' name='enviar' id="enviar" value="Registrar"/>
-								</div>
-							</div>
-						</form>
+				<div class="input-field col-xs-12">
+					<h4>Usuario</h4>
+	        		<input type="text" placeholder="Campaña" name="usuario"  id="usuario"  value="<?php echo $row['usuario'];?>" readonly required>
 				</div>
-			</div>
-		</div>
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-		<script>
-			var buttonFilter = { $filters: null, $reset: null, groups: [], outputArray: [], outputString: '',
-			  init: function(){
-			    var self = this;
-			    self.$filters = $('#Filters');
-			    self.$reset = $('#Reset');
-			    self.$container = $('#Container');
-			    self.$filters.find('fieldset').each(function(){
-			      self.groups.push({ $buttons: $(this).find('.filter'), active: '' });
-			    });
-			    self.bindHandlers();
-			  },
-			  bindHandlers: function(){
-			    var self = this;
-			    self.$filters.on('click', '.filter', function(e){
-			      e.preventDefault();
-			      var $button = $(this);
-			      $button.hasClass('active') ?
-			        $button.removeClass('active') :
-			        $button.addClass('active').siblings('.filter').removeClass('active');
-			      self.parseFilters();
-			    });
-			    self.$reset.on('click', function(e){
-			      e.preventDefault();
-			      self.$filters.find('.filter').removeClass('active');
-			      self.parseFilters();
-			    });
-			  },
-			  parseFilters: function(){
-			    var self = this;
-			 	for(var i = 0, group; group = self.groups[i]; i++){
-			      group.active = group.$buttons.filter('.active').attr('data-filter') || '';
-			    }
-			    self.concatenate();
-			  },
-			  concatenate: function(){
-			    var self = this;
-			    self.outputString = '';
-			    for(var i = 0, group; group = self.groups[i]; i++){ self.outputString += group.active; }
-			    !self.outputString.length && (self.outputString = 'all'); 
-			    console.log(self.outputString); 
-			    if(self.$container.mixItUp('isLoaded')){ self.$container.mixItUp('filter', self.outputString); }
-			  }
-			};
-			jQuery(function(){
-			  	buttonFilter.init();
-				jQuery('#Container').mixItUp({
-					animation: { duration: 200 },
-					pagination: { limit: 50, loop: false, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a ><h4>Siguiente</h4></a>' }
-				});
-			});
-		</script>
-		<script>
-		  jQuery(function() {
-		    jQuery( "#fecha" ).datepicker({
-        		dateFormat: 'dd/mm/yy',
-        		maxDate: "0d"
-    		});
-		  });
-		  </script>
-		  <!--/////////////////////////////////////////////////////////////////////////////// -->
-		  <!--///////////////////////////      ADMINISTRADOR    //////////////////////////// -->
-		  <!--///////////////////////////////////////////////////////////////////////////// -->
-	<?php }
-	if( current_user_can('administrator')) { ?>
-<div class="container text-center margintop25 marginbot25">
-		<?php include (TEMPLATEPATH . '/funciones/usuariologged.php');
-			$args=array('post_status' => 'publish', 'order' => 'ASC', 'post_type'=> 'post', 'posts_per_page' => 1); $my_query = new WP_Query($args);
-        	if( $my_query->have_posts() ) {
-        		$todoslosusuarios = get_users();
-				if(isset($_POST['btn'])) {
-						$id=$_POST['id'];
-						$btn=$_POST['btn'];
-						$con = mysqli_connect ("localhost","advv","cdavv210416","bdve210416");
+				<div class="input-field col-xs-12">
+					<h4>Banco</h4>
 
-						if ($btn=='Aprobar') {
-
-							$query = mysqli_query($con, "SELECT * FROM registro WHERE id='".$id."'");
-							while ($row = mysqli_fetch_array($query)) {
-								$referencia=$row['referencia'];
-								$monto=$row['monto'];
-								$fecha=$row['fecha'];
-								$banco=$row['banco'];
-								$cliente=$row['cliente'];
-							}
-
-
-							$d = mysqli_query($con, "SELECT * FROM registro WHERE referencia='".$referencia."' AND banco='".$banco."' AND fecha='".$fecha."' AND monto='".$monto."' AND status='aprobado'");
-							if(mysqli_num_rows($d) != 0){ ?>
-
-								<div class="modal fade" id="myModal"  tabindex="-1" role="dialog">
-								  <div class="modal-dialog" role="document">
-								    <div class="modal-content">
-								      <div class="modal-header">
-								        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-								        <h4 class="modal-title letraroja">ATENCIÓN</h4>
-								      </div>
-								      <div class="modal-body">
-								        <p>El depósito se encuentra en uso y aprobado actualmente por el usuario <?php echo $cliente; ?>.</p>
-								      </div>
-								      <div class="modal-footer">
-								        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-								      </div>
-								    </div><!-- /.modal-content -->
-								  </div><!-- /.modal-dialog -->
-								</div><!-- /.modal -->
-								<script>
-									jQuery(document).ready(function() {
-										$('#myModal').modal('show'); 
-									});
-								</script>
-
-							<?php }elseif (mysqli_num_rows($d) == 0){
-									$sql = "UPDATE registro SET status='aprobado' WHERE id=$id";
-									mysqli_query($con, $sql);
-									mysqli_close($con);
-							}
-
-						} elseif ($btn=='Pendiente') {
-
-							$sql = "UPDATE registro SET status='pendiente' WHERE id=$id";
-							mysqli_query($con, $sql);
-							mysqli_close($con);
-
-						} elseif ($btn=='Negar') {
-
-							$sql = "UPDATE registro SET status='negada' WHERE id=$id";
-							mysqli_query($con, $sql);
-							mysqli_close($con);
-
-						} elseif ($btn=='Eliminar') {
-
-							$sql = "DELETE FROM registro WHERE id=$id";
-							mysqli_query($con, $sql);
-							mysqli_close($con);
-
-						} elseif ($btn=='Editar') {
-
-							$fechaeditada=$_POST['fecha'.$id];
-							$referenciaeditada=$_POST['referencia'.$id];
-							$sql = "UPDATE registro SET fecha='$fechaeditada', referencia='$referenciaeditada' WHERE id=$id";
-							mysqli_query($con, $sql);
-							mysqli_close($con);
-
+					<p>
+						<input name="banco<?php echo $row['id']; ?>" type="radio" id="<?php echo $row['banco']; ?><?php echo $row['id']; ?>" value="<?php echo $row['banco']; ?>" checked />
+						<label for="<?php echo $row['banco']; ?><?php echo $row['id']; ?>"><?php echo $row['banco']; ?></label>
+					</p>
+					<?php
+						$bancos=bancos();
+						foreach ($bancos as $opcion) {
+							if($opcion!=$row['banco']){ ?>
+								<p>
+									<input name="banco<?php echo $row['id']; ?>" type="radio" id="<?php echo $opcion; ?><?php echo $row['id']; ?>" value="<?php echo $opcion; ?>" />
+									<label for="<?php echo $opcion; ?><?php echo $row['id']; ?>"><?php echo $opcion; ?></label>
+								</p>
+							<?php }
 						}
-				}
-	        	?>
-      			<h1 class="marginbot10 text-left">Depósitos Problemas</h1>
-	            <div class="text-left">
-					<div class="clearfix"></div>
-					<form class="controls" id="Filters">
-						<div class="row margintop50">
-							<div class="col-md-2 col-sm-2 col-xs-12">
-								<span class="finalinventario">Filtrar por Usuarios: </span>
-							</div>
-							<div class="col-md-10 col-sm-10 col-xs-12">
-								<fieldset>
-								    <select class="form-control" id="Filters" name="Filters">
-									    <option value="">Todos</option>
-						                <?php $con = mysqli_connect ("localhost","advv","cdavv210416","bdve210416");
-										$result = mysqli_query($con, "SELECT DISTINCT cliente FROM registro WHERE status='pendiente'");
-										while ($row = mysqli_fetch_array($result)) {
-											echo '<option value=".'.$row['cliente'].'"> '.$row['cliente'].' </option>';
-										} ?>
-								    </select>
-							    </fieldset>
-		    				</div>
-	    				</div>
-						<div class="clearfix"></div>
-						<div class="row margintop10">
-							<div class="col-md-2 col-sm-2 col-xs-12">
-								<span class="finalinventario">Filtrar por Banco: </span>
-							</div>
-							<div class="col-md-10 col-sm-10 col-xs-12">
-								<fieldset>
-								    <select class="form-control" id="Filters" name="Filters">
-									    <option value="">Todos</option>
-									    <option value=".provincial">Provincial</option>
-									    <option value=".banesco">Banesco</option>
-									    <option value=".activo">Banco Activo</option>
-									    <option value=".bicentenario">Bicentenario</option>
-									    <option value=".venezuela">Banco de Venezuela</option>
-									    <option value=".banplus">BanPlus</option>
-									    <option value=".mercantil">Mercantil</option>
-									    <option value=".bancaribe">Bancaribe</option>
-									    <option value=".bnc">BNC</option>
-									    <option value=".venezolano">Venezolano de Crédito</option>
-								    </select>
-							    </fieldset> 
-							</div>
-						</div>
-						<div class="clearfix"></div>
-						<div class="row margintop10">
-							<div class="col-md-2 col-sm-2 col-xs-12">
-								<span class="finalinventario">Ordernar por: </span>
-							</div>
-							<div class="col-md-10 col-sm-10 col-xs-12">
-								<button type="button" class="sort btn btn-default" data-sort="default">Default</button>
-							  	<button type="button" class="sort btn btn-default" data-sort="myorder:asc">Anteriores</button>
-							  	<button type="button" class="sort btn btn-default active" data-sort="myorder:desc">Recientes</button>
-							</div>
-			            </div>
-					</form>
-	            </div>
-                <div class="pager-list margintop10 marginbot10"></div>
-	      		<div class="inventario margintop25">
-		    		<div class="col-md-2 col-sm-2 col-xs-4"><h4>Fecha</h4></div>
-				    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Cliente</h4></div>
-				    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Banco</h4></div>
-				    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Número de Referencia</h4></div>
-				    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Monto</h4></div>
-				    <div class="col-md-2 col-sm-2 col-xs-4"><h4>Status</h4></div>
+					?>
 				</div>
-				<div class="clearfix"></div>
-				<div id="Container">
-					<?php include (TEMPLATEPATH . '/funciones/estadodecuentaproblema.php'); ?>
+				<div class="input-field col-xs-12">
+					<h4>Referencia</h4>
+	        		<input type="text" placeholder="Campaña" name="referencia"  id="referencia"  value="<?php echo $row['referencia'];?>" required>
 				</div>
-                <div class="pager-list marginbot10"></div>
-			<?php } else { ?>
-				<h3 class="marginbot25">No existen colecciones asignadas</h3>
-			<?php } ?>
-	</div>
-	<div class="clearfix"></div>
+				<div class="input-field col-xs-12">
+					<h4>Monto</h4>
+	        		<input type="text" placeholder="Campaña" name="monto"  id="monto"  value="<?php echo $row['monto'];?>" required>
+				</div>
+				<div class="input-field col-xs-12">
+					<h4>Campaña</h4>
 
-<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script>
-	var dropdownFilter = {
-	  $filters: null,
-	  $reset: null,
-	  groups: [],
-	  outputArray: [],
-	  outputString: '',
-	  
-	  init: function(){
-	    var self = this;
-	    self.$filters = $('#Filters');
-	    self.$reset = $('#Reset');
-	    self.$container = $('#Container');
-	    self.$filters.find('fieldset').each(function(){
-	      self.groups.push({
-	        $dropdown: $(this).find('select'),
-	        active: ''
-	      });
-	    });
-	    
-	    self.bindHandlers();
-	  },
-	  bindHandlers: function(){
-	    var self = this;
-	    self.$filters.on('change', 'select', function(e){
-	      e.preventDefault();
-	      
-	      self.parseFilters();
-	    });
-	    self.$reset.on('click', function(e){
-	      e.preventDefault();
-	      
-	      self.$filters.find('select').val('');
-	      
-	      self.parseFilters();
-	    });
-	  },
-	  parseFilters: function(){
-	    var self = this;
-	    for(var i = 0, group; group = self.groups[i]; i++){
-	      group.active = group.$dropdown.val();
-	    }
-	    
-	    self.concatenate();
-	  },
-	  concatenate: function(){
-	    var self = this;
-	    
-	    self.outputString = '';
-	    
-	    for(var i = 0, group; group = self.groups[i]; i++){
-	      self.outputString += group.active;
-	    }
-	    !self.outputString.length && (self.outputString = 'all'); 
-		  if(self.$container.mixItUp('isLoaded')){
-	    	self.$container.mixItUp('filter', self.outputString);
-		  }
-	  }
-	};
-	$(function(){ dropdownFilter.init();
-	    jQuery('#Container').mixItUp({
-			animation: { duration: 200 },
-			pagination: { limit: 50, loop: false, prevButtonHTML: '<a><h4>Anterior</h4></a>', nextButtonHTML: '<a><h4>Siguiente</h4></a>' },
-			controls: { toggleFilterButtons: true, toggleLogic: 'and' },
-			load: { sort: 'myorder:desc' }
-	  });    
+					<p>
+						<input name="cam<?php echo $row['id']; ?>" type="radio" id="<?php echo $row['cam']; ?><?php echo $row['id']; ?>" value="<?php echo $row['cam']; ?>" checked />
+						<label for="<?php echo $row['cam']; ?><?php echo $row['id']; ?>"><?php echo $row['cam']; ?></label>
+					</p>
+						<?php
+						$usuario=$row['usuario'];
+						$query3 = "SELECT DISTINCT cam from vive_fac WHERE usuario='$usuario' ORDER BY cam ASC";
+						$result3 = mysqli_query($mysqli, $query3);
+						if(mysqli_num_rows($result3) != 0) {
+							while($row3 = mysqli_fetch_assoc($result3)) {
+								$cam=$row3['cam'];
+								if($row['cam']!=$cam){
+									?>
+									<p>
+										<input name="cam<?php echo $row['id']; ?>" type="radio" id="<?php echo $cam; ?><?php echo $row['id']; ?>" value="<?php echo $cam; ?>" />
+										<label for="<?php echo $cam; ?><?php echo $row['id']; ?>"><?php echo $cam; ?></label>
+									</p>
+									<?php
+								}
+							}
+						} ?>
+				</div>
+				<div class="input-field col-xs-12">
+					<h4>Status</h4>
+
+					<p>
+						<input name="status<?php echo $row['id']; ?>" type="radio" id="<?php echo $row['status']; ?><?php echo $row['id']; ?>" value="<?php echo $row['status']; ?>" checked />
+						<label for="<?php echo $row['status']; ?><?php echo $row['id']; ?>"><?php echo $row['status']; ?></label>
+					</p>
+					<?php
+						$status=status();
+						foreach ($status as $opcion) {
+							if($opcion!=$row['status']){ ?>
+								<p> 
+									<input name="status<?php echo $row['id']; ?>" type="radio" id="<?php echo $opcion; ?><?php echo $row['id']; ?>" value="<?php echo $opcion; ?>" />
+									<label for="<?php echo $opcion; ?><?php echo $row['id']; ?>"><?php echo $opcion; ?></label>
+								</p>
+							<?php }
+						}
+					?>
+				</div>
+				<div class="input-field col-xs-12 marginbot25">
+					<h4>Descripción</h4>
+	        		<textarea id="comentario" name="comentario" class="materialize-textarea" length="500"></textarea>
+				</div>
+			</div>
+			<div class="modal-footer">
+					<button  type="submit" name="btn" id="btn" value="borrar" class="btn hoverable fondo5 waves-effect waves-light btn-radius" type="submit">
+						<i class="material-icons left">cancel</i>
+							BORRAR DEPÓSITO
+					</button>
+					<button  type="submit" name="btn" id="btn" value="editar" class="btn hoverable fondo2 waves-effect waves-light btn-radius" type="submit">
+						<i class="material-icons left">mode_edit</i>
+							EDITAR
+					</button>
+					<input type="hidden" name="id" id="id" value="<?php echo $row['id']; ?>" />
+					<a href="#!" class=" modal-action modal-close btn hoverable fondo3 waves-effect waves-light btn-radius">CANCELAR</a>
+			</div>
+		</form>
+	</div>
+<?php
+};
+?>
+        </tbody>
+      </table>
+
+<div>
+<?php
+
+//Now select all from table
+$query = "select * from vive_pen WHERE status='Pendiente'";
+$result = mysqli_query($con, $query);
+
+// Count the total records
+$total_records = mysqli_num_rows($result);
+
+//Using ceil function to divide the total records on per page
+$total_pages = ceil($total_records / $per_page);
+
+//Going to first page
+
+echo '<ul class="pagination">';
+echo "<li><a href='http://app.vivecolecciones.com.ve/lista-de-depositos/?page=1'>".'Primera página'."</a></li>";
+
+for ($i=1; $i<=$total_pages; $i++) {
+	if($ultimo==$i){$clase='active';}else{$clase='';}
+echo "<li class='waves-effect ".$clase."'><a href='http://app.vivecolecciones.com.ve/lista-de-depositos/?page=".$i."'>".$i."</a></li>";
+};
+// Going to last page
+echo "<li><a href='http://app.vivecolecciones.com.ve/lista-de-depositos/?page=".$total_pages."'>".'Última página'."</a></li>";
+echo '</ul>';
+
+?>
+
+</div>
+
+
+
+
+
+
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+	    <?php }
+	} else{ ?>
+		<h1> ACCESO NEGADO </h1>
+	<?php	}  ?>
+<?php } else {  
+		header("Location: http://app.vivecolecciones.com.ve/"); /* Redirect browser */
+		exit(); 
+ } get_footer(); ?>
+ <script>
+	jQuery(document).ready(function(){
+	    jQuery('.modal').modal();
+	    jQuery('select').material_select();
+	    jQuery('textarea#descripcion').characterCounter();
+	    jQuery('.datepicker').pickadate({
+	    	monthsFull: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+			monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+			weekdaysFull: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+			weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+		    selectMonths: true, // Creates a dropdown to control month
+		    selectYears: 1, // Creates a dropdown of 15 years to control year
+		    format: 'dd/mm/yyyy',
+		    today: 'Hoy',
+			clear: 'Borrar',
+			close: 'Cerrar',
+		});
 	});
 </script>
-	<?php }
-get_footer(); ?>
+<?php
+	if(isset($_POST['btn'])){ ?>
+		<script>
+			  jQuery(document).ready(function(){
+			    jQuery('#<?php echo 'btn'.$iddep; ?>').modal('open');
+			  });
+		</script>
+	<?php
+	}
+?>
