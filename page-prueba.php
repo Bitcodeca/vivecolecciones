@@ -7,7 +7,71 @@ if ( is_user_logged_in() ) {
 			<h1>ERROR DE CONEXIÓN</h1>
 	    <?php } else { ?>
 
-			<div class="container-fluid margintop25 marginbot25">	
+			<div class="container-fluid margintop25 marginbot25">
+	    		<div class="row">
+	        		<div class="col-xs-12">
+        				<div class="card-panel z-depth-2 hoverable">
+
+							<?php
+								$stmt0 = $mysqli->prepare("SELECT DISTINCT cam FROM vive_con");
+								$stmt0->execute();
+								$stmt0->bind_result($cam);
+								$stmt0->store_result();
+							    while ($stmt0->fetch()) {
+									$stmt = $mysqli->prepare("SELECT sum(vive_fac.can), 
+										 							 vive_cam.art,
+										 							 vive_cam.cos 
+										 							 FROM vive_fac JOIN vive_cam 
+										 							 ON vive_fac.art_id=vive_cam.id 
+																	 AND vive_cam.cam='$cam' 
+																	 GROUP BY vive_fac.art_id");
+									$stmt->execute();
+									$stmt->bind_result($facCan, $camArt, $camCos);
+									$stmt->store_result();
+									$costo=0;
+								    while ($stmt->fetch()) {
+								    	$costo=$facCan*$camCos + $costo;
+								    	?>
+								    	<p> <?php echo $camArt.' Colecciones:'.$facCan; ?></p>
+								    	<?
+									}
+									$stmt->close();
+									?>
+									<h5>Campaña #<?php echo $cam; ?>: <b>Bsf <?php $valor=formato($costo); echo $valor; ?></b></h5>
+									<?php
+								}
+								$stmt0->close();
+								?>
+        				</div>
+					</div>
+				</div>
+	    		<div class="row">
+	        		<div class="col-xs-12">
+        				<div class="card-panel z-depth-2 hoverable">
+							<?php
+								$stmt = $mysqli->prepare("SELECT SUM(vive_averia.can), 
+																 vive_var.art, 
+																 vive_cam.art, 
+																 vive_var.var 
+																 FROM vive_averia 
+																 JOIN vive_var ON vive_averia.art=vive_var.var 
+																 JOIN vive_cam ON vive_var.art=vive_cam.id 
+																 GROUP BY vive_var.art");
+								$stmt->execute();
+								$stmt->bind_result($averiaCan, $varArt, $camArt, $varVar);
+								$stmt->store_result();
+								$costo=0;
+							    while ($stmt->fetch()) {
+							    	$costo=$facCan*$camCos + $costo;
+							    	?>
+							    	<p> <?php echo 'Coleccion:'. $camArt.' Variacion:'.$varVar.' Cantidad: '.abs($averiaCan); ?></p>
+							    	<?
+								}
+								$stmt->close();
+							?>
+        				</div>
+					</div>
+				</div>
 	    		<div class="row">
 	        		<div class="col-xs-12">
 	        			<h1 class="center-align">Depósitos Problemas con MATCH en la DATA</h1>

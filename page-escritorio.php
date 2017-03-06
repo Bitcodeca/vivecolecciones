@@ -57,7 +57,6 @@ if ( is_user_logged_in() ) {
 	        					<hr />
 	        					<div class="row marginbot0">
 		        					<div class="col-xs-12">
-
 		        						<?php
 		        						$query = "SELECT * from vive_cam ORDER BY cam ASC";
 										$result = mysqli_query($mysqli, $query);
@@ -85,9 +84,7 @@ if ( is_user_logged_in() ) {
 												<?php
 											}
 										}
-
 										?>
-	        							
 	        							<h4 class="center-align bold marginbot0 margintop0">Total: <b>Bsf <?php $valor=formato($costo_total); echo $valor; ?></b></h4>
 	        							<?php
 		        						$query = "SELECT * from vive_con ORDER BY cam ASC";
@@ -199,7 +196,7 @@ if ( is_user_logged_in() ) {
 			        					<h5><i class="material-icons">check_circle</i> Depósitos Aprobados: <b><?php echo $num_dep; ?></b></h5>
 			        					<h5><i class="material-icons">error</i> Depósitos Problemas: <b><?php echo $num_pen; ?></b></h5>
 			        					<h5><i class="material-icons">cancel</i> Depósitos Negados: <b><?php echo $num_neg; ?></b></h5>
-			        					<h5><i class="material-icons">check_box_outline_blank</i> Depósitos Sin Asignar: <b><?php echo $num_vacio; ?></b></h5>
+			        					<h5><i class="material-icons">panorama_fish_eye</i> Depósitos Sin Asignar: <b><?php echo $num_vacio; ?></b></h5>
 			        					<h5><i class="material-icons">archive</i> Facturas Cerradas</h5>
 			        					<h5><i class="material-icons">cached</i> Cambios: <b><?php echo $camb; ?></b></h5>
 			        					<h5><i class="material-icons">build</i> Averías: <b><?php echo $aver; ?></b></h5>
@@ -410,16 +407,8 @@ if ( is_user_logged_in() ) {
 		]);
 
 		var options = {
-			title: 'Motivation and Energy Level Throughout the Day',
-			hAxis: {
-				title: 'Time of Day',
-				format: 'h:mm a',
-				viewWindow: {
-					min: [7, 30, 0],
-					max: [17, 30, 0]
-				}
-			},
-			vAxis: { title: 'Rating (scale of 1-10)'}
+			hAxis: { title: 'Campañas' },
+			vAxis: { title: 'Bsf'}
 		};
 
 		var chart = new google.visualization.ColumnChart(document.getElementById('chart1'));

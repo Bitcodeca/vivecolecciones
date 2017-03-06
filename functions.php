@@ -29,7 +29,7 @@ function prototipo_script_enqueue() {
       wp_enqueue_script('mixitupjs', 'https://cdnjs.cloudflare.com/ajax/libs/mixitup/2.1.11/jquery.mixitup.min.js', array(), '2.1.11', true);
       wp_enqueue_script('mixituppaginationjs',  'http://tseoc.co.uk/chris/jquery.mixitup-pagination.min.js', array(), '1.0.0', true);
     }
-    if ( is_page('dependencias') || is_page('escritorio') || is_page('estructura') || is_page('buscar-factura') || is_page('facturacion') ){
+    if ( is_page('dependencias') || is_page('escritorio') || is_page('estructura') || is_page('buscar-factura') || is_page('facturacion') || is_page('prueba') ){
       wp_enqueue_script('gcharts', 'https://www.gstatic.com/charts/loader.js', array(), '2.1.11', true);
     }
 }

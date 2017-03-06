@@ -251,7 +251,7 @@ if ( is_user_logged_in() ) {
 								}
 								else{
 							    	?>
-									<h1 class="center-align">No puede ingresar una avería</h1>
+									<h1 class="center-align">No puede ingresar un cambio</h1>
 							    	<?php
 								}
             					$stmt->close();

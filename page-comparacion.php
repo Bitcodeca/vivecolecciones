@@ -57,6 +57,7 @@ if ( is_user_logged_in() ) {
 													<input type="hidden" name="penid<?php echo $penId; ?>" id="penid<?php echo $penId; ?>" value="<?php echo $penId; ?>" />
 													<input type="hidden" name="usuario<?php echo $penId; ?>" id="usuario<?php echo $penId; ?>" value="<?php echo $penUsuario; ?>" />
 													<input type="hidden" name="depid<?php echo $penId; ?>" id="depid<?php echo $penId; ?>" value="<?php echo $depId; ?>" />
+													<input type="hidden" name="cam<?php echo $penId; ?>" id="cam<?php echo $penId; ?>" value="<?php echo $penCam; ?>" />
 												</td>
 										    </tr>
 											<?php
@@ -74,7 +75,7 @@ if ( is_user_logged_in() ) {
 		<h1> ACCESO NEGADO </h1>
 	<?php	}  ?>
 <?php } else {  
-		header("Location: http://app.vivecolecciones.com.ve/"); /* Redirect browser */
+		header("Location: http://app.vivecolecciones.com.ve/");
 		exit(); 
  } get_footer(); ?>
 <script>
@@ -85,12 +86,13 @@ if ( is_user_logged_in() ) {
 			var penid = jQuery('#penid'+id).val();
 			var usuario = jQuery('#usuario'+id).val();
 			var depid = jQuery('#depid'+id).val();
-			console.log(id);
-			console.log(penid);
-			console.log(usuario);
-			console.log(depid);
-			jQuery("#btn"+id).removeClass("yellow").addClass("fondo3");
-			jQuery('#btn'+id).prop('disabled', true);
+			var pencam = jQuery('#cam'+id).val();
+			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/comparacionAprobar.php", {params:{"penId": penid, "usuario": usuario, "depId": depid, "penCam": pencam }})
+			.then(function (response) {
+				jQuery("#btn"+id).removeClass("yellow").addClass("fondo3");
+				jQuery('#btn'+id).prop('disabled', true);
+			}); 
+
 		}
 		
 	});
