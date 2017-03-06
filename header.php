@@ -305,7 +305,7 @@
                             ?>
                             <ul>
                                 <li><a class="btn-floating fondo2" href="<?php site_url(); ?>/buscar-deposito/"><i class="material-icons">search</i></a></li>
-                                <li><a class="btn-floating fondo3" href="<?php site_url(); ?>/buscar-factura/"><i class="material-icons">account_balance_wallet</i></a></li>
+                                <li><a class="btn-floating fondo3" href="<?php site_url(); ?>/buscar-factura/"><i class="material-icons">credit_card</i></a></li>
                                 <li><a class="btn-floating fondo4" href="<?php site_url(); ?>/mensajes/"><i class="material-icons">mail</i></a></li>
                             </ul>
                             <?php

@@ -373,7 +373,11 @@ if ( is_user_logged_in() ) {
                     	$var=explode("/",$nacimiento);
                     	echo "{
                     		title  : '".$usuario."',
-				            start  : '2017-".$var['1']."-".$var['0']."'
+				            start  : '".date('Y')."-".$var['1']."-".$var['0']."'
+			    			},";
+                    	echo "{
+                    		title  : '".$usuario."',
+				            start  : '".date('Y', strtotime('+1 year'))."-".$var['1']."-".$var['0']."'
 			    			},";
                     }
                     $stmt_ORDER->close();?>
@@ -384,35 +388,52 @@ if ( is_user_logged_in() ) {
  </script>
  <?php if($user_logged['rol']=='administrator'){ ?>
  <script>
-	google.charts.load('current', {packages: ['corechart', 'bar']});
-	google.charts.setOnLoadCallback(drawMultSeries);
+      google.charts.load('current', {'packages':['bar']});
+      google.charts.setOnLoadCallback(drawStuff);
 
-	function drawMultSeries() {
-		var data = new google.visualization.DataTable();
-		data.addColumn('timeofday', 'Time of Day');
-		data.addColumn('number', 'Motivation Level');
-		data.addColumn('number', 'Energy Level');
+      function drawStuff() {
+        var data = new google.visualization.arrayToDataTable([
+          ['Campaña', 'Aprobado', 'Invertido'],
 
-		data.addRows([
-			[{v: [8, 0, 0], f: '8 am'}, 1, .25],
-			[{v: [9, 0, 0], f: '9 am'}, 2, .5],
-			[{v: [10, 0, 0], f: '10 am'}, 3, 1],
-			[{v: [11, 0, 0], f: '11 am'}, 4, 2.25],
-			[{v: [12, 0, 0], f: '12 pm'}, 5, 2.25],
-			[{v: [13, 0, 0], f: '1 pm'}, 6, 3],
-			[{v: [14, 0, 0], f: '2 pm'}, 7, 4],
-			[{v: [15, 0, 0], f: '3 pm'}, 8, 5.25],
-			[{v: [16, 0, 0], f: '4 pm'}, 9, 7.5],
-			[{v: [17, 0, 0], f: '5 pm'}, 10, 10],
-		]);
+			<?php
+				$stmt0 = $mysqli->prepare("SELECT DISTINCT cam FROM vive_con");
+				$stmt0->execute();
+				$stmt0->bind_result($cam);
+				$stmt0->store_result();
+			    while ($stmt0->fetch()) {
+					$stmt = $mysqli->prepare("SELECT sum(vive_fac.can), vive_cam.art, vive_cam.cos FROM vive_fac JOIN vive_cam ON vive_fac.art_id=vive_cam.id AND vive_cam.cam='$cam' GROUP BY vive_fac.art_id");
+					$stmt->execute();
+					$stmt->bind_result($facCan, $camArt, $camCos);
+					$stmt->store_result();
+					$costo=0;
+				    while ($stmt->fetch()) { $costo=$facCan*$camCos + $costo; }
+					$stmt->close();
 
-		var options = {
-			hAxis: { title: 'Campañas' },
-			vAxis: { title: 'Bsf'}
-		};
+					$stmt = $mysqli->prepare("SELECT sum(monto) FROM vive_dep WHERE cam='$cam' AND NOT status='vacio'");
+					$stmt->execute();
+					$stmt->bind_result($total_pagado);
+				    $stmt->fetch();
+					$stmt->close();
+						
+					
+					echo "['#".$cam."', ".$total_pagado.", ".$costo."],";
+				}
+				$stmt0->close();
+			?>
+        ]);
 
-		var chart = new google.visualization.ColumnChart(document.getElementById('chart1'));
-		chart.draw(data, options);
-    }
+        var options = {
+       	  vAxis: {format: 'none'},
+          series: {
+            0: { axis: 'Bsf' }, // Bind series 0 to an axis named 'distance'.
+          },
+          axes: {
+            y: {  Bsf: {label: 'Bsf'}, }
+          }
+        };
+
+      var chart = new google.charts.Bar(document.getElementById('chart1'));
+      chart.draw(data, options);
+    };
  </script>
  <?php } ?>
