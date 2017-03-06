@@ -18,7 +18,7 @@ if ( is_user_logged_in() ) {
 			<div class="container-fluid margintop25 marginbot25">
 				<div class="row"> 		
 		    		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		    			<h1 class="center-align margintop0 imprimir">Cambios</h1>
+		    			<h1 class="center-align margintop0">Cambios</h1>
 			        	<?php
 						$query3 = "SELECT DISTINCT usuario from vive_cambio ORDER BY usuario ASC";
 						$result3 = mysqli_query($mysqli, $query3);
@@ -29,7 +29,7 @@ if ( is_user_logged_in() ) {
 									$usu=$row3['usuario'];
 									$info=user_by_login($usu);
 									?>
-									<li>
+									<li class="nobreak">
 										<div class="collapsible-header paddingtop5 paddingbot5">
 											<h3 class="margintop0 marginbot0 marginleft25"><img src="<?php echo $info['avatarxs']; ?>" class="circle" height="48px" width="auto"> <?php echo $usu; ?></h3>
 										</div>

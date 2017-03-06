@@ -30,7 +30,7 @@ if ( is_user_logged_in() ) {
 									$usu=$row3['usuario'];
 									$info=user_by_login($usu);
 									?>
-									<li>
+									<li class="nobreak">
 										<div class="collapsible-header paddingtop5 paddingbot5">
 											<h3 class="margintop0 marginbot0 marginleft25"><img src="<?php echo $info['avatarxs']; ?>" class="circle" height="48px" width="auto"> <?php echo $usu; ?></h3>
 										</div>

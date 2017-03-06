@@ -9,14 +9,14 @@ function prototipo_script_enqueue() {
      wp_enqueue_style('Bootstrap grid', get_template_directory_uri() . '/css/bootstrap.min.css', array(), '1.0.0', 'all');
      wp_enqueue_style('Materializecss', 'https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css', array(), '0.97.8', 'all');
      wp_enqueue_style('material icons', 'https://fonts.googleapis.com/icon?family=Material+Icons', array(), '1.0.0', 'all');
-     wp_enqueue_style('style', get_template_directory_uri() . '/css/style.css', array(), '2.1.35', 'all');
+     wp_enqueue_style('style', get_template_directory_uri() . '/css/style.css', array(), '2.1.46', 'all');
 
     //js
     wp_enqueue_script('jquery', 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js', array(), '3.1.0', true);
     wp_enqueue_script('Materialize js', 'https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js', array(), '0.97.8', true);
 
 
-    if( is_page('agregar-campana') || is_page('chat') || is_page('asignar-dependencia') || is_page('centro-de-control') || is_page('registrar-pago') || is_page('registrar-deposito-problema') || is_page('devoluciones') || is_page('denuncias') || is_page('premios') || is_page('agregar-nueva-coleccion') || is_page('agregar-nuevo-premio') ){
+    if( is_page('agregar-campana') || is_page('chat') || is_page('asignar-dependencia') || is_page('centro-de-control') || is_page('registrar-pago') || is_page('registrar-deposito-problema') || is_page('devoluciones') || is_page('denuncias') || is_page('premios') || is_page('agregar-nueva-coleccion') || is_page('agregar-nuevo-premio') || is_page('comparacion') || is_page('prueba') ){
       wp_enqueue_script('angular', 'https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js', array(), '3.1.0', true);
       wp_enqueue_script('appjs', get_template_directory_uri() . '/app.js', array(), '3.1.0', true);
     }

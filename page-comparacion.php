@@ -85,12 +85,12 @@ if ( is_user_logged_in() ) {
 			var penid = jQuery('#penid'+id).val();
 			var usuario = jQuery('#usuario'+id).val();
 			var depid = jQuery('#depid'+id).val();
-			jQuery('#btn'+id).prop('disabled', true);
 			console.log(id);
 			console.log(penid);
 			console.log(usuario);
 			console.log(depid);
 			jQuery("#btn"+id).removeClass("yellow").addClass("fondo3");
+			jQuery('#btn'+id).prop('disabled', true);
 		}
 		
 	});

@@ -47,6 +47,12 @@
                     $notifCamb = $stmt_ORDER->num_rows;
                     $stmt_ORDER->close();
 
+                    $stmt_ORDER = $conn->prepare("SELECT vive_pen.id FROM vive_dep JOIN vive_pen ON vive_pen.referencia = vive_dep.referencia AND vive_pen.fecha = vive_dep.fecha AND vive_pen.banco = vive_dep.banco AND vive_pen.monto = vive_dep.monto AND vive_dep.usuario = 'vacio'");
+                    $stmt_ORDER->execute();
+                    $stmt_ORDER->store_result();
+                    $notifMatch = $stmt_ORDER->num_rows;
+                    $stmt_ORDER->close();
+
                     $stmt_ORDER = $conn->prepare("SELECT id FROM vive_averia WHERE status='pendiente'");
                     $stmt_ORDER->execute();
                     $stmt_ORDER->store_result();
@@ -256,6 +262,7 @@
                                     <a href="<?php site_url(); ?>/depositos-problemas/" class="black-text"><i class="material-icons medium circle yellow darken-3">&#xE001;</i>
                                     <span class="title truncate"><b>DEPÓSITOS PROBLEMAS</b></span>
                                     <h4>Total: <b><?php echo $notifPen; ?></b></h4></a>
+                                    <a href="<?php site_url(); ?>/comparacion/" class="black-text"><h4>Match: <b><?php echo $notifMatch; ?></b></h4></a>
                                 </li>
                                 <li class="collection-item avatar">
                                     <a href="<?php site_url(); ?>/cambios/" class="black-text"><i class="material-icons medium circle yellow darken-3">cached</i>

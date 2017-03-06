@@ -170,6 +170,9 @@ if ( is_user_logged_in() ) {
 	        							if ($result = $mysqli->query("SELECT id FROM vive_dep WHERE status<>'vacio'")) {
 	        								$num_dep = mysqli_num_rows($result);
 	        							}	
+	        							if ($result = $mysqli->query("SELECT id FROM vive_dep WHERE status='vacio'")) {
+	        								$num_vacio = mysqli_num_rows($result);
+	        							}	
 	        							if ($result = $mysqli->query("SELECT * FROM vive_pen WHERE status='pendiente'")) {
 	        								$num_pen = mysqli_num_rows($result);
 	        							}
@@ -196,6 +199,7 @@ if ( is_user_logged_in() ) {
 			        					<h5><i class="material-icons">check_circle</i> Depósitos Aprobados: <b><?php echo $num_dep; ?></b></h5>
 			        					<h5><i class="material-icons">error</i> Depósitos Problemas: <b><?php echo $num_pen; ?></b></h5>
 			        					<h5><i class="material-icons">cancel</i> Depósitos Negados: <b><?php echo $num_neg; ?></b></h5>
+			        					<h5><i class="material-icons">check_box_outline_blank</i> Depósitos Sin Asignar: <b><?php echo $num_vacio; ?></b></h5>
 			        					<h5><i class="material-icons">archive</i> Facturas Cerradas</h5>
 			        					<h5><i class="material-icons">cached</i> Cambios: <b><?php echo $camb; ?></b></h5>
 			        					<h5><i class="material-icons">build</i> Averías: <b><?php echo $aver; ?></b></h5>
