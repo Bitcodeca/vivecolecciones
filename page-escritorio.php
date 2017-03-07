@@ -402,7 +402,7 @@ if ( is_user_logged_in() ) {
           ['Fecha', 'Monto'],
 
           <?php
-			$stmt = $mysqli->prepare("SELECT sum(vive_dep.monto), vive_dep.fecha FROM vive_dep WHERE status<>'vacio' GROUP BY vive_dep.fecha ORDER BY UNIX_TIMESTAMP(STR_TO_DATE(vive_dep.fecha, '%d/%m/%Y')) ASC");
+			$stmt = $mysqli->prepare("SELECT sum(vive_dep.monto), vive_dep.fecha FROM vive_dep GROUP BY vive_dep.fecha ORDER BY UNIX_TIMESTAMP(STR_TO_DATE(vive_dep.fecha, '%d/%m/%Y')) ASC");
 			$stmt->execute();
 			$stmt->bind_result($monto, $fecha);
 			$stmt->store_result();
@@ -413,8 +413,9 @@ if ( is_user_logged_in() ) {
 			?>
         ]);
         var options = {
-          series: { 0: { axis: 'Bsf' }, },
-          axes: { y: {  Bsf: {label: 'Bsf'}, } }
+        	legend: { position: "none" },
+            series: { 0: { axis: 'Bsf' }, },
+            axes: { y: {  Bsf: {label: 'Bsf'}, } }
         };
         var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
         chart.draw(data, options);
