@@ -82,6 +82,15 @@ if ( is_user_logged_in() ) {
 					</div>
 				</div>
 
+        		<div class="row">
+	        		<div class="col-xs-12">
+        				<div class="card-panel z-depth-2 hoverable" style="overflow-x: scroll;">
+        					<h3 class="center-align bold margintop0 marginbot0"><i class="material-icons color5 verticalalignsub">trending_up</i> Ingresos Diarios</h3>
+							<div id="columnchart_material"></div>
+        				</div>
+					</div>
+				</div>
+
 	    		<div class="row">
 	        		<div class="col-xs-12">
 	        			<h1 class="center-align">Depósitos Problemas con MATCH en la DATA</h1>
@@ -173,7 +182,6 @@ if ( is_user_logged_in() ) {
  <script>
       google.charts.load('current', {'packages':['bar']});
       google.charts.setOnLoadCallback(drawStuff);
-
       function drawStuff() {
         var data = new google.visualization.arrayToDataTable([
           ['Campaña', 'Aprobado', 'Invertido'],
@@ -204,19 +212,37 @@ if ( is_user_logged_in() ) {
 				$stmt0->close();
 			?>
         ]);
-
         var options = {
        	  vAxis: {format: 'none'},
-          series: {
-            0: { axis: 'Bsf' }, // Bind series 0 to an axis named 'distance'.
-          },
-          axes: {
-            y: {  Bsf: {label: 'Bsf'}, }
-          }
+          series: { 0: { axis: 'Bsf' }, },
+          axes: { y: {  Bsf: {label: 'Bsf'}, } }
         };
-
       var chart = new google.charts.Bar(document.getElementById('chart1'));
       chart.draw(data, options);
     };
 
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Fecha', 'Monto'],
+
+          <?php
+			$stmt = $mysqli->prepare("SELECT sum(vive_dep.monto), vive_dep.fecha FROM vive_dep WHERE status<>'vacio' GROUP BY vive_dep.fecha ORDER BY UNIX_TIMESTAMP(STR_TO_DATE(vive_dep.fecha, '%d/%m/%Y')) ASC");
+			$stmt->execute();
+			$stmt->bind_result($monto, $fecha);
+			$stmt->store_result();
+		    while ($stmt->fetch()) {
+				echo "['".$fecha."', ".$monto."],";
+		    }
+			$stmt->close();
+			?>
+        ]);
+        var options = {
+        	vAxis: {format: 'decimal' },
+            series: { 0: { axis: 'Bsf' }, },
+            axes: { y: {  Bsf: {label: 'Bsf'}, } },
+        };
+        var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+        chart.draw(data, options);
+      }
  </script>

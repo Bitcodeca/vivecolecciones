@@ -157,6 +157,7 @@ td.fc-list-item-title.fc-widget-content { font-size: 1.5em; }
 td p {margin: 0px;}
 
 .pointer{cursor:pointer}
+.reportes{-webkit-column-count: 2; -moz-column-count: 2; column-count: 2;}
 
 @media (max-width:1440px){
     nav ul a { font-size: 1.2em; letter-spacing: 1px; padding: 0 7px; }
@@ -178,6 +179,8 @@ td p {margin: 0px;}
     span.fc-title { font-size: 1.8em; }
 }
 @media (max-width:1080px){
+
+  .reportes{-webkit-column-count: 1; -moz-column-count: 1; column-count: 1;}
     nav ul a { letter-spacing: 0px; }
 }
 @media (max-width:992px){

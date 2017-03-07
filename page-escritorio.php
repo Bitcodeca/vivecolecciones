@@ -160,7 +160,7 @@ if ( is_user_logged_in() ) {
 	        					<h2 class="bold center-align"><i class="material-icons color5 verticalalignsub">flag</i>Reportes</h2>
 	        					<hr />
 	        					<div class="row marginbot0">
-		        					<div class="col-xs-12">
+		        					<div class="col-xs-12 reportes">
 		        						<?php
 		        						$usercount = count_users();
 										$total_usuarios = $usercount['total_users'];
@@ -209,6 +209,21 @@ if ( is_user_logged_in() ) {
 						</div>
 
 					</div>
+
+        			<div class="row">
+		        		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
+	        				<div class="card-panel z-depth-2 hoverable" style="overflow-x: scroll;">
+	        					<h3 class="center-align bold margintop0 marginbot0"><i class="material-icons color5 verticalalignsub">trending_up</i> Ingresos Diarios</h3>
+								<div id="columnchart_material"></div>
+	        				</div>
+						</div>
+		        		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
+	        				<div class="card-panel z-depth-2 hoverable" style="overflow-x: scroll;">
+	        					<h3 class="center-align bold margintop0 marginbot0"><i class="material-icons color5 verticalalignsub">message</i> Chat</h3>
+								<div id="chatChart"></div>
+	        				</div>
+						</div>
+					</div>
 	        		<div class="row">
 		        		<div class="col-xs-12">
 	        				<div class="card-panel z-depth-2 hoverable">
@@ -218,14 +233,6 @@ if ( is_user_logged_in() ) {
         				</div>
     				</div>
 
-	        		<div class="row">
-		        		<div class="col-xs-12">
-	        				<div class="card-panel z-depth-2 hoverable" style="overflow-x: scroll;">
-	        					<h3 class="center-align bold margintop0 marginbot0"><i class="material-icons color5 verticalalignsub">trending_up</i> Movimientos</h3>
-	        					<div id="chart1"></div>
-	        				</div>
-						</div>
-					</div>
 
 				</div>
 			</div>
@@ -388,52 +395,57 @@ if ( is_user_logged_in() ) {
  </script>
  <?php if($user_logged['rol']=='administrator'){ ?>
  <script>
-      google.charts.load('current', {'packages':['bar']});
-      google.charts.setOnLoadCallback(drawStuff);
+      google.charts.load('current', {'packages':['bar', 'corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Fecha', 'Monto'],
 
-      function drawStuff() {
-        var data = new google.visualization.arrayToDataTable([
-          ['Campaña', 'Aprobado', 'Invertido'],
-
-			<?php
-				$stmt0 = $mysqli->prepare("SELECT DISTINCT cam FROM vive_con");
-				$stmt0->execute();
-				$stmt0->bind_result($cam);
-				$stmt0->store_result();
-			    while ($stmt0->fetch()) {
-					$stmt = $mysqli->prepare("SELECT sum(vive_fac.can), vive_cam.art, vive_cam.cos FROM vive_fac JOIN vive_cam ON vive_fac.art_id=vive_cam.id AND vive_cam.cam='$cam' GROUP BY vive_fac.art_id");
-					$stmt->execute();
-					$stmt->bind_result($facCan, $camArt, $camCos);
-					$stmt->store_result();
-					$costo=0;
-				    while ($stmt->fetch()) { $costo=$facCan*$camCos + $costo; }
-					$stmt->close();
-
-					$stmt = $mysqli->prepare("SELECT sum(monto) FROM vive_dep WHERE cam='$cam' AND NOT status='vacio'");
-					$stmt->execute();
-					$stmt->bind_result($total_pagado);
-				    $stmt->fetch();
-					$stmt->close();
-						
-					
-					echo "['#".$cam."', ".$total_pagado.", ".$costo."],";
-				}
-				$stmt0->close();
+          <?php
+			$stmt = $mysqli->prepare("SELECT sum(vive_dep.monto), vive_dep.fecha FROM vive_dep WHERE status<>'vacio' GROUP BY vive_dep.fecha ORDER BY UNIX_TIMESTAMP(STR_TO_DATE(vive_dep.fecha, '%d/%m/%Y')) ASC");
+			$stmt->execute();
+			$stmt->bind_result($monto, $fecha);
+			$stmt->store_result();
+		    while ($stmt->fetch()) {
+				echo "['".$fecha."', ".$monto."],";
+		    }
+			$stmt->close();
 			?>
         ]);
-
         var options = {
-       	  vAxis: {format: 'none'},
-          series: {
-            0: { axis: 'Bsf' }, // Bind series 0 to an axis named 'distance'.
-          },
-          axes: {
-            y: {  Bsf: {label: 'Bsf'}, }
-          }
+          series: { 0: { axis: 'Bsf' }, },
+          axes: { y: {  Bsf: {label: 'Bsf'}, } }
         };
+        var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+        chart.draw(data, options);
+      }
 
-      var chart = new google.charts.Bar(document.getElementById('chart1'));
-      chart.draw(data, options);
-    };
+      google.charts.setOnLoadCallback(drawpie);
+
+	  function drawpie() {
+
+	      var data = new google.visualization.DataTable();
+	      data.addColumn('string', 'Status');
+	      data.addColumn('number', '# mensajes');
+	      data.addRows([
+          <?php
+			$stmt = $mysqli->prepare("SELECT SUM(if(vive_msn.visto = 'N', 1, 0)) AS no, SUM(if(vive_msn.visto = 'Y', 1, 0)) AS yes FROM vive_msn");
+			$stmt->execute();
+			$stmt->bind_result($no, $si);
+			$stmt->store_result();
+		    $stmt->fetch();
+			echo "['Mensajes leidos', ".$si."],";
+			echo "['Mensajes no leidos', ".$no."],";
+			$stmt->close();
+			?>
+	      ]);
+
+	      var options = {
+          	//legend: 'none'
+	      };
+
+	      var chart = new google.visualization.PieChart(document.getElementById('chatChart'));
+	      chart.draw(data, options);
+	  }
  </script>
  <?php } ?>
