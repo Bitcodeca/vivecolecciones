@@ -361,7 +361,7 @@ if ( is_user_logged_in() ) {
 
 														        var data = google.visualization.arrayToDataTable([
 														          ['Estado', 'Cantidad'],
-														          ['Deuda',  <?php echo $total_a_cancelar; ?>],
+														          ['Deuda',  <?php echo $deuda_pendiente; ?>],
 														          ['Pagado', <?php echo $depositado_total; ?>]
 														        ]);
 

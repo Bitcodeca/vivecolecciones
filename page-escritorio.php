@@ -348,6 +348,21 @@ if ( is_user_logged_in() ) {
 					</div>
 				</div>
 			</div>
+
+        		<div class="row">
+	        		<div class="col-xs-12 col-sm-12 col-md-7">
+        				<div class="card-panel z-depth-2 hoverable" style="overflow-x: scroll;">
+        					<h3 class="center-align bold margintop0 marginbot0"><i class="material-icons color5 verticalalignsub">trending_up</i> Depósitos Realizados</h3>
+							<div id="columnchart_material"></div>
+        				</div>
+					</div>
+	        		<div class="col-xs-12 col-sm-12 col-md-5">
+        				<div class="card-panel z-depth-2 hoverable" style="overflow-x: scroll;">
+        					<h3 class="center-align bold margintop0 marginbot0"><i class="material-icons color5 verticalalignsub">payment</i> Factura</h3>
+							<div id="chart2"></div>
+        				</div>
+					</div>
+				</div>
 		</div>
 
 		<?php
@@ -446,6 +461,89 @@ if ( is_user_logged_in() ) {
 	      };
 
 	      var chart = new google.visualization.PieChart(document.getElementById('chatChart'));
+	      chart.draw(data, options);
+	  }
+ </script>
+ <?php } ?>
+
+
+ <?php if($user_logged['rol']=='Gerente'){ ?>
+ <script>
+      google.charts.load('current', {'packages':['bar', 'corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Fecha', 'Monto'],
+
+          <?php
+			$stmt = $mysqli->prepare("SELECT sum(vive_dep.monto), vive_dep.fecha FROM vive_dep WHERE vive_dep.usuario=? GROUP BY vive_dep.fecha ORDER BY UNIX_TIMESTAMP(STR_TO_DATE(vive_dep.fecha, '%d/%m/%Y')) ASC");
+			$stmt->bind_param('s', $user_logged['login']);
+			$stmt->execute();
+			$stmt->bind_result($monto, $fecha);
+			$stmt->store_result();
+		    while ($stmt->fetch()) { echo "['".$fecha."', ".$monto."],"; }
+			$stmt->close();
+			?>
+        ]);
+        var options = {
+        	vAxis: {format: 'decimal' },
+            series: { 0: { axis: 'Bsf' }, },
+            axes: { y: {  Bsf: {label: 'Bsf'}, } },
+        };
+        var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+        chart.draw(data, options);
+      }
+      google.charts.setOnLoadCallback(drawpie);
+
+	  function drawpie() {
+
+	      var data = new google.visualization.DataTable();
+	      data.addColumn('string', 'Status');
+	      data.addColumn('number', '# mensajes');
+	      data.addRows([
+          <?php
+			$stmt = $mysqli->prepare("SELECT vive_fac.can, vive_fac.fec, vive_fac.q1, vive_fac.q2, vive_fac.q3, vive_fac.q4, vive_cam.cos from vive_fac JOIN vive_cam ON vive_fac.art_id=vive_cam.id WHERE usuario=?");
+			$stmt->bind_param('s', $user_logged['login']);
+			$stmt->execute();
+			$stmt->bind_result($facCan, $facFec, $facQ1, $facQ2, $facQ3, $facQ4, $camCosto);
+			$stmt->store_result();
+          	$total=0; $total_colecciones=0;
+		    while ($stmt->fetch()) { $total_colecciones=$total_colecciones+$facCan; $total=$facCan*$camCosto+$total; }
+			$stmt->close();
+
+			$stmt = $mysqli->prepare('SELECT fecha, monto FROM vive_dep WHERE usuario = ?');
+			$stmt->bind_param('s', $user_logged['login']);
+			$stmt->execute();
+			$stmt->bind_result($depFecha, $depMonto);
+			$stmt->store_result();
+          	$depositado=0;
+		    while ($stmt->fetch()) { $depositado=$depMonto+$depositado; }
+			$stmt->close();
+
+
+			$stmt = $mysqli->prepare('SELECT cam, gven, pbas, dis, ger, q1, q2, q3 FROM vive_con ORDER BY id ASC LIMIT 1');
+			$stmt->execute();
+			$stmt->bind_result($can, $gven, $pbas, $dis, $ger, $q1, $q2, $q3);
+			$stmt->store_result();
+		    $stmt->fetch();
+		    $ganancia_total_gven=$total_colecciones*$gven;
+			$total_distribucion=$dis*$total_colecciones;
+			$total_gerencia=$ger*$total_colecciones;
+			$stmt->close();
+
+			$total_a_cancelar=$total-$total_distribucion-$total_gerencia-$ganancia_total_gven;
+			$restante=$total_a_cancelar-$depositado;
+
+			echo "['Aprobado', ".$depositado."],";
+			echo "['Deuda', ".$restante."],";
+			?>
+	      ]);
+
+	      var options = {
+          	//legend: 'none'
+	      };
+
+	      var chart = new google.visualization.PieChart(document.getElementById('chart2'));
 	      chart.draw(data, options);
 	  }
  </script>
