@@ -154,7 +154,24 @@ if ( is_user_logged_in() ) {
 			</div>
 	    <?php }
 	} else{ ?>
-		<h1> ACCESO NEGADO </h1>
+		
+        		<div class="row">
+	        		<div class="col-xs-12">
+        				<div class="card-panel z-depth-2 hoverable" style="overflow-x: scroll;">
+        					<h3 class="center-align bold margintop0 marginbot0"><i class="material-icons color5 verticalalignsub">trending_up</i> Movimientos</h3>
+        					<div id="chart1"></div>
+        				</div>
+					</div>
+				</div>
+
+        		<div class="row">
+	        		<div class="col-xs-12">
+        				<div class="card-panel z-depth-2 hoverable" style="overflow-x: scroll;">
+        					<h3 class="center-align bold margintop0 marginbot0"><i class="material-icons color5 verticalalignsub">trending_up</i> Ingresos Diarios</h3>
+							<div id="columnchart_material"></div>
+        				</div>
+					</div>
+				</div>
 	<?php	}  ?>
 <?php } else {  
 		header("Location: http://app.vivecolecciones.com.ve/"); /* Redirect browser */
@@ -227,7 +244,7 @@ if ( is_user_logged_in() ) {
           ['Fecha', 'Monto'],
 
           <?php
-			$stmt = $mysqli->prepare("SELECT sum(vive_dep.monto), vive_dep.fecha FROM vive_dep WHERE status<>'vacio' GROUP BY vive_dep.fecha ORDER BY UNIX_TIMESTAMP(STR_TO_DATE(vive_dep.fecha, '%d/%m/%Y')) ASC");
+			$stmt = $mysqli->prepare("SELECT sum(vive_dep.monto), vive_dep.fecha FROM vive_dep GROUP BY vive_dep.fecha ORDER BY UNIX_TIMESTAMP(STR_TO_DATE(vive_dep.fecha, '%d/%m/%Y')) ASC");
 			$stmt->execute();
 			$stmt->bind_result($monto, $fecha);
 			$stmt->store_result();

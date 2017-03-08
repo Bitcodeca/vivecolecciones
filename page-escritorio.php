@@ -310,7 +310,7 @@ if ( is_user_logged_in() ) {
 						    $stmt->fetch();
 							$stmt->close();
 						?>
-						<h4 class="center-align">Bsf <?php $valor=formato($total_pagado); echo $valor; ?></h4>
+						<h4 class="center-align">Bsf <?php if(!empty($total_pagado)){$valor=formato($total_pagado); echo $valor;}else{echo '0,00';} ?></h4>
 					</div>
 				</div>
 			</div>

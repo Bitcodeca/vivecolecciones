@@ -15,7 +15,7 @@ while ($stmt->fetch()) {
 	$fechacambiadadep = DateTime::createFromFormat("d/m/Y", $fecha);
 	$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
 	$fechaunixdep=strtotime($fechacambiadadep);
-	if (is_numeric($monto)){$valor=number_format($monto, 2, ',', '.');}
+	$valor=number_format($monto, 2, ',', '.');
     if ($outp != "") {$outp .= ",";}
 
 	    $outp .= '{"Fechaunix":"'.$fechaunixdep.'",';

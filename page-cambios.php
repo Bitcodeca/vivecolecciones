@@ -40,7 +40,7 @@ if ( is_user_logged_in() ) {
 										          <tr>
 										              <th data-field="id">Status</th>
 										              <th data-field="id">Fecha</th>
-										              <th data-field="id">Colección</th>
+										              <th data-field="id">Artículo</th>
 										              <th data-field="id">Cantidad</th>
 										              <th data-field="id">Observación</th>
 										              <th data-field="id">Comentario</th>
@@ -271,7 +271,7 @@ if ( is_user_logged_in() ) {
 							          <tr>
 							              <th data-field="id">Status</th>
 							              <th data-field="id">Fecha</th>
-							              <th data-field="name">Colección</th>
+							              <th data-field="name">Artículo</th>
 							              <th data-field="price">Cantidad</th>
 							              <th data-field="price">Observación</th>
 							              <th data-field="price">Comentario</th>

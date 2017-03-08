@@ -32,7 +32,7 @@
 
                     $stmt_ORDER->close();
 
-                    $data = array('success' => true, 'message' => 'REGISTRADO');
+                    $data = array('success' => true, 'message' => 'Depósito correctamente registrado');
                     echo json_encode($data);
             }
 
@@ -40,13 +40,13 @@
             //////                SI NO ESTA EN LA BD                 //////
             ///////////////////////////////////////////////////////////////
             else {
-                $data = array('success' => false, 'message' => 'REPETIDO');
+                $data = array('success' => false, 'message' => 'Ya ha ingresado este depósito anteriormente');
                 echo json_encode($data);
             }
             $stmt->close();
         }
         else {
-                $data = array('success' => false, 'message' => 'CAMPO VACIO');
+                $data = array('success' => false, 'message' => 'Llene todos los campos');
                 echo json_encode($data);
         }
         $mysqli->close();

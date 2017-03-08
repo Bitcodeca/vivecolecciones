@@ -105,7 +105,14 @@ function user_by_login($login){
 }
 
 function formato($valor){
-   $resultado=number_format($valor, 2, ',', '.');
+   $numero=preg_replace("/[^0-9,.]/", "", $valor);
+   $resultado=number_format($numero, 2, ',', '.');
+   return $resultado;
+}
+
+function decimales($valor){
+   $numero=preg_replace("/[^0-9,.]/", "", $valor);
+   $resultado=number_format($numero, 2, ',', '');
    return $resultado;
 }
 

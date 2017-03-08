@@ -227,7 +227,7 @@ if ( is_user_logged_in() ) {
 												        <td><?php echo $row['usuario']; ?></td>
 												        <td><?php echo $row['banco']; ?></td>
 												        <td><?php echo $row['referencia']; ?></td>
-												        <td>Bsf <?php if (is_numeric($row['monto'])){$valor=formato($row['monto']); echo $valor;}else{echo $row['monto'];} ?></td>
+												        <td>Bsf <?php $valor=formato($row['monto']); echo $valor; ?></td>
 												        <td><?php echo $row['cam']; ?></td>
 												        <td>
 												        	<a class="btn hoverable fondo3 waves-effect waves-light btn-radius" href="#<?php echo $row['id']; ?>">EDITAR</a>
@@ -353,7 +353,7 @@ if ( is_user_logged_in() ) {
 												        <td><?php echo $row['usuario']; ?></td>
 												        <td><?php echo $row['banco']; ?></td>
 												        <td><?php echo $row['referencia']; ?></td>
-												        <td>Bsf <?php if (is_numeric($row['monto'])){$valor=formato($row['monto']); echo $valor;}else{echo $row['monto'];} ?></td>
+												        <td>Bsf <?php $valor=formato($row['monto']); echo $valor; ?></td>
 												        <td><?php echo $row['cam']; ?></td>
 												        <td>
 												        	<a class="btn hoverable fondo3 waves-effect waves-light btn-radius" href="#<?php echo $row['id']; ?>">EDITAR</a>

@@ -34,14 +34,14 @@
 
                         $stmt_ORDER->close();
 
-                        $data = array('success' => true, 'message' => 'APROBADO');
+                        $data = array('success' => true, 'message' => 'Depósito aprobado');
                         echo json_encode($data);
                     }
                     /////////////////////////////////////////////////////////////////
                     //////            SI YA ESTA OCUPADO EL DEPOSITO          //////
                     ///////////////////////////////////////////////////////////////
                     else {
-                        $data = array('success' => false, 'message' => 'NEGADO');
+                        $data = array('success' => false, 'message' => 'El depósito no es válido, puede ya estar registrado');
                         echo json_encode($data);
                     }
                 }
@@ -51,13 +51,13 @@
             //////                SI NO ESTA EN LA BD                 //////
             ///////////////////////////////////////////////////////////////
             else {
-                $data = array('success' => false, 'message' => 'PROBLEMA');
+                $data = array('success' => false, 'message' => 'Depósito no registrado correctamente. Registrarlo en depósitos problemas');
                 echo json_encode($data);
             }
             $stmt->close();
         }
         else {
-                $data = array('success' => false, 'message' => 'CAMPO VACIO');
+                $data = array('success' => false, 'message' => 'Llene todos los campos');
                 echo json_encode($data);
         }
         $mysqli->close();

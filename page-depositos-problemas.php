@@ -280,14 +280,14 @@ $total_pages = ceil($total_records / $per_page);
 //Going to first page
 
 echo '<ul class="pagination">';
-echo "<li><a href='http://app.vivecolecciones.com.ve/lista-de-depositos/?page=1'>".'Primera página'."</a></li>";
+echo "<li><a href='http://app.vivecolecciones.com.ve/depositos-problemas/?page=1'>".'Primera página'."</a></li>";
 
 for ($i=1; $i<=$total_pages; $i++) {
 	if($ultimo==$i){$clase='active';}else{$clase='';}
-echo "<li class='waves-effect ".$clase."'><a href='http://app.vivecolecciones.com.ve/lista-de-depositos/?page=".$i."'>".$i."</a></li>";
+echo "<li class='waves-effect ".$clase."'><a href='http://app.vivecolecciones.com.ve/depositos-problemas/?page=".$i."'>".$i."</a></li>";
 };
 // Going to last page
-echo "<li><a href='http://app.vivecolecciones.com.ve/lista-de-depositos/?page=".$total_pages."'>".'Última página'."</a></li>";
+echo "<li><a href='http://app.vivecolecciones.com.ve/depositos-problemas/?page=".$total_pages."'>".'Última página'."</a></li>";
 echo '</ul>';
 
 ?>

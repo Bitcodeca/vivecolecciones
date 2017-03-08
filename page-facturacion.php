@@ -260,13 +260,13 @@ if ( is_user_logged_in() ) {
 																$fechacambiadadep = DateTime::createFromFormat("d/m/Y", $depFecha);
 																$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
 																$fechaunixdep=strtotime($fechacambiadadep);
-																if($fechaunixdep>=$fecha_creada_unix && $fechaunixdep<$q1_unix){
+																if($fechaunixdep>=$fecha_creada_unix && $fechaunixdep<=$q1_unix){
 																	$depositado_q1=$depositado_q1+$depMonto;
 																	$depositado_total=$depositado_total+$depMonto;
-																}elseif($fechaunixdep>=$q1_unix && $fechaunixdep<$q2_unix){
+																}elseif($fechaunixdep>$q1_unix && $fechaunixdep<=$q2_unix){
 																	$depositado_q2=$depositado_q2+$depMonto;
 																	$depositado_total=$depositado_total+$depMonto;
-																}elseif($fechaunixdep>=$q2_unix && $fechaunixdep<$q3_unix){
+																}elseif($fechaunixdep>$q2_unix && $fechaunixdep<=$q3_unix){
 																	$depositado_q3=$depositado_q3+$depMonto;
 																	$depositado_total=$depositado_total+$depMonto;
 																}elseif($fechaunixdep>$q3_unix && $fechaunixdep<=$q4_unix){
@@ -276,12 +276,19 @@ if ( is_user_logged_in() ) {
 														    }
 															$stmt->close();
 
-															$porcentaje_q1=($depositado_q1/$total_a_depositar_quincenal)*100;
-															$porcentaje_q2=($depositado_q2/$total_a_depositar_quincenal)*100;
-															$porcentaje_q3=($depositado_q3/$total_a_depositar_quincenal)*100;
-															$porcentaje_q4=($depositado_q4/$total_a_depositar_quincenal)*100;
+															$porcentaje_q1=($depositado_q1*$total_colecciones)/$total_a_depositar_quincenal;
+															$porcentaje_q2=($depositado_q2*$total_colecciones)/$total_a_depositar_quincenal;
+															$porcentaje_q3=($depositado_q3*$total_colecciones)/$total_a_depositar_quincenal;
+															$porcentaje_q4=0;
 
-															$porcentaje_total=($porcentaje_q1+$porcentaje_q2+$porcentaje_q3+$porcentaje_q4)/4;
+															$porcentaje_total=$porcentaje_q1+$porcentaje_q2+$porcentaje_q3+$porcentaje_q4;
+															
+															$porcentaje_q1=decimales($porcentaje_q1);
+															$porcentaje_q2=decimales($porcentaje_q2);
+															$porcentaje_q3=decimales($porcentaje_q3);
+															$porcentaje_q4=decimales($porcentaje_q4);
+															$porcentaje_total=decimales($porcentaje_total);
+
 
 															$ganancia_q1=$q1*$porcentaje_q1;
 															$ganancia_q2=$q2*$porcentaje_q2;
