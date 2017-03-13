@@ -5,6 +5,105 @@ if ( is_user_logged_in() ) {
 	    require_once 'api/vive-db.php';
 	    if (mysqli_connect_errno()) { ?> <h1>ERROR DE CONEXIÓN</h1> <?php }
 	    else { ?>
+
+			<div class="container-fluid margintop25 marginbot25">
+				<div class="row"> 		
+		    		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		    			<h1 class="center-align margintop0">Premios</h1>
+			        	<?php
+						$query3 = "SELECT DISTINCT usuario from vive_fac_prem ORDER BY usuario ASC";
+						$result3 = mysqli_query($mysqli, $query3);
+						if(mysqli_num_rows($result3) != 0) { ?>
+							<ul class="collapsible popout imprimir" data-collapsible="expandable">
+								<?php
+								while($row3 = mysqli_fetch_assoc($result3)) {
+									$usu=$row3['usuario'];
+									$info=user_by_login($usu);
+									?>
+									<li class="nobreak">
+										<div class="collapsible-header paddingtop5 paddingbot5">
+											<h3 class="margintop0 marginbot0 marginleft25"><img src="<?php echo $info['avatarxs']; ?>" class="circle" height="48px" width="auto"> <?php echo $usu; ?></h3>
+										</div>
+										<div class="collapsible-body white">
+											<table class="striped responsive-table">
+										        <thead>
+										          <tr>
+										              <th data-field="id">Campaña</th>
+										              <th data-field="id">Premio</th>
+										              <th data-field="id">Cantidad</th>
+										              <th data-field="id">Tipo</th>
+										          </tr>
+										        </thead>
+
+										        <tbody>
+												<?php 
+												$query = "SELECT vive_fac_prem.usuario, vive_fac_prem.cam, vive_fac_prem.nombre, vive_fac_prem.cantidad, vive_pre.tipo FROM vive_fac_prem JOIN vive_pre ON vive_fac_prem.nombre=vive_pre.articulo WHERE vive_fac_prem.usuario='$usu'";
+												$result = mysqli_query ($mysqli, $query);
+												$totalPremios=0;
+												if(mysqli_num_rows($result) != 0) {
+													while ($row = mysqli_fetch_assoc($result)) {
+														$totalPremios=$row['cantidad']+$totalPremios;
+														?>
+														<tr>
+													        <td><?php echo $row['cam']; ?></td>
+													        <td><?php echo $row['nombre']; ?></td>
+													        <td><?php echo $row['cantidad']; ?></td>
+													        <td><?php echo $row['tipo']; ?></td>
+													    </tr>
+													<?php
+													}
+												} ?>
+												</tbody>
+											</table>
+											<?php
+												$stmt = $mysqli->prepare('SELECT sum(can) as total FROM vive_fac WHERE usuario = ?');
+												$stmt->bind_param('s', $usu);
+												$stmt->execute();
+												$stmt->bind_result($var);
+												$total_colecciones=0;
+											    while ($stmt->fetch()) { 
+											    	?>
+											    	<h3>Colecciones facturadas: <b><?php echo $var; ?></b></h3>
+											    	<h3>Premios seleccionados: <b><?php echo $totalPremios; ?></b></h3>
+											    	<?php 
+											    }
+												$stmt->close();
+											?>
+										</div>
+									</li> 
+									<?php
+								} ?>
+							</ul> <?php
+						} ?>
+					</div>
+				</div>
+				<div class="row">
+					<button onclick="imprimir()" class="btn hoverable fondo3 waves-effect waves-light btn-radius"><i class="material-icons left">print</i> Imprimir</button>
+	            </div>
+	            <div class="row">
+					<button onclick="expandAll()" class="btn hoverable fondo3 waves-effect waves-light btn-radius"><i class="material-icons left">add</i> Abrir todos</button>
+					<button onclick="collapseAll()" class="btn hoverable fondo3 waves-effect waves-light btn-radius"><i class="material-icons left">remove</i> Cerrar todos</button>
+	            </div>
+				<script>
+					function imprimir() {
+					    window.print();
+					}
+					function expandAll(){
+					  jQuery(".collapsible-header").addClass("active");
+					  jQuery(".collapsible").collapsible({accordion: false});
+					}
+
+					function collapseAll(){
+					  jQuery(".collapsible-header").removeClass(function(){
+					    return "active";
+					  });
+					  jQuery(".collapsible").collapsible({accordion: true});
+					  jQuery(".collapsible").collapsible({accordion: false});
+					}
+				</script>
+			</div>
+
+
 	    <?php }
 	    
 	}  elseif ($user_logged['rol']=='Gerente') {
@@ -144,7 +243,19 @@ if ( is_user_logged_in() ) {
 <?php } else {  
 		header("Location: http://app.vivecolecciones.com.ve/");
 		exit(); 
- } get_footer(); ?>
+ } get_footer(); 
+if($user_logged['rol']=='administrator'){
+	?>
+
+	<script>
+		jQuery(document).ready(function() {
+		    jQuery('.collapsible').collapsible();
+	        jQuery(window).resize(checkWidth);
+		  });
+	</script>
+	<?php
+}
+if ($user_logged['rol']=='Gerente') { ?>
 <script>
 	app.controller('customersCtrl', function($scope, $http, $timeout) { 
 
@@ -205,3 +316,4 @@ if ( is_user_logged_in() ) {
 
 	});
 </script>
+<?php } ?>

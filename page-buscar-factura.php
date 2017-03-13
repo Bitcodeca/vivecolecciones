@@ -247,6 +247,11 @@ if ( is_user_logged_in() ) {
 															$porcentaje_q3=($depositado_q3*$total_colecciones)/$total_a_depositar_quincenal;
 															$porcentaje_q4=0;
 
+															if($porcentaje_q1>=$total_colecciones){$porcentaje_q1=$total_colecciones;}
+															if($porcentaje_q2>=$total_colecciones){$porcentaje_q2=$total_colecciones;}
+															if($porcentaje_q3>=$total_colecciones){$porcentaje_q3=$total_colecciones;}
+															if($porcentaje_q4>=$total_colecciones){$porcentaje_q4=$total_colecciones;}
+
 															$porcentaje_total=$porcentaje_q1+$porcentaje_q2+$porcentaje_q3+$porcentaje_q4;
 															
 															$porcentaje_q1=decimales($porcentaje_q1);
