@@ -44,41 +44,60 @@ if(isset($_POST['btn'])){
 		$camdep=$_POST['cam'.$iddep];
 		$comentariodep=$_POST['comentario'];
 
-		if($statusdep=='Aprobado'){
+		if($statusdep=='aprobado'){
 			
-			$query = "SELECT * from vive_dep WHERE fecha='$fechadep' AND referencia='$referenciadep' AND monto='$montodep' AND banco='$bancodep' AND usuario='vacio'";
+							
+			$query = "SELECT * from vive_dep WHERE fecha='$fechadep' AND referencia='$referenciadep' AND monto='$montodep' AND banco='$bancodep'";
 			$result = mysqli_query($mysqli, $query);
-			if(mysqli_num_rows($result) != 0) {
-				while ($row4 = mysqli_fetch_assoc($result)) {
-					$idaprobado=$row4['id'];
+			if(mysqli_num_rows($result) == 0) {
+
+				$query3 = "SELECT * from vive_dep WHERE fecha='$fechadep' AND referencia='$referenciadep' AND monto='$montodep' AND banco='$bancodep' AND usuario='vacio'";
+				$result3 = mysqli_query($mysqli, $query3);
+				if(mysqli_num_rows($result3) != 0) {
+					while ($row = mysqli_fetch_assoc($result3)) { 
+						$iddata=$row['id'];
+					}
+					$query2 = "DELETE FROM vive_pen WHERE id=$iddep";
+	                if( $mysqli->query( $query2 ) ){
+	                	$query3="UPDATE vive_dep SET status='$statusdep', usuario='$usuariodep' WHERE id='$iddata'";
+	            		if( $mysqli->query( $query3 ) ){ ?>
+							<div id="<?php echo 'btn'.$iddep; ?>" class="modal">
+								<div class="modal-content">
+									<h4>DEPÓSITO APROBADO</h4>
+								</div>
+								<div class="modal-footer">
+									<a href="#!" class=" modal-action modal-close btn hoverable fondo3 waves-effect waves-light btn-radius">Cerrar</a>
+								</div>
+							</div> 
+						<?php }
+	                }
+	            } 
+	            else { 
+	            	?>
+					<div id="<?php echo 'btn'.$iddep; ?>" class="modal">
+						<div class="modal-content">
+							<h4>ERROR</h4>
+							<h5>No se puede aprobar el depósito si no se encuentra en la base de datos</h5>
+						</div>
+						<div class="modal-footer">
+							<a href="#!" class=" modal-action modal-close btn hoverable fondo3 waves-effect waves-light btn-radius">Cerrar</a>
+						</div>
+					</div> 
+					<?php
 				}
-				$query2 = "DELETE FROM vive_pen WHERE id=$iddep";
-                if( $mysqli->query( $query2 ) ){
-					$query2 = "UPDATE vive_dep SET status='$statusdep', cam='$camdep', usuario='$usuariodep' WHERE id=$idaprobado";
-            		if( $mysqli->query( $query2 ) ){ ?>
-						<div id="<?php echo 'btn'.$iddep; ?>" class="modal">
-							<div class="modal-content">
-								<h4>DEPÓSITO APROBADO</h4>
-							</div>
-							<div class="modal-footer">
-								<a href="#!" class=" modal-action modal-close btn hoverable fondo3 waves-effect waves-light btn-radius">Cerrar</a>
-							</div>
-						</div> 
-					<?php }
-                }
-			} else { ?>
+			} else { 
+				?>
 				<div id="<?php echo 'btn'.$iddep; ?>" class="modal">
 					<div class="modal-content">
 						<h4>ERROR</h4>
-						<h5>No se puede aprobar el depósito si no se encuentra en la base de datos</h5>
+						<h5>Ya existe un depósito con los mismos datos aprobado.</h5>
 					</div>
 					<div class="modal-footer">
 						<a href="#!" class=" modal-action modal-close btn hoverable fondo3 waves-effect waves-light btn-radius">Cerrar</a>
 					</div>
 				</div> 
-			<?php
+				<?php
 			}
-
 		}else{
 			$query2 = "UPDATE vive_pen SET fecha='$fechadep', referencia='$referenciadep', monto='$montodep', banco='$bancodep', status='$statusdep', cam='$camdep', comentario='$comentariodep' WHERE id=$iddep";
 			if ($mysqli->query( $query2 ) === TRUE) { ?>
@@ -222,15 +241,17 @@ while ($row = mysqli_fetch_assoc($result)) {
 				</div>
 				<div class="input-field col-xs-12">
 					<h4>Status</h4>
-
+					<?php
+						$minuscula=strtolower($row['status']);
+					?>
 					<p>
-						<input name="status<?php echo $row['id']; ?>" type="radio" id="<?php echo $row['status']; ?><?php echo $row['id']; ?>" value="<?php echo $row['status']; ?>" checked />
-						<label for="<?php echo $row['status']; ?><?php echo $row['id']; ?>"><?php echo $row['status']; ?></label>
+						<input name="status<?php echo $row['id']; ?>" type="radio" id="<?php echo $minuscula; ?><?php echo $row['id']; ?>" value="<?php echo $minuscula; ?>" checked />
+						<label for="<?php echo $minuscula; ?><?php echo $row['id']; ?>"><?php echo $minuscula; ?></label>
 					</p>
 					<?php
 						$status=status();
 						foreach ($status as $opcion) {
-							if($opcion!=$row['status']){ ?>
+							if($opcion!=$minuscula){ ?>
 								<p> 
 									<input name="status<?php echo $row['id']; ?>" type="radio" id="<?php echo $opcion; ?><?php echo $row['id']; ?>" value="<?php echo $opcion; ?>" />
 									<label for="<?php echo $opcion; ?><?php echo $row['id']; ?>"><?php echo $opcion; ?></label>

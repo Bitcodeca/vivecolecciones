@@ -25,6 +25,7 @@ if ( is_user_logged_in() ) {
 	    			}elseif($_POST['pen']=='editar'){
 	    				$iddep=$_POST['id'];
 						$fechadep=$_POST['fecha'];
+						$usuariodep=$_POST['usuario'];
 						$referenciadep=$_POST['referencia'];
 						$montodep=$_POST['monto'];
 						$bancodep=$_POST['banco'];
@@ -35,34 +36,56 @@ if ( is_user_logged_in() ) {
 
 						if($statusdep=='aprobado'){
 							
-							$query = "SELECT * from vive_dep WHERE fecha='$fechadep' AND referencia='$referenciadep' AND monto='$montodep' AND banco='$bancodep' AND usuario='vacio'";
+							$query = "SELECT * from vive_dep WHERE fecha='$fechadep' AND referencia='$referenciadep' AND monto='$montodep' AND banco='$bancodep'";
 							$result = mysqli_query($mysqli, $query);
-							if(mysqli_num_rows($result) != 0) {
-								$query2 = "DELETE FROM vive_pen WHERE id=$iddep";
-				                if( $mysqli->query( $query2 ) ){
-				                	$query="INSERT INTO  vive_dep ( fecha, referencia, monto, banco, status, cam ) VALUES ( '$fechadep', '$referenciadep', '$montodep', '$bancodep', '$statusdep', '$camdep' )";
-				            		if( $mysqli->query( $query2 ) ){ ?>
-										<div id="<?php echo 'btn'.$iddep; ?>" class="modal">
-											<div class="modal-content">
-												<h4>DEPÓSITO BORRADO</h4>
-											</div>
-											<div class="modal-footer">
-												<a href="#!" class=" modal-action modal-close btn hoverable fondo3 waves-effect waves-light btn-radius">Cerrar</a>
-											</div>
-										</div> 
-									<?php }
-				                }
-							} else { ?>
+							if(mysqli_num_rows($result) == 0) {
+
+								$query3 = "SELECT * from vive_dep WHERE fecha='$fechadep' AND referencia='$referenciadep' AND monto='$montodep' AND banco='$bancodep' AND usuario='vacio'";
+								$result3 = mysqli_query($mysqli, $query3);
+								if(mysqli_num_rows($result3) != 0) {
+									while ($row = mysqli_fetch_assoc($result3)) { 
+										$iddata=$row['id'];
+									}
+									$query2 = "DELETE FROM vive_pen WHERE id=$iddep";
+					                if( $mysqli->query( $query2 ) ){
+					                	$query3="UPDATE vive_dep SET status='$statusdep', usuario='$usuariodep' WHERE id='$iddata'";
+					            		if( $mysqli->query( $query3 ) ){ ?>
+											<div id="<?php echo 'btn'.$iddep; ?>" class="modal">
+												<div class="modal-content">
+													<h4>DEPÓSITO APROBADO</h4>
+												</div>
+												<div class="modal-footer">
+													<a href="#!" class=" modal-action modal-close btn hoverable fondo3 waves-effect waves-light btn-radius">Cerrar</a>
+												</div>
+											</div> 
+										<?php }
+					                }
+					            } 
+					            else { 
+					            	?>
+									<div id="<?php echo 'btn'.$iddep; ?>" class="modal">
+										<div class="modal-content">
+											<h4>ERROR</h4>
+											<h5>No se puede aprobar el depósito si no se encuentra en la base de datos</h5>
+										</div>
+										<div class="modal-footer">
+											<a href="#!" class=" modal-action modal-close btn hoverable fondo3 waves-effect waves-light btn-radius">Cerrar</a>
+										</div>
+									</div> 
+									<?php
+								}
+							} else { 
+								?>
 								<div id="<?php echo 'btn'.$iddep; ?>" class="modal">
 									<div class="modal-content">
 										<h4>ERROR</h4>
-										<h5>No se puede aprobar el depósito si no se encuentra en la base de datos</h5>
+										<h5>Ya existe un depósito con los mismos datos aprobado.</h5>
 									</div>
 									<div class="modal-footer">
 										<a href="#!" class=" modal-action modal-close btn hoverable fondo3 waves-effect waves-light btn-radius">Cerrar</a>
 									</div>
 								</div> 
-							<?php
+								<?php
 							}
 						} else {
 
@@ -216,7 +239,8 @@ if ( is_user_logged_in() ) {
 											$result = mysqli_query ($mysqli, $query);
 											if(mysqli_num_rows($result) != 0) {
 												while ($row = mysqli_fetch_assoc($result)) { 
-													if($row['status']=='aprobado'){$clase='fondo3';}elseif($row['status']=='vacio'){$clase='grey lighten-5';}elseif($row['status']=='pendiente'){$clase='yellow';}elseif($row['status']=='negado'){$clase='fondo5';}
+													$minuscula=strtolower($row['status']);				
+													if($minuscula=='aprobado'){$clase='fondo3';}elseif($minuscula=='vacio'){$clase='grey lighten-5';}elseif($minuscula=='pendiente'){$clase='yellow';}elseif($minuscula=='negado'){$clase='fondo5';}
 													$fechacambiadadep = DateTime::createFromFormat("d/m/Y", $row['fecha']);
 													$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
 													$fechaunixdep=strtotime($fechacambiadadep);
@@ -299,15 +323,18 @@ if ( is_user_logged_in() ) {
 																</div>
 																<div class="input-field col-xs-12">
 																	<h4>Status</h4>
-
+																	<?php
+																		$minuscula=strtolower($row['status']);
+																	?>
 																	<p>
-																		<input name="status" type="radio" id="<?php echo $row['status']; ?>" value="<?php echo $row['status']; ?>" checked />
-																		<label for="<?php echo $row['status']; ?>"><?php echo $row['status']; ?></label>
+																		<input name="status" type="radio" id="<?php echo $minuscula; ?>" value="<?php echo $minuscula; ?>" checked />
+																		<label for="<?php echo $minuscula; ?>"><?php echo $minuscula; ?></label>
 																	</p>
 																	<?php
 																		$status=status();
 																		foreach ($status as $opcion) {
-																			if($opcion!=$row['status']){ ?>
+																			$minuscula=strtolower($row['status']);
+																			if($opcion!=$minuscula){ ?>
 																				<p> 
 																					<input name="status" type="radio" id="<?php echo $opcion; ?>" value="<?php echo $opcion; ?>" />
 																					<label for="<?php echo $opcion; ?>"><?php echo $opcion; ?></label>
@@ -342,7 +369,8 @@ if ( is_user_logged_in() ) {
 											$result = mysqli_query ($mysqli, $query);
 											if(mysqli_num_rows($result) != 0) {
 												while ($row = mysqli_fetch_assoc($result)) { 
-													if($row['status']=='aprobado'){$clase='fondo3';}elseif($row['status']=='vacio'){$clase='grey lighten-5';}elseif($row['status']=='pendiente'){$clase='yellow';}elseif($row['status']=='negado'){$clase='fondo5';}
+													$minuscula=strtolower($row['status']);
+													if($minuscula=='aprobado'){$clase='fondo3';}elseif($minuscula=='vacio'){$clase='grey lighten-5';}elseif($minuscula=='pendiente'){$clase='yellow';}elseif($minuscula=='negado'){$clase='fondo5';}
 													$fechacambiadadep = DateTime::createFromFormat("d/m/Y", $row['fecha']);
 													$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
 													$fechaunixdep=strtotime($fechacambiadadep);
@@ -425,15 +453,17 @@ if ( is_user_logged_in() ) {
 																</div>
 																<div class="input-field col-xs-12">
 																	<h4>Status</h4>
-
+																	<?php
+																		$minuscula=strtolower($row['status']);
+																	?>
 																	<p>
-																		<input name="status" type="radio" id="<?php echo $row['status']; ?>" value="<?php echo $row['status']; ?>" checked />
-																		<label for="<?php echo $row['status']; ?>"><?php echo $row['status']; ?></label>
+																		<input name="status" type="radio" id="<?php echo $minuscula; ?>" value="<?php echo $minuscula; ?>" checked />
+																		<label for="<?php echo $minuscula; ?>"><?php echo $minuscula; ?></label>
 																	</p>
 																	<?php
 																		$status=status();
 																		foreach ($status as $opcion) {
-																			if($opcion!=$row['status']){ ?>
+																			if($opcion!=$minuscula){ ?>
 																				<p> 
 																					<input name="status" type="radio" id="<?php echo $opcion; ?>" value="<?php echo $opcion; ?>" />
 																					<label for="<?php echo $opcion; ?>"><?php echo $opcion; ?></label>

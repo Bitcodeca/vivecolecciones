@@ -24,7 +24,15 @@
             $stmt->bind_result($id);
             $stmt->store_result();
             $numberofrows = $stmt->num_rows;
-            if($numberofrows==0){                       
+            if($numberofrows==0){
+                $stmt2 = $mysqli->prepare("SELECT id FROM vive_dep WHERE usuario=? AND banco=? AND fecha=? AND referencia=? AND monto=?");
+                $stmt2->bind_param("sssss", $usuario, $ban, $fec, $ref, $mon);
+                $stmt2->execute();
+                $stmt2->bind_result($id);
+                $stmt2->store_result();
+                $numberofrows2 = $stmt2->num_rows;
+                if($numberofrows2==0){      
+
                     $status='Pendiente';
                     $stmt_ORDER = $mysqli->prepare("INSERT INTO vive_pen ( usuario, banco, fecha, referencia, monto, status, cam ) VALUES ( ?, ?, ?, ?, ?, ?, ? )");
                     $stmt_ORDER->bind_param("sssssss", $usuario, $ban, $fec, $ref, $mon, $status, $cam);
@@ -34,8 +42,15 @@
 
                     $data = array('success' => true, 'message' => 'Depósito correctamente registrado');
                     echo json_encode($data);
+                }
+                /////////////////////////////////////////////////////////////////
+                //////                SI NO ESTA EN LA BD                 //////
+                ///////////////////////////////////////////////////////////////
+                else {
+                    $data = array('success' => false, 'message' => 'Ya ha ingresado este depósito anteriormente');
+                    echo json_encode($data);
+                }
             }
-
             /////////////////////////////////////////////////////////////////
             //////                SI NO ESTA EN LA BD                 //////
             ///////////////////////////////////////////////////////////////

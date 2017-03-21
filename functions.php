@@ -134,9 +134,9 @@ function bancos(){
 
 function status(){
   $status=array();
-  array_push($status, 'Aprobado');
-  array_push($status, 'Negado');
-  array_push($status, 'Pendiente');
+  array_push($status, 'aprobado');
+  array_push($status, 'negado');
+  array_push($status, 'pendiente');
   return $status;
 }
 function estado(){

@@ -53,7 +53,7 @@ if ( is_user_logged_in() ) {
 								<li class="collection-item">
 									<div class="input-field col-xs-8 col-sm-10 col-md-11 chat">
 										<textarea id="msn" class="materialize-textarea" length="500"></textarea>
-										<label for="msn"></label>
+										<label for="msn">Escribir mensaje</label>
 									</div>
 									<div class="col-xs-4 col-sm-2 col-md-1 right-align">
 										<button ng-disabled="submitButtonDisabled" ng-click="pushData()" value="siguiente" id="btn" name="btn" class="btn btn-radius margintop25 fondo3 waves-effect waves-light">

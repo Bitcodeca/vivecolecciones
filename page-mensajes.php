@@ -103,7 +103,7 @@ if ( is_user_logged_in() ) {
 						<div class="card-panel z-depth-2 hoverable" id="notificacionesmsn">
 					     	<h1 class="center-align">Notificaciones</h1>
 					     	<?php
-							$stmt = $mysqli->prepare('SELECT ini, msn FROM vive_msn WHERE fin = ? GROUP BY (ini)');
+							$stmt = $mysqli->prepare('SELECT ini, msn FROM vive_msn WHERE fin = ? AND visto="N" GROUP BY (ini)');
 							$stmt->bind_param('s', $user_logged['login']);
 							$stmt->execute();
 							$stmt->bind_result($ini, $msn);
@@ -124,6 +124,32 @@ if ( is_user_logged_in() ) {
 										</a>
 									</div>
 								</div>
+								<?php
+						    }
+						    ?>
+						</div>
+					</div>
+				</div>
+
+	    		<div class="row">
+					<div class="col-md-12">
+						<div class="card-panel z-depth-2 hoverable" id="notificacionesmsn">
+					     	<h1 class="center-align">Conversaciones abiertas</h1>
+					     	<?php
+							$stmt = $mysqli->prepare('SELECT ini FROM vive_msn WHERE fin = ? GROUP BY (ini)');
+							$stmt->bind_param('s', $user_logged['login']);
+							$stmt->execute();
+							$stmt->bind_result($ini);
+							$stmt->store_result();
+						    while ($stmt->fetch()) {
+						    	$avatar=user_by_login($ini);
+						    	?>
+				    			<a id="<?php echo $ini; ?>" class="black-text pointer" >
+								    	<div class="chip">
+										    <img src="<?php echo $avatar['avatarxs']; ?>" alt="Contact Person">
+										    <?php echo $ini; ?>
+										</div>
+								</a>
 								<?php
 						    }
 						    ?>
@@ -194,7 +220,7 @@ if ( is_user_logged_in() ) {
 						<div class="card-panel z-depth-2 hoverable" id="notificacionesmsn">
 					     	<h1 class="center-align">Notificaciones</h1>
 					     	<?php
-							$stmt = $mysqli->prepare('SELECT ini, msn FROM vive_msn WHERE fin = ? GROUP BY (ini)');
+							$stmt = $mysqli->prepare('SELECT ini, msn FROM vive_msn WHERE fin = ? AND visto="N" GROUP BY (ini)');
 							$stmt->bind_param('s', $user_logged['login']);
 							$stmt->execute();
 							$stmt->bind_result($ini, $msn);
@@ -215,6 +241,32 @@ if ( is_user_logged_in() ) {
 										</a>
 									</div>
 								</div>
+								<?php
+						    }
+						    ?>
+						</div>
+					</div>
+				</div>
+
+	    		<div class="row">
+					<div class="col-md-12">
+						<div class="card-panel z-depth-2 hoverable" id="notificacionesmsn">
+					     	<h1 class="center-align">Conversaciones abiertas</h1>
+					     	<?php
+							$stmt = $mysqli->prepare('SELECT ini FROM vive_msn WHERE fin = ? GROUP BY (ini)');
+							$stmt->bind_param('s', $user_logged['login']);
+							$stmt->execute();
+							$stmt->bind_result($ini);
+							$stmt->store_result();
+						    while ($stmt->fetch()) {
+						    	$avatar=user_by_login($ini);
+						    	?>
+				    			<a id="<?php echo $ini; ?>" class="black-text pointer" >
+								    	<div class="chip">
+										    <img src="<?php echo $avatar['avatarxs']; ?>" alt="Contact Person">
+										    <?php echo $ini; ?>
+										</div>
+								</a>
 								<?php
 						    }
 						    ?>

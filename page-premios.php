@@ -77,6 +77,35 @@ if ( is_user_logged_in() ) {
 						} ?>
 					</div>
 				</div>
+				<div class="row"> 		
+		    		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        				<div class="card-panel z-depth-2 hoverable">
+							<?php
+							$stmt0 = $mysqli->prepare("SELECT DISTINCT cam FROM vive_con");
+							$stmt0->execute();
+							$stmt0->bind_result($cam);
+							$stmt0->store_result();
+						    while ($stmt0->fetch()) {
+								$stmt = $mysqli->prepare("SELECT sum(vive_fac_prem.cantidad), 
+									 							 vive_fac_prem.nombre
+									 							 FROM vive_fac_prem 
+																 GROUP BY vive_fac_prem.nombre");
+								$stmt->execute();
+								$stmt->bind_result($premioCan, $premioNombre);
+								$stmt->store_result();
+								$costo=0;
+							    while ($stmt->fetch()) {
+							    	?>
+							    	<h5> <?php echo $premioNombre.' <b>total:'.$premioCan.'</b>'; ?></h5>
+							    	<?
+								}
+								$stmt->close();
+							}
+							$stmt0->close();
+							?>
+						</div>
+					</div>
+				</div>
 				<div class="row">
 					<button onclick="imprimir()" class="btn hoverable fondo3 waves-effect waves-light btn-radius"><i class="material-icons left">print</i> Imprimir</button>
 	            </div>
@@ -117,8 +146,8 @@ if ( is_user_logged_in() ) {
 			<div class="container margintop25 marginbot25">	
 	    		<div class="row">
 					<div class="col-md-12">
+				     	<h1 class="center-align">Premios</h1>
 						<div class="card-panel z-depth-2 hoverable" ng-app="contactApp" ng-controller="customersCtrl">
-					     	<h1 class="center-align">Premios</h1>
 							<?php
 							$stmt = $mysqli->prepare("SELECT nombre, cantidad FROM vive_fac_prem WHERE usuario=?");
 				            $stmt->bind_param("s", $gerente_logged);
@@ -128,15 +157,18 @@ if ( is_user_logged_in() ) {
 				            $numberofrows = $stmt->num_rows;
 				            if($numberofrows>0){
 				            	?>
-									<div class="row margintop25">
+									<div class="row">
 										<h2>Premios Seleccionados</h2>
-										<?php 
-										while ($stmt->fetch()) {
+										<div class="col-xs-12 col-sm-offset-1 col-sm-10">
+											<?php 
+											while ($stmt->fetch()) {
+												?>
+													<h4><?php echo $nombre; ?>: <b><?php echo $cantidad; ?></b></h4>
+													<div class="divider"></div>
+												<?php
+											}
 											?>
-												<h4><?php echo $nombre; ?>: <b><?php echo $cantidad; ?></b></h4>
-											<?php
-										}
-										?>
+										</div>
 									</div>
 				            	<?php
 				            }
@@ -173,7 +205,7 @@ if ( is_user_logged_in() ) {
 										foreach ($premio as $opcion) {
 											?>
 											<div class="divider"></div>
-											<h3><?php echo $opcion; ?></h3>
+											<h2 class="padding5 fondo3"><?php echo $opcion; ?></h2>
 											<div class="row">
 												<?php
 												$stmt_1 = $mysqli->prepare("SELECT id, articulo, tipo, otro FROM vive_pre WHERE cam=? AND tipo=?");
