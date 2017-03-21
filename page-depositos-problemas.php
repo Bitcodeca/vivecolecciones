@@ -47,7 +47,7 @@ if(isset($_POST['btn'])){
 		if($statusdep=='aprobado'){
 			
 							
-			$query = "SELECT * from vive_dep WHERE fecha='$fechadep' AND referencia='$referenciadep' AND monto='$montodep' AND banco='$bancodep'";
+			$query = "SELECT * from vive_dep WHERE fecha='$fechadep' AND referencia='$referenciadep' AND monto='$montodep' AND banco='$bancodep' AND usuario<>'vacio'";
 			$result = mysqli_query($mysqli, $query);
 			if(mysqli_num_rows($result) == 0) {
 
