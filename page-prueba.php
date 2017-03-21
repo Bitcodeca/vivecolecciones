@@ -11,6 +11,13 @@ if ( is_user_logged_in() ) {
 	    		<div class="row">
 	        		<div class="col-xs-12">
         				<div class="card-panel z-depth-2 hoverable">
+        				
+        				</div>
+					</div>
+				</div>
+	    		<div class="row">
+	        		<div class="col-xs-12">
+        				<div class="card-panel z-depth-2 hoverable">
 
 							<?php
 								$stmt0 = $mysqli->prepare("SELECT DISTINCT cam FROM vive_con");

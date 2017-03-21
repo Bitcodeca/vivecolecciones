@@ -23,6 +23,14 @@ if ( is_user_logged_in() ) {
 							        </div>
 						        </div>
 						        <div class="row">
+									<button ng-disabled="devoluciones_AT_Button" ng-click="devoluciones_AT_PUSH()" class="btn hoverable fondo1 waves-effect waves-light btn-radius secondary-content left">
+										<i class="material-icons large left">&#xE884;</i>
+										Agregar todos
+									</button>
+									<button ng-disabled="devoluciones_ET_Button" ng-click="devoluciones_ET_PUSH()" class="btn hoverable fondo5 waves-effect waves-light btn-radius secondary-content left">
+										<i class="material-icons large left">clear</i>
+										Quitar todos
+									</button>
 									<button ng-disabled="devoluciones_Button" ng-click="devoluciones_PUSH()" class="btn hoverable fondo3 waves-effect waves-light btn-radius secondary-content">
 										<i class="material-icons large left">add</i>
 										Agregar
@@ -55,6 +63,14 @@ if ( is_user_logged_in() ) {
 							        </div>
 						        </div>
 						        <div class="row">
+									<button ng-disabled="AVER_AT_Button" ng-click="AVER_AT_PUSH()" class="btn hoverable fondo1 waves-effect waves-light btn-radius secondary-content left">
+										<i class="material-icons large left">&#xE884;</i>
+										Agregar todos
+									</button>
+									<button ng-disabled="AVER_ET_Button" ng-click="AVER_ET_PUSH()" class="btn hoverable fondo5 waves-effect waves-light btn-radius secondary-content left">
+										<i class="material-icons large left">clear</i>
+										Quitar todos
+									</button>
 									<button ng-disabled="AVER_Button" ng-click="AVER_PUSH()"  class="btn hoverable fondo3 waves-effect waves-light btn-radius secondary-content">
 										<i class="material-icons large left">add</i>
 										Agregar
@@ -89,6 +105,14 @@ if ( is_user_logged_in() ) {
 							        </div>
 						        </div>
 						        <div class="row">
+									<button ng-disabled="CAMB_AT_Button" ng-click="CAMB_AT_PUSH()" class="btn hoverable fondo1 waves-effect waves-light btn-radius secondary-content left">
+										<i class="material-icons large left">&#xE884;</i>
+										Agregar todos
+									</button>
+									<button ng-disabled="CAMB_ET_Button" ng-click="CAMB_ET_PUSH()" class="btn hoverable fondo5 waves-effect waves-light btn-radius secondary-content left">
+										<i class="material-icons large left">clear</i>
+										Quitar todos
+									</button>
 									<button ng-disabled="CAMB_Button" ng-click="CAMB_PUSH()"  class="btn hoverable fondo3 waves-effect waves-light btn-radius secondary-content">
 										<i class="material-icons large left">add</i>
 										Agregar
@@ -123,6 +147,14 @@ if ( is_user_logged_in() ) {
 							        </div>
 						        </div>
 						        <div class="row">
+									<button ng-disabled="premio_AT_Button" ng-click="premio_AT_PUSH()" class="btn hoverable fondo1 waves-effect waves-light btn-radius secondary-content left">
+										<i class="material-icons large left">&#xE884;</i>
+										Agregar todos
+									</button>
+									<button ng-disabled="premio_ET_Button" ng-click="premio_ET_PUSH()" class="btn hoverable fondo5 waves-effect waves-light btn-radius secondary-content left">
+										<i class="material-icons large left">clear</i>
+										Quitar todos
+									</button>
 									<button ng-disabled="premio_Button" ng-click="premio_PUSH()"  class="btn hoverable fondo3 waves-effect waves-light btn-radius secondary-content">
 										<i class="material-icons large left">add</i>
 										Agregar
@@ -192,6 +224,22 @@ if ( is_user_logged_in() ) {
 				$timeout(function() { $scope.CAMB_Button = false; }, 2000)
 			}); 
 		}
+		$scope.CAMB_AT_PUSH = function() {
+			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/camb-push-AT.php")
+			.then(function (response) {
+				$scope.CAMB_AT_Button = true;
+				$scope.CAMB_PULL();
+				$timeout(function() { $scope.CAMB_AT_Button = false; }, 2000)
+			}); 
+		}
+		$scope.CAMB_ET_PUSH = function() {
+			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/camb-push-ET.php")
+			.then(function (response) {
+				$scope.CAMB_ET_Button = true;
+				$scope.CAMB_PULL();
+				$timeout(function() { $scope.CAMB_ET_Button = false; }, 2000)
+			}); 
+		}
 		$scope.CAMB_PULL = function() {
 			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/camb-pull.php")
 			.then(function (response) {
@@ -217,6 +265,22 @@ if ( is_user_logged_in() ) {
 				jQuery('#aver').val('');
 				$scope.AVER_PULL();
 				$timeout(function() { $scope.AVER_Button = false; }, 2000)
+			}); 
+		}
+		$scope.AVER_AT_PUSH = function() {
+			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/aver-push-AT.php")
+			.then(function (response) {
+				$scope.AVER_AT_Button = true;
+				$scope.AVER_PULL();
+				$timeout(function() { $scope.AVER_AT_Button = false; }, 2000)
+			}); 
+		}
+		$scope.AVER_ET_PUSH = function() {
+			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/aver-push-ET.php")
+			.then(function (response) {
+				$scope.AVER_ET_Button = true;
+				$scope.AVER_PULL();
+				$timeout(function() { $scope.AVER_ET_Button = false; }, 2000)
 			}); 
 		}
 		$scope.AVER_PULL = function() {
@@ -246,6 +310,22 @@ if ( is_user_logged_in() ) {
 				$timeout(function() { $scope.premio_Button = false; }, 2000)
 			}); 
 		}
+		$scope.premio_AT_PUSH = function() {
+			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/premio-push-AT.php")
+			.then(function (response) {
+				$scope.premio_AT_Button = true;
+				$scope.premio_PULL();
+				$timeout(function() { $scope.premio_AT_Button = false; }, 2000)
+			}); 
+		}
+		$scope.premio_ET_PUSH = function() {
+			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/premio-push-ET.php")
+			.then(function (response) {
+				$scope.premio_ET_Button = true;
+				$scope.premio_PULL();
+				$timeout(function() { $scope.premio_ET_Button = false; }, 2000)
+			}); 
+		}
 		$scope.premio_PULL = function() {
 			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/premio-pull.php")
 			.then(function (response) {
@@ -271,6 +351,22 @@ if ( is_user_logged_in() ) {
 				jQuery('#devoluciones').val('');
 				$scope.devoluciones_PULL();
 				$timeout(function() { $scope.devoluciones_Button = false; }, 2000)
+			}); 
+		}
+		$scope.devoluciones_AT_PUSH = function() {
+			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/devoluciones-push-AT.php")
+			.then(function (response) {
+				$scope.devoluciones_AT_Button = true;
+				$scope.devoluciones_PULL();
+				$timeout(function() { $scope.devoluciones_AT_Button = false; }, 2000)
+			}); 
+		}
+		$scope.devoluciones_ET_PUSH = function() {
+			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/devoluciones-push-ET.php")
+			.then(function (response) {
+				$scope.devoluciones_ET_Button = true;
+				$scope.devoluciones_PULL();
+				$timeout(function() { $scope.devoluciones_ET_Button = false; }, 2000)
 			}); 
 		}
 		$scope.devoluciones_PULL = function() {

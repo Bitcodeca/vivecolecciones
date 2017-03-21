@@ -278,7 +278,7 @@ if ( is_user_logged_in() ) {
 															          <tr class="fondo1 white-text">
 																	    <th>Quincena</th>
 																	    <th>Depositado</th>
-																	    <th>Premios unidad</th>
+																	    <th>Quincenales</th>
 																	    <th>Premios Bsf</th>
 															          </tr>
 															        </thead>

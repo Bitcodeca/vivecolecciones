@@ -218,7 +218,6 @@ if ( is_user_logged_in() ) {
 					jQuery('#ref').val('');
 					jQuery('#fec').val('');
 					jQuery('#mon').val('');
-					jQuery('#ban').val('');
 					//$scope.reg_PULL();
                 } else {
                     window.alert(data.data.message);
