@@ -9,7 +9,7 @@ function prototipo_script_enqueue() {
      wp_enqueue_style('Bootstrap grid', get_template_directory_uri() . '/css/bootstrap.min.css', array(), '1.0.0', 'all');
      wp_enqueue_style('Materializecss', 'https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css', array(), '0.97.8', 'all');
      wp_enqueue_style('material icons', 'https://fonts.googleapis.com/icon?family=Material+Icons', array(), '1.0.0', 'all');
-     wp_enqueue_style('style', get_template_directory_uri() . '/css/style.css', array(), '2.1.47', 'all');
+     wp_enqueue_style('style', get_template_directory_uri() . '/css/style.css', array(), '2.1.48', 'all');
 
     //js
     wp_enqueue_script('jquery', 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js', array(), '3.1.0', true);

@@ -149,13 +149,38 @@ if ( is_user_logged_in() ) {
 
 					<div class="row">
 
-		        		<div class="col-xs-12 col-sm-6">
-	        				<div class="card-panel z-depth-2 hoverable">
-	        					<h2 class="bold center-align"><i class="material-icons color5 verticalalignsub">account_circle</i> Usuarios online</h2>
-	        					<?php echo do_shortcode( '[ultimatemember_online]' ); ?>
+		        		<div class="col-xs-12 col-sm-4">
+		        			<div class="row">
+		        				<div class="card-panel z-depth-2 hoverable">
+		        					<h3 class="center-align bold margintop0 marginbot0"><i class="material-icons color5 verticalalignsub">pause_circle_filled</i> Depósitos no asignados</h3>
+		        					<hr />
+		        					<div class="row marginbot0">
+			        					<div class="col-xs-12">
+			        						<?php
+			        							$sql="SELECT sum(monto) as total FROM vive_dep WHERE status='vacio'";
+												$result = mysqli_query($mysqli, $sql);
+												$res = $result->fetch_assoc();	
+												$totalaprobado=$res['total'];
+			        						?>
+		        							<h4 class="center-align bold marginbot0 margintop0">Total: Bsf <?php $valor=formato($totalaprobado); echo $valor; ?></h4>
+			        					</div>
+		        					</div>
+		        					<hr />
+		        					<div class="row marginbot0">
+		        						<div class="col-xs-12 center-align marginbotmenos40">
+			        						<a class="waves-effect waves-light btn fondo5 btn-vive-lg hoverable" href="/depositos-sin-asignar/">Buscar Depósitos</a>
+			        					</div>
+		        					</div>
+		        				</div>
 	        				</div>
+			        		<div class="row">
+		        				<div class="card-panel z-depth-2 hoverable">
+		        					<h3 class="bold center-align margintop0"><i class="material-icons color5 verticalalignsub">account_circle</i> Usuarios online</h3>
+		        					<?php echo do_shortcode( '[ultimatemember_online]' ); ?>
+		        				</div>
+							</div>
 						</div>
-						<div class="col-xs-12 col-sm-6">
+						<div class="col-xs-12 col-sm-8">
 	        				<div class="card-panel z-depth-2 hoverable">
 	        					<h2 class="bold center-align"><i class="material-icons color5 verticalalignsub">flag</i>Reportes</h2>
 	        					<hr />

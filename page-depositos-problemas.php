@@ -59,7 +59,7 @@ if(isset($_POST['btn'])){
 					}
 					$query2 = "DELETE FROM vive_pen WHERE id=$iddep";
 	                if( $mysqli->query( $query2 ) ){
-	                	$query3="UPDATE vive_dep SET status='$statusdep', usuario='$usuariodep' WHERE id='$iddata'";
+	                	$query3="UPDATE vive_dep SET cam='$camdep', status='$statusdep', usuario='$usuariodep' WHERE id='$iddata'";
 	            		if( $mysqli->query( $query3 ) ){ ?>
 							<div id="<?php echo 'btn'.$iddep; ?>" class="modal">
 								<div class="modal-content">
