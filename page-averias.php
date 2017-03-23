@@ -131,6 +131,22 @@ if ( is_user_logged_in() ) {
 					<button onclick="expandAll()" class="btn hoverable fondo3 waves-effect waves-light btn-radius"><i class="material-icons left">add</i> Abrir todos</button>
 					<button onclick="collapseAll()" class="btn hoverable fondo3 waves-effect waves-light btn-radius"><i class="material-icons left">remove</i> Cerrar todos</button>
 	            </div>
+
+	    		<div class="row">
+	        		<div class="col-xs-12">
+        				<div class="card-panel z-depth-2 hoverable">
+							<?php
+								$stmt = $mysqli->prepare('SELECT SUM(ABS(vive_averia.can)) FROM vive_averia');
+								$stmt->execute();
+								$stmt->bind_result($total);
+							    $stmt->fetch();
+								$stmt->close();
+							?>
+        					<h3>Total: <?php echo $total; ?></h3>
+        				 	<div id="averias"></div>
+        				</div>
+					</div>
+				</div>
 				<script>
 					function imprimir() {
 					    window.print();
@@ -358,3 +374,52 @@ if ( is_user_logged_in() ) {
         jQuery(window).resize(checkWidth);
 	  });
 </script>
+<?php
+	if($user_logged['rol']=='administrator'){
+		?>
+		 <script>
+		    google.charts.load('current', {packages: ['corechart', 'bar']});
+			google.charts.setOnLoadCallback(drawBasic);
+			function drawBasic() {
+
+			      var data = google.visualization.arrayToDataTable([
+					    	['Artículo', 'Cantidad total'],
+
+							<?php
+								$stmt = $mysqli->prepare("SELECT SUM(ABS(vive_averia.can)), 
+																 vive_var.art, 
+																 vive_cam.art, 
+																 vive_var.var 
+																 FROM vive_averia 
+																 JOIN vive_var ON vive_averia.art=vive_var.var 
+																 JOIN vive_cam ON vive_var.art=vive_cam.id 
+																 GROUP BY vive_var.art");
+								$stmt->execute();
+								$stmt->bind_result($averiaCan, $varArt, $camArt, $varVar);
+								$stmt->store_result();
+								$total=0;
+							    while ($stmt->fetch()) {
+							    	echo "['".$varVar."',".$averiaCan."],";
+							    	$total++;
+								}
+								$stmt->close();
+							?>
+			      ]);
+
+			      var options = {
+			        hAxis: {
+			          minValue: 0
+			        },
+			        bars: 'horizontal',
+			        height: <?php echo $total*50; ?>,
+			      };
+
+			      var chart = new google.charts.Bar(document.getElementById('averias'));
+
+			      chart.draw(data, options);
+			    }
+
+		 </script>
+		<?php
+	}
+?>

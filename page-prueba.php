@@ -56,7 +56,7 @@ if ( is_user_logged_in() ) {
 	        		<div class="col-xs-12">
         				<div class="card-panel z-depth-2 hoverable">
 							<?php
-								$stmt = $mysqli->prepare("SELECT SUM(vive_averia.can), 
+								$stmt = $mysqli->prepare("SELECT SUM(ABS(vive_averia.can)), 
 																 vive_var.art, 
 																 vive_cam.art, 
 																 vive_var.var 

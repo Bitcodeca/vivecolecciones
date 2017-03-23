@@ -210,17 +210,26 @@ if ( is_user_logged_in() ) {
 
 					</div>
 
+
         			<div class="row">
-		        		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
+		        		<div class="col-xs-12 col-sm-6">
+	        				<div class="card-panel z-depth-2 hoverable">
+	        					<h3 class="center-align bold margintop0 marginbot0"><i class="material-icons color5 verticalalignsub">message</i> Chat</h3>
+								<div id="chatChart"></div>
+	        				</div>
+						</div>
+		        		<div class="col-xs-12 col-sm-6">
+	        				<div class="card-panel z-depth-2 hoverable">
+	        					<h3 class="center-align bold margintop0 marginbot0"><i class="material-icons color5 verticalalignsub">trending_up</i> Administración</h3>
+								<div id="chatChart2"></div>
+	        				</div>
+						</div>
+					</div>
+					<div class="row">
+		        		<div class="col-xs-12">
 	        				<div class="card-panel z-depth-2 hoverable" style="overflow-x: scroll;">
 	        					<h3 class="center-align bold margintop0 marginbot0"><i class="material-icons color5 verticalalignsub">trending_up</i> Ingresos Diarios</h3>
 								<div id="columnchart_material"></div>
-	        				</div>
-						</div>
-		        		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-	        				<div class="card-panel z-depth-2 hoverable" style="overflow-x: scroll;">
-	        					<h3 class="center-align bold margintop0 marginbot0"><i class="material-icons color5 verticalalignsub">message</i> Chat</h3>
-								<div id="chatChart"></div>
 	        				</div>
 						</div>
 					</div>
@@ -461,6 +470,79 @@ if ( is_user_logged_in() ) {
 	      };
 
 	      var chart = new google.visualization.PieChart(document.getElementById('chatChart'));
+	      chart.draw(data, options);
+	  }
+
+      google.charts.setOnLoadCallback(drawpie2);
+
+	  function drawpie2() {
+
+	      var data = new google.visualization.DataTable();
+	      data.addColumn('string', 'Status');
+	      data.addColumn('number', '# mensajes');
+	      data.addRows([
+          <?php
+			$stmt0 = $mysqli->prepare("SELECT DISTINCT cam FROM vive_con");
+			$stmt0->execute();
+			$stmt0->bind_result($cam);
+			$stmt0->store_result();
+		    while ($stmt0->fetch()) {
+				$stmt = $mysqli->prepare("SELECT sum(vive_fac.can), 
+					 							 vive_cam.art,
+					 							 vive_cam.cos 
+					 							 FROM vive_fac JOIN vive_cam 
+					 							 ON vive_fac.art_id=vive_cam.id 
+												 AND vive_cam.cam='$cam' 
+												 GROUP BY vive_fac.art_id");
+				$stmt->execute();
+				$stmt->bind_result($facCan, $camArt, $camCos);
+				$stmt->store_result();
+				$costo=0;
+				$total_colecciones=0;
+			    while ($stmt->fetch()) {
+			    	$costo=$facCan*$camCos + $costo;
+			    	$total_colecciones=$total_colecciones+$facCan;
+				}
+				$stmt->close();
+
+				$stmt = $mysqli->prepare('SELECT cam, gven, pbas, dis, ger, q1, q2, q3 FROM vive_con ORDER BY id ASC LIMIT 1');
+				$stmt->execute();
+				$stmt->bind_result($can, $gven, $pbas, $dis, $ger, $q1, $q2, $q3);
+				$stmt->store_result();
+			    $stmt->fetch();
+			    $ganancia_total_gven=$total_colecciones*$gven;
+				$total_distribucion=$dis*$total_colecciones;
+				$total_gerencia=$ger*$total_colecciones;
+				$stmt->close();
+				
+				$total_a_cancelar=$costo-$total_distribucion-$total_gerencia-$ganancia_total_gven;
+
+
+				$stmt = $mysqli->prepare('SELECT fecha, monto FROM vive_dep WHERE cam = ?');
+				$stmt->bind_param('s', $cam);
+				$stmt->execute();
+				$stmt->bind_result($depFecha, $depMonto);
+				$stmt->store_result();
+	          	$depositado=0;
+			    while ($stmt->fetch()) { $depositado=$depMonto+$depositado; }
+				$stmt->close();
+
+				$restante=$total_a_cancelar-$depositado;
+
+				echo "['Depositado', ".$depositado."],";
+				echo "['Restante', ".$restante."],";
+
+
+			}
+			$stmt0->close();
+			?>
+	      ]);
+
+	      var options = {
+          	//legend: 'none'
+	      };
+
+	      var chart = new google.visualization.PieChart(document.getElementById('chatChart2'));
 	      chart.draw(data, options);
 	  }
  </script>
