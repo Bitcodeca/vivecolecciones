@@ -9,35 +9,13 @@ if ( is_user_logged_in() ) {
 
 			<div class="container-fluid margintop25 marginbot25">
 	    		<div class="row">
-	        		<div class="col-xs-12 col-sm-3">
-        				<div class="card-panel z-depth-2 hoverable">
-        					<h3 class="center-align bold margintop0 marginbot0"><i class="material-icons color5 verticalalignsub">pause_circle_filled</i> Depósitos no asignados</h3>
-        					<hr />
-        					<div class="row marginbot0">
-	        					<div class="col-xs-12">
-	        						<?php
-	        							$sql="SELECT sum(monto) as total FROM vive_dep WHERE status='vacio'";
-										$result = mysqli_query($mysqli, $sql);
-										$res = $result->fetch_assoc();	
-										$totalaprobado=$res['total'];
-	        						?>
-        							<h4 class="center-align bold marginbot0 margintop0">Total: Bsf <?php $valor=formato($totalaprobado); echo $valor; ?></h4>
-	        					</div>
-        					</div>
-        					<hr />
-        					<div class="row marginbot0">
-        						<div class="col-xs-12 center-align marginbotmenos40">
-	        						<a class="waves-effect waves-light btn fondo5 btn-vive-lg hoverable" href="/depositos-sin-asignar/">Buscar Depósitos</a>
-	        					</div>
-        					</div>
-        				</div>
-					</div>
-				</div>
-	    		<div class="row">
 	        		<div class="col-xs-12">
         				<div class="card-panel z-depth-2 hoverable">
 
 							<?php
+
+								echo str_replace('world','"','Hello world!');
+
 								$stmt0 = $mysqli->prepare("SELECT DISTINCT cam FROM vive_con");
 								$stmt0->execute();
 								$stmt0->bind_result($cam);
