@@ -251,8 +251,8 @@ if ( is_user_logged_in() ) {
 															$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
 															$q4_unix=strtotime($fechacambiadadep);
 
-															$stmt = $mysqli->prepare('SELECT fecha, monto FROM vive_dep WHERE usuario = ?');
-															$stmt->bind_param('s', $gerente_logged);
+															$stmt = $mysqli->prepare('SELECT fecha, monto FROM vive_dep WHERE usuario = ? AND cam = ?');
+															$stmt->bind_param('ss', $gerente_logged, $cam);
 															$stmt->execute();
 															$stmt->bind_result($depFecha, $depMonto);
 															$stmt->store_result();

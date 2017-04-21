@@ -104,7 +104,7 @@ if ( is_user_logged_in() ) {
 
 							<div class="divider margintop25"></div>
 					     	<h1 class="center-align">Pagos Aprobados</h1>
-				        	<div class="">
+				        	<div class=" imprimir">
 								<table class="striped responsive-table">
 							        <thead>
 							          <tr>

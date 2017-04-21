@@ -112,7 +112,7 @@ function formato($valor){
 
 function decimales($valor){
    $numero=preg_replace("/[^0-9,.]/", "", $valor);
-   $resultado=number_format($numero, 2, ',', '');
+   $resultado=number_format($numero, 2, '.', '');
    return $resultado;
 }
 
