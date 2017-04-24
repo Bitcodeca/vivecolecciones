@@ -159,6 +159,7 @@ td p {margin: 0px;}
 .pointer{cursor:pointer}
 .reportes{-webkit-column-count: 2; -moz-column-count: 2; column-count: 2;}
 .um-online {max-width: 100%;}
+i.medium { font-size: 4rem!important; }
 
 @media (max-width:1440px){
     nav ul a { font-size: 1.2em; letter-spacing: 1px; padding: 0 7px; }
