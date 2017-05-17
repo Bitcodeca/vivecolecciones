@@ -37,20 +37,29 @@ if ( is_user_logged_in() ) {
 
 										        <tbody>
 												<?php 
-												$query = "SELECT vive_fac_prem.usuario, vive_fac_prem.cam, vive_fac_prem.nombre, vive_fac_prem.cantidad, vive_pre.tipo FROM vive_fac_prem JOIN vive_pre ON vive_fac_prem.nombre=vive_pre.articulo WHERE vive_fac_prem.usuario='$usu'";
-												$result = mysqli_query ($mysqli, $query);
-												$totalPremios=0;
-												if(mysqli_num_rows($result) != 0) {
-													while ($row = mysqli_fetch_assoc($result)) {
-														$totalPremios=$row['cantidad']+$totalPremios;
-														?>
-														<tr>
-													        <td><?php echo $row['cam']; ?></td>
-													        <td><?php echo $row['nombre']; ?></td>
-													        <td><?php echo $row['cantidad']; ?></td>
-													        <td><?php echo $row['tipo']; ?></td>
-													    </tr>
-													<?php
+												
+
+												$query2 = "SELECT cam from vive_fac WHERE usuario = '$usu' ORDER BY cam DESC LIMIT 1";
+												$result2 = mysqli_query ($mysqli, $query2);
+												if(mysqli_num_rows($result2) != 0) {
+													while ($row2 = mysqli_fetch_assoc($result2)) {
+														$cam=$row2['cam'];
+														$query = "SELECT vive_fac_prem.usuario, vive_fac_prem.cam, vive_fac_prem.nombre, vive_fac_prem.cantidad, vive_pre.tipo FROM vive_fac_prem JOIN vive_pre ON vive_fac_prem.nombre=vive_pre.articulo WHERE vive_fac_prem.usuario='$usu' AND vive_fac_prem.cam='$cam' AND vive_pre.cam='$cam'";
+														$result = mysqli_query ($mysqli, $query);
+														$totalPremios=0;
+														if(mysqli_num_rows($result) != 0) {
+															while ($row = mysqli_fetch_assoc($result)) {
+																$totalPremios=$row['cantidad']+$totalPremios;
+																?>
+																<tr>
+															        <td><?php echo $row['cam']; ?></td>
+															        <td><?php echo $row['nombre']; ?></td>
+															        <td><?php echo $row['cantidad']; ?></td>
+															        <td><?php echo $row['tipo']; ?></td>
+															    </tr>
+															<?php
+															}
+														}
 													}
 												} ?>
 												</tbody>

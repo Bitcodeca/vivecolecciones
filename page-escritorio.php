@@ -27,18 +27,19 @@ if ( is_user_logged_in() ) {
 											$res = $result->fetch_assoc();	
 		        						?>
 	        							<h4 class="center-align bold marginbot0 margintop0">Total Colecciones: <?php echo $res['total']; ?></h4>
-		        						<?php $query = "SELECT * from vive_con ORDER BY cam ASC";
+		        						<?php
+		        						$query = "SELECT * from vive_con ORDER BY cam ASC";
 										$result = mysqli_query($mysqli, $query);
 										if(mysqli_num_rows($result) != 0) {
 											while($row = mysqli_fetch_assoc($result)) {
-											$cam=$row['cam'];
-
-											$sql="SELECT sum(can) as total FROM vive_fac WHERE cam='$cam'";
-											$result = mysqli_query($mysqli, $sql);
-											$res = $result->fetch_assoc();										
-											?>
-												<h5>Campaña #<?php echo $cam; ?>: <b><?php echo $res['total']; ?></b></h5>
+												$cam=$row['cam'];
+												$sql="SELECT sum(can) as total FROM vive_fac WHERE cam='$cam'";
+												$result2 = mysqli_query($mysqli, $sql);
+												while($res = mysqli_fetch_assoc($result2)) {									
+												?>
+													<h5>Campaña #<?php echo $cam; ?>: <b><?php echo $res['total']; ?></b></h5>
 											<?php }
+											}
 										} ?>
 
 		        					</div>
@@ -129,10 +130,11 @@ if ( is_user_logged_in() ) {
 											$cam=$row['cam'];
 
 											$sql="SELECT sum(monto) as total FROM vive_dep WHERE cam='$cam' AND  NOT status='vacio'";
-											$result = mysqli_query($mysqli, $sql);
-											$res = $result->fetch_assoc();										
+											$result2 = mysqli_query($mysqli, $sql);
+											$res = $result2->fetch_assoc();			
+											if(empty($res['total'])){$resultado=0;}else{$resultado=$res['total'];}							
 											?>
-												<h5>Campaña #<?php echo $cam; ?>: <b>Bsf <?php $valor=formato($res['total']); echo $valor; ?></b></h5>
+												<h5>Campaña #<?php echo $cam; ?>: <b>Bsf <?php $valor=formato($resultado); echo $valor; ?></b></h5>
 											<?php }
 										} ?>
 		        					</div>
@@ -222,7 +224,6 @@ if ( is_user_logged_in() ) {
 			        					<h5><i class="material-icons">error</i> Depósitos Problemas: <b><?php echo $num_pen; ?></b></h5>
 			        					<h5><i class="material-icons">cancel</i> Depósitos Negados: <b><?php echo $num_neg; ?></b></h5>
 			        					<h5><i class="material-icons">panorama_fish_eye</i> Depósitos Sin Asignar: <b><?php echo $num_vacio; ?></b></h5>
-			        					<h5><i class="material-icons">archive</i> Facturas Cerradas</h5>
 			        					<h5><i class="material-icons">cached</i> Cambios: <b><?php echo $camb; ?></b></h5>
 			        					<h5><i class="material-icons">build</i> Averías: <b><?php echo $aver; ?></b></h5>
 			        					<h5><i class="material-icons">arrow_back</i> Devoluciones: <b><?php echo $dev; ?></b></h5>
@@ -292,15 +293,24 @@ if ( is_user_logged_in() ) {
     				<div class="card-panel z-depth-2 hoverable">
 						<h3 class="center-align"><i class="material-icons color5 verticalalignsub">shopping_basket</i> Total Colecciones</h3>
 						<?php
-						$stmt = $mysqli->prepare('SELECT sum(can) as total FROM vive_fac WHERE usuario = ?');
-						$stmt->bind_param('s', $user_logged['login']);
-						$stmt->execute();
-						$stmt->bind_result($var);
-						$total_colecciones=0;
-					    while ($stmt->fetch()) { 
-					    	$total_colecciones=$var; 
+						/*$stmt2 = $mysqli->prepare('SELECT cam from vive_fac WHERE usuario = ? ORDER BY cam DESC');
+						$stmt2->bind_param('s', $user_logged['login']);
+						$stmt2->execute();
+						$stmt2->bind_result($var2);
+					    while ($stmt2->fetch()) { 
+							$buscar=$var2;
+							echo $buscar;*/
+							$stmt = $mysqli->prepare("SELECT sum(can) as total FROM vive_fac WHERE usuario = ?");
+							$stmt->bind_param("s", $user_logged['login']);
+							$stmt->execute();
+							$stmt->bind_result($var);
+							$total_colecciones=0;
+						    while ($stmt->fetch()) { 
+						    	$total_colecciones=$var; 
+						    }
+							$stmt->close();/*
 					    }
-						$stmt->close();
+						$stmt2->close();*/
 						?>
 						<h4 class="center-align"><?php echo $total_colecciones; ?></h4>
 					</div>

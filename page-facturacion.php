@@ -41,6 +41,16 @@ if ( is_user_logged_in() ) {
 	    }
 	    else {
 			$gerente_logged=$user_logged["login"];
+			$stmt0 = $mysqli->prepare("SELECT DISTINCT cam FROM vive_fac WHERE usuario = ? ORDER BY id DESC");
+			$stmt0->bind_param('s', $gerente_logged);
+			$stmt0->execute();
+			$stmt0->bind_result($query_cam);
+			$stmt0->store_result();
+			$array_cam=array();
+		    while ($stmt0->fetch()) {
+		    	array_push($array_cam, $query_cam);
+		    }
+		    $stmt0->close();
 	    	?>
 			<div class="container-fluid margintop25 marginbot25">
 	    		<div class="row">
@@ -251,6 +261,31 @@ if ( is_user_logged_in() ) {
 															$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
 															$q4_unix=strtotime($fechacambiadadep);
 
+
+																
+														    $orden_cam = array_search($cam, $array_cam);
+														    
+															if($orden_cam==0){
+																$orden='ultima';
+															}else{
+																$ultimacam_comp=$ordencam-1;
+																$buscar_cam=$array_cam[$ultimacam_comp];
+																$query4 = "SELECT * from vive_fac WHERE usuario='$gerente_logged' AND cam='$buscar_cam'";
+																$result4 = mysqli_query($mysqli, $query4);
+																if(mysqli_num_rows($result4) != 0) {
+																	while($row4 = mysqli_fetch_assoc($result4)) {
+																		$corte_comp=$row4['fecha_creada'];
+																    	$fechacambiadadep = DateTime::createFromFormat("d/m/Y", $corte_comp);
+																		$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
+																		$corte_comp_unix=strtotime($fechacambiadadep);
+																		$orden='antigua';
+																	}
+																}else{
+																	$orden='sin_asignar';
+																}
+															}
+
+
 															$stmt = $mysqli->prepare('SELECT fecha, monto FROM vive_dep WHERE usuario = ? AND cam = ?');
 															$stmt->bind_param('ss', $gerente_logged, $cam);
 															$stmt->execute();
@@ -269,9 +304,20 @@ if ( is_user_logged_in() ) {
 																}elseif($fechaunixdep>$q2_unix && $fechaunixdep<=$q3_unix){
 																	$depositado_q3=$depositado_q3+$depMonto;
 																	$depositado_total=$depositado_total+$depMonto;
-																}elseif($fechaunixdep>$q3_unix && $fechaunixdep<=$q4_unix){
-																	$depositado_q4=$depositado_q4+$depMonto;
-																	$depositado_total=$depositado_total+$depMonto;
+																/*}elseif($fechaunixdep>$q3_unix && $fechaunixdep<=$q4_unix){*/
+																}elseif($fechaunixdep>$q3_unix){
+																	if($orden=='ultima'){
+																		$depositado_q4=$depositado_q4+$depMonto;
+																		$depositado_total=$depositado_total+$depMonto;
+																	}elseif($orden=='antigua'){
+																		if($fechaunixdep>$q3_unix && $fechaunixdep<=$corte_comp_unix){
+																			$depositado_q4=$depositado_q4+$depMonto;
+																			$depositado_total=$depositado_total+$depMonto;
+																		}
+																	}else{
+																		$depositado_q4=$depositado_q4+$depMonto;
+																		$depositado_total=$depositado_total+$depMonto;
+																	}
 																}
 														    }
 															$stmt->close();

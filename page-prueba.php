@@ -11,11 +11,32 @@ if ( is_user_logged_in() ) {
 	    		<div class="row">
 	        		<div class="col-xs-12">
         				<div class="card-panel z-depth-2 hoverable">
+        					<?php
+        						$user_logged='fcastillo90';
+								$stmt0 = $mysqli->prepare("SELECT DISTINCT cam, fec, q1, q2, q3, q4 FROM vive_fac WHERE usuario = ? ORDER BY id DESC");
+								$stmt0->bind_param('s', $user_logged);
+								$stmt0->execute();
+								$stmt0->bind_result($cam, $fec, $q1, $q2, $q3, $q4);
+								$stmt0->store_result();
+								$array_cam=array();
+							    while ($stmt0->fetch()) {
+							    	array_push($array_cam, $cam);
+							    }
+							    $stmt0->close();
+
+							    print_r($array_cam);
+
+							    $key = array_search(12017, $array_cam);
+							    echo '<br>'.$key;
+        					?>
+        				</div>
+    				</div>
+				</div>
+	    		<div class="row">
+	        		<div class="col-xs-12">
+        				<div class="card-panel z-depth-2 hoverable">
 
 							<?php
-
-								echo str_replace('world','"','Hello world!');
-
 								$stmt0 = $mysqli->prepare("SELECT DISTINCT cam FROM vive_con");
 								$stmt0->execute();
 								$stmt0->bind_result($cam);
