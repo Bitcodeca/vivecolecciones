@@ -74,22 +74,37 @@ if ( is_user_logged_in() ) {
 													<th class="bold">Nombre</th>
 													<th class="bold">Costo</th>
 													<th class="bold">Referencia</th>
+													<th class="bold">Total</th>
 												</tr>
 											</thead>
 
 											<tbody>
 												<?php
-												$query2 = "SELECT * from vive_cam WHERE cam='$cam'";
-												$result2 = mysqli_query($mysqli, $query2);
-												if(mysqli_num_rows($result2) != 0) {
-													while($row2 = mysqli_fetch_assoc($result2)) { ?>
-														<tr>
-															<td><?php echo $row2['art']; ?></td>
-															<td>Bsf <?php $valor=formato($row2['cos']); echo $valor; ?></td>
-															<td><?php echo $row2['ref']; ?></td>
-														</tr>
-													<?php }
-												} ?>
+												$stmt = $mysqli->prepare("SELECT sum(vive_fac.can), 
+													 							 vive_cam.art,
+													 							 vive_cam.cos,
+													 							 vive_cam.ref 
+													 							 FROM vive_fac JOIN vive_cam 
+													 							 ON vive_fac.art_id=vive_cam.id 
+																				 AND vive_cam.cam='$cam' 
+																				 GROUP BY vive_fac.art_id");
+												$stmt->execute();
+												$stmt->bind_result($facCan, $camArt, $camCos, $camRef);
+												$stmt->store_result();
+												$costo=0;
+											    while ($stmt->fetch()) {
+											    	?>
+													<tr>
+														<td><?php echo $camArt; ?></td>
+														<td>Bsf <?php $valor=formato($camCos); echo $valor; ?></td>
+														<td><?php echo $camRef; ?></td>
+														<td><?php echo $facCan; ?></td>
+													</tr>
+											    	<?
+												}
+												$stmt->close();
+												?>
+
 											</tbody>
 										</table>
 									</div>

@@ -11,6 +11,7 @@ $outp = "";
 while($rs = $result->fetch_array(MYSQLI_ASSOC)) {
     if ($outp != "") {$outp .= ",";}
     $msn=str_replace('"','`', $rs["msn"]);
+    $msn=preg_replace('/[^A-Za-z0-9\-]/', '', $msn);
     if($rs['ini']==$usuario){$grid='col-xs-11 col-sm-10 left-align';$gridinner='bubble me';}else{$grid='col-xs-offset-1 col-xs-11 col-sm-offset-2 col-sm-10 right-align';$gridinner='bubble you';}
 	    $outp .= '{"Grid":"'.$grid.'",';
 		$outp .= '"Inner":"'.$gridinner.'",';

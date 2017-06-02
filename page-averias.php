@@ -179,7 +179,6 @@ if ( is_user_logged_in() ) {
 
 			if($_POST['btn']=='grabar') {
 	    			$articulos=$_POST['articulos'];
-	    			echo $articulos;
 	    			for ($i = 0; $i < $articulos; $i++) {
 	    				if(isset($_POST['art'.$i])){
 	    					$fecha=date("d/m/Y");
@@ -215,8 +214,22 @@ if ( is_user_logged_in() ) {
 											<h2>Registrar nueva avería</h2>
 
 											<?php
+											$stmt0 = $mysqli->prepare("SELECT DISTINCT cam FROM vive_fac WHERE usuario = ? ORDER BY id DESC");
+											$stmt0->bind_param('s', $gerente_logged);
+											$stmt0->execute();
+											$stmt0->bind_result($query_cam);
+											$stmt0->store_result();
+											$array_cam=array();
+										    while ($stmt0->fetch()) {
+										    	array_push($array_cam, $query_cam);
+										    }
+										    $stmt0->close();
+
+										    $cam=$array_cam[0];
+
 											$x=0;
-								        	$query2 = "SELECT DISTINCT art_id FROM vive_fac WHERE usuario='$gerente_logged'";
+								        	$query2 = "SELECT DISTINCT art_id FROM vive_fac WHERE usuario='$gerente_logged' AND cam='$cam'";
+											echo '<script>console.log("'.$query2.'")</script>';
 											$result2 = mysqli_query($mysqli, $query2);
 											if(mysqli_num_rows($result2) != 0) { 
 												while($row2 = mysqli_fetch_assoc($result2)) {

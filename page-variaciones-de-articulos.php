@@ -15,8 +15,8 @@ if ( is_user_logged_in() ) {
 						$art=$_POST['art'];
 						$var=$_POST['var'];
 
-						$stmt2 = $mysqli->prepare('SELECT id FROM vive_cam WHERE art = ?');
-						$stmt2->bind_param('s', $art);
+						$stmt2 = $mysqli->prepare('SELECT id FROM vive_cam WHERE art = ? AND cam = ?');
+						$stmt2->bind_param('ss', $art, $cam);
 						$stmt2->execute();
 						$stmt2->bind_result($art_id);
 						$stmt2->store_result();

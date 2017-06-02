@@ -286,6 +286,18 @@ if ( is_user_logged_in() ) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	} elseif ($user_logged['rol']=='Gerente') {
 		require_once 'api/vive-db.php';
+		$gerente_logged=$user_logged["login"];
+		$stmt0 = $mysqli->prepare("SELECT DISTINCT cam FROM vive_fac WHERE usuario = ? ORDER BY id DESC");
+		$stmt0->bind_param('s', $gerente_logged);
+		$stmt0->execute();
+		$stmt0->bind_result($query_cam);
+		$stmt0->store_result();
+		$array_cam=array();
+	    while ($stmt0->fetch()) {
+	    	array_push($array_cam, $query_cam);
+	    }
+	    $stmt0->close();
+	    $ultima_cam=$array_cam[0];
 		?>
 		<div class="container-fluid margintop25 marginbot25">	
     		<div class="row">
@@ -300,8 +312,8 @@ if ( is_user_logged_in() ) {
 					    while ($stmt2->fetch()) { 
 							$buscar=$var2;
 							echo $buscar;*/
-							$stmt = $mysqli->prepare("SELECT sum(can) as total FROM vive_fac WHERE usuario = ?");
-							$stmt->bind_param("s", $user_logged['login']);
+							$stmt = $mysqli->prepare("SELECT sum(can) as total FROM vive_fac WHERE usuario = ? AND cam = ?");
+							$stmt->bind_param("ss", $user_logged['login'], $ultima_cam);
 							$stmt->execute();
 							$stmt->bind_result($var);
 							$total_colecciones=0;
@@ -319,8 +331,8 @@ if ( is_user_logged_in() ) {
     				<div class="card-panel z-depth-2 hoverable">
 						<h3 class="center-align"><i class="material-icons color5 verticalalignsub">credit_card</i>Total a Pagar</h3>
 						<?php
-							$stmt = $mysqli->prepare('SELECT art_id, can FROM vive_fac WHERE usuario = ?');
-							$stmt->bind_param('s', $user_logged['login']);
+							$stmt = $mysqli->prepare('SELECT art_id, can FROM vive_fac WHERE usuario = ? AND cam = ?');
+							$stmt->bind_param('ss', $user_logged['login'], $ultima_cam);
 							$stmt->execute();
 							$stmt->bind_result($art_id, $can);
 							$stmt->store_result();
@@ -347,8 +359,8 @@ if ( is_user_logged_in() ) {
     				<div class="card-panel z-depth-2 hoverable">
 						<h3 class="center-align"><i class="material-icons color5 verticalalignsub">done_all</i> Total Pagado</h3>
 						<?php
-							$stmt = $mysqli->prepare('SELECT sum(monto) FROM vive_dep WHERE usuario = ?');
-							$stmt->bind_param('s', $user_logged['login']);
+							$stmt = $mysqli->prepare('SELECT sum(monto) FROM vive_dep WHERE usuario = ? AND cam = ?');
+							$stmt->bind_param('ss', $user_logged['login'], $ultima_cam);
 							$stmt->execute();
 							$stmt->bind_result($total_pagado);
 						    $stmt->fetch();
@@ -359,8 +371,8 @@ if ( is_user_logged_in() ) {
 				</div>
 			</div>
 			<?php
-				$stmt = $mysqli->prepare('SELECT q1, q2, q3, q4 FROM vive_fac WHERE usuario = ? LIMIT 1');
-				$stmt->bind_param('s', $user_logged['login']);
+				$stmt = $mysqli->prepare('SELECT q1, q2, q3, q4 FROM vive_fac WHERE usuario = ? AND cam = ? LIMIT 1');
+				$stmt->bind_param('ss', $user_logged['login'], $ultima_cam);
 				$stmt->execute();
 				$stmt->bind_result($q1, $q2, $q3, $q4);
 			    $stmt->fetch();
@@ -593,8 +605,8 @@ if ( is_user_logged_in() ) {
           ['Fecha', 'Monto'],
 
           <?php
-			$stmt = $mysqli->prepare("SELECT sum(vive_dep.monto), vive_dep.fecha FROM vive_dep WHERE vive_dep.usuario=? GROUP BY vive_dep.fecha ORDER BY UNIX_TIMESTAMP(STR_TO_DATE(vive_dep.fecha, '%d/%m/%Y')) ASC");
-			$stmt->bind_param('s', $user_logged['login']);
+			$stmt = $mysqli->prepare("SELECT sum(vive_dep.monto), vive_dep.fecha FROM vive_dep WHERE vive_dep.usuario=? AND vive_dep.cam=? GROUP BY vive_dep.fecha ORDER BY UNIX_TIMESTAMP(STR_TO_DATE(vive_dep.fecha, '%d/%m/%Y')) ASC");
+			$stmt->bind_param('ss', $user_logged['login'], $ultima_cam);
 			$stmt->execute();
 			$stmt->bind_result($monto, $fecha);
 			$stmt->store_result();
@@ -619,8 +631,8 @@ if ( is_user_logged_in() ) {
 	      data.addColumn('number', '# mensajes');
 	      data.addRows([
           <?php
-			$stmt = $mysqli->prepare("SELECT vive_fac.can, vive_fac.fec, vive_fac.q1, vive_fac.q2, vive_fac.q3, vive_fac.q4, vive_cam.cos from vive_fac JOIN vive_cam ON vive_fac.art_id=vive_cam.id WHERE usuario=?");
-			$stmt->bind_param('s', $user_logged['login']);
+			$stmt = $mysqli->prepare("SELECT vive_fac.can, vive_fac.fec, vive_fac.q1, vive_fac.q2, vive_fac.q3, vive_fac.q4, vive_cam.cos from vive_fac JOIN vive_cam ON vive_fac.art_id=vive_cam.id WHERE usuario=? AND cam=?");
+			$stmt->bind_param('ss', $user_logged['login'], $ultima_cam);
 			$stmt->execute();
 			$stmt->bind_result($facCan, $facFec, $facQ1, $facQ2, $facQ3, $facQ4, $camCosto);
 			$stmt->store_result();
@@ -638,7 +650,8 @@ if ( is_user_logged_in() ) {
 			$stmt->close();
 
 
-			$stmt = $mysqli->prepare('SELECT cam, gven, pbas, dis, ger, q1, q2, q3 FROM vive_con ORDER BY id ASC LIMIT 1');
+			$stmt = $mysqli->prepare('SELECT cam, gven, pbas, dis, ger, q1, q2, q3 FROM vive_con WHERE cam=? ORDER BY id ASC LIMIT 1');
+			$stmt->bind_param('s', $ultima_cam);
 			$stmt->execute();
 			$stmt->bind_result($can, $gven, $pbas, $dis, $ger, $q1, $q2, $q3);
 			$stmt->store_result();

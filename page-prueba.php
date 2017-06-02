@@ -12,6 +12,23 @@ if ( is_user_logged_in() ) {
 	        		<div class="col-xs-12">
         				<div class="card-panel z-depth-2 hoverable">
         					<?php
+								$stmt0 = $mysqli->prepare("SELECT vive_var.var, vive_var.art, vive_var.cam, vive_cam.art FROM vive_var JOIN vive_cam ON vive_var.art=vive_cam.id WHERE vive_var.cam='20172' ORDER BY vive_var.art");
+								$stmt0->execute();
+								$stmt0->bind_result($varvar, $varart, $varcam, $camart);
+								$stmt0->store_result();
+								$array_cam=array();
+							    while ($stmt0->fetch()) {
+							    	echo $camart.' '.$varcam.' '.$varvar.'<br>';
+							    }
+							    $stmt0->close();
+        					?>
+        				</div>
+    				</div>
+				</div>
+	    		<div class="row">
+	        		<div class="col-xs-12">
+        				<div class="card-panel z-depth-2 hoverable">
+        					<?php
         						$user_logged='fcastillo90';
 								$stmt0 = $mysqli->prepare("SELECT DISTINCT cam, fec, q1, q2, q3, q4 FROM vive_fac WHERE usuario = ? ORDER BY id DESC");
 								$stmt0->bind_param('s', $user_logged);

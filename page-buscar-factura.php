@@ -374,39 +374,45 @@ if ( is_user_logged_in() ) {
 													    <div class="row">
 													    	<h3 class="left-align bold paddingleft15 paddingtop10 paddingbot10 red white-text">Deuda pendiente <small>Bsf <?php $valor=formato($deuda_pendiente); echo $valor; ?></small></h3>
 												    	</div>
-														<script>
-															function Grafica() {
+														<?php
+															if($orden_cam==0){
+																?>
+																<script>
+																	function Grafica() {
 
-													      google.charts.load('current', {'packages':['corechart']});
-													      google.charts.setOnLoadCallback(drawChart);
-													      function drawChart() {
+															      google.charts.load('current', {'packages':['corechart']});
+															      google.charts.setOnLoadCallback(drawChart);
+															      function drawChart() {
 
-													        var data = google.visualization.arrayToDataTable([
-													          ['Estado', 'Cantidad'],
-													          ['Deuda',  <?php echo $deuda_pendiente; ?>],
-													          ['Pagado', <?php echo $depositado_total; ?>]
-													        ]);
+															        var data = google.visualization.arrayToDataTable([
+															          ['Estado', 'Cantidad'],
+															          ['Deuda',  <?php echo $deuda_pendiente; ?>],
+															          ['Pagado', <?php echo $depositado_total; ?>]
+															        ]);
 
-													        var options = {
-													        	slices: {
-														            0: { color: '#ff5252' },
-														            1: { color: '#13B88D' }
-														        },
-																		chartArea:{width:'100%',height:'100%'},
-													        };
+															        var options = {
+															        	slices: {
+																            0: { color: '#ff5252' },
+																            1: { color: '#13B88D' }
+																        },
+																				chartArea:{width:'100%',height:'100%'},
+															        };
 
-													        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+															        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
 
-													        chart.draw(data, options);
+															        chart.draw(data, options);
 
-																};
+																		};
+																	}
+																</script>
+																<div class="row">
+																	<div class="col-xs-12">
+																		<div id="piechart"></div>
+																	</div>
+																</div>
+																<?php
 															}
-														</script>
-														<div class="row">
-															<div class="col-xs-12">
-																<div id="piechart"></div>
-															</div>
-														</div>
+														?>
 
 														</div>
 													</div>

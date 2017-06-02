@@ -31,6 +31,18 @@ if ( is_user_logged_in() ) {
 	    }
 	    else {
 			$gerente_logged=$user_logged["login"];
+
+			$stmt0 = $mysqli->prepare("SELECT DISTINCT cam FROM vive_fac WHERE usuario = ? ORDER BY id DESC");
+			$stmt0->bind_param('s', $gerente_logged);
+			$stmt0->execute();
+			$stmt0->bind_result($cam);
+			$stmt0->store_result();
+			$array_cam=array();
+		    while ($stmt0->fetch()) {
+		    	array_push($array_cam, $cam);
+		    }
+		    $stmt0->close();
+		    $camact=$array_cam[0];
 	    	?>
 			<div class="container margintop25 marginbot25" ng-controller="customersCtrl">	
 	    		<div class="row">
@@ -75,17 +87,34 @@ if ( is_user_logged_in() ) {
 										<div class="input-field">
 											<h4>Campaña</h4>
 											<select name="cam" id="cam" required>
-												<option value="" disabled selected>Selecciona la Campaña</option>
 												<?php
+													$stmt0 = $mysqli->prepare("SELECT DISTINCT cam FROM vive_fac WHERE usuario = ? ORDER BY id DESC");
+													$stmt0->bind_param('s', $gerente_logged);
+													$stmt0->execute();
+													$stmt0->bind_result($cam);
+													$stmt0->store_result();
+													$array_cam=array();
+												    while ($stmt0->fetch()) {
+												    	array_push($array_cam, $cam);
+												    }
+												    $stmt0->close();
+
+
 													$stmt = $mysqli->prepare('SELECT DISTINCT cam FROM vive_fac WHERE usuario = ? ORDER BY cam ASC');
 													$stmt->bind_param('s', $gerente_logged);
 													$stmt->execute();
 													$stmt->bind_result($cam);
 													$stmt->store_result();
 												    while ($stmt->fetch()) {
-														?>
-														<option value="<?php echo $cam; ?>">Campaña #<?php echo $cam; ?></option>
-														<?php
+												    	if ($cam==$array_cam[0]){
+															?>
+															<option selected value="<?php echo $cam; ?>">Campaña #<?php echo $cam; ?></option>
+															<?php
+														}else{
+															?>
+															<option disabled value="<?php echo $cam; ?>">Campaña #<?php echo $cam; ?></option>
+															<?php
+														}
 												    }
 													$stmt->close();
 												?>
@@ -229,7 +258,8 @@ if ( is_user_logged_in() ) {
 
 		$scope.reg_PULL = function() {
 			var usuario = '<?php echo $gerente_logged; ?>';
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/gerente-deposito-problema-pull.php", {params:{"usuario": usuario }})
+			var camact = '<?php echo $camact; ?>';
+			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/gerente-deposito-problema-pull.php", {params:{"usuario": usuario, "camact": camact }})
 			.then(function (response) {
 				$scope.pulldata = response.data.records;
 

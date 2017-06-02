@@ -5,8 +5,9 @@ header("Content-Type: application/json; charset=UTF-8");
 $mysqli = new mysqli("localhost","bitcode_bitvcv2","IRV$#eTDk]u4","bitcode_vcv2150117");
 
 $gerente_logged=$_GET['usuario'];
-$stmt = $mysqli->prepare('SELECT status, fecha, banco, referencia, monto, cam, comentario FROM vive_pen WHERE usuario = ?');
-$stmt->bind_param('s', $gerente_logged);
+$camact=$_GET['camact'];
+$stmt = $mysqli->prepare('SELECT status, fecha, banco, referencia, monto, cam, comentario FROM vive_pen WHERE usuario = ? AND cam = ?');
+$stmt->bind_param('ss', $gerente_logged, $camact);
 $stmt->execute();
 $stmt->bind_result($status, $fecha, $banco, $referencia, $monto, $cam, $comentario);
 $stmt->store_result();
