@@ -151,15 +151,28 @@ if ( is_user_logged_in() ) {
 	    <?php
 	    }
 	    else {
-			$gerente_logged=$user_logged["login"]; ?>
+			$gerente_logged=$user_logged["login"];
+
+			$stmt0 = $mysqli->prepare("SELECT DISTINCT cam FROM vive_fac WHERE usuario = ? ORDER BY id DESC");
+			$stmt0->bind_param('s', $gerente_logged);
+			$stmt0->execute();
+			$stmt0->bind_result($cam);
+			$stmt0->store_result();
+			$array_cam=array();
+		    while ($stmt0->fetch()) {
+		    	array_push($array_cam, $cam);
+		    }
+		    $stmt0->close();
+		    $ultima=$array_cam[0];
+		     ?>
 			<div class="container margintop25 marginbot25">	
 	    		<div class="row">
 					<div class="col-md-12">
 				     	<h1 class="center-align">Premios</h1>
 						<div class="card-panel z-depth-2 hoverable" ng-app="contactApp" ng-controller="customersCtrl">
 							<?php
-							$stmt = $mysqli->prepare("SELECT nombre, cantidad FROM vive_fac_prem WHERE usuario=?");
-				            $stmt->bind_param("s", $gerente_logged);
+							$stmt = $mysqli->prepare("SELECT nombre, cantidad FROM vive_fac_prem WHERE usuario=? AND cam=?");
+				            $stmt->bind_param("ss", $gerente_logged, $ultima);
 				            $stmt->execute();
 							$stmt->bind_result($nombre, $cantidad);
 				            $stmt->store_result();
@@ -191,8 +204,8 @@ if ( is_user_logged_in() ) {
 					            $stmt->store_result();
 					            $numberofrows = $stmt->num_rows;
 					            if($numberofrows>0){
-									$stmt_0 = $mysqli->prepare("SELECT cam, can FROM vive_fac WHERE usuario=?");
-						            $stmt_0->bind_param("s", $gerente_logged);
+									$stmt_0 = $mysqli->prepare("SELECT cam, can FROM vive_fac WHERE usuario=? AND cam=?");
+						            $stmt_0->bind_param("ss", $gerente_logged, $ultima);
 						            $stmt_0->execute();
 									$stmt_0->bind_result($cam, $can);
 						            $stmt_0->store_result();
