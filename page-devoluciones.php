@@ -201,8 +201,101 @@ if ( is_user_logged_in() ) {
 			</div>
 			<?php
 		}
-	}  ?>
-	<?php
+	}  
+
+	elseif($user_logged['rol']=='Analista'){
+	    require_once 'api/vive-db.php';
+	    if (mysqli_connect_errno()) { ?>
+			<h1>ERROR DE CONEXIÓN</h1>
+	    	<?php 
+		} else {
+
+			$gerente_logged=$user_logged['login'];
+			$stmt0 = $mysqli->prepare("SELECT gerente FROM vive_analista WHERE analista = ?");
+			$stmt0->bind_param('s', $gerente_logged);
+			$stmt0->execute();
+			$stmt0->bind_result($query_gerente);
+			$stmt0->store_result();
+			$array_analista=array();
+		    while ($stmt0->fetch()) {
+		    	array_push($array_analista, $query_gerente);
+		    }
+		    $stmt0->close();
+		    $buscar_gerente = join("','",$array_analista);
+		    ?>
+
+
+		    	<div class="container-fluid margintop25 marginbot25">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<div class="card-panel z-depth-2 hoverable">
+							<h1 class="center-align">Devoluciones</h1>
+								<div class="row">
+									<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="default">Default</button>
+								  	<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="fecha:asc">Fechas anteriores</button>
+								  	<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius active" data-sort="fecha:desc">Fechas recientes</button>
+							  	</div>
+						  	<div class="row">
+							  	<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="name:asc">Ordenar por Nombre (A-Z)</button>
+    							<button type="button" class="sort btn hoverable fondo3 waves-effect waves-light btn-radius" data-sort="name:desc">Ordenar por Nombre (Z-A)</button>
+						  	</div>
+				        	<div class="imprimir" id="Container">
+								<table class="striped responsive-table">
+							        <thead>
+							          <tr>
+							              <th data-field="id">Gerente</th>
+							              <th data-field="id">Fecha</th>
+							              <th data-field="id">Colección</th>
+							              <th data-field="id">Cantidad</th>
+							          </tr>
+							        </thead>
+
+							        <tbody>
+
+										<?php 
+										$query = "SELECT * FROM vive_dev WHERE usuario IN ('$buscar_gerente')";
+										$result = mysqli_query ($mysqli, $query);
+										if(mysqli_num_rows($result) != 0) {
+											while ($row = mysqli_fetch_assoc($result)) { 
+													$fechacambiadadep = DateTime::createFromFormat("d/m/Y", $row['fec']);
+													$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
+													$fechaunixdep=strtotime($fechacambiadadep);
+												?>
+												<tr class="mix" data-name="<?php echo $row['usuario']; ?>" data-fecha="<?php echo $fechaunixdep; ?>">
+											        <td><?php echo $row['usuario']; ?></td>
+											        <td><?php echo $row['fec']; ?></td>
+											        <td><?php echo $row['art']; ?></td>
+											        <td><?php echo $row['can']; ?></td>
+											    </tr>
+											<?php
+											}
+										} else {
+											?>
+											<h3 class="center-align">No hay devoluciones registradas</h3>
+											<?php
+										}
+										?>
+							        </tbody>
+							    </table>
+
+
+				            </div>
+				            <div class="row">
+				                <div class="pager-list center-align marginbot25 margintop25"></div>
+				            </div>
+				            <div class="row marginbotmenos40">
+								<button onclick="imprimir()" class="btn hoverable fondo3 waves-effect waves-light btn-radius"><i class="material-icons left">print</i> Imprimir</button>
+				            </div>
+							<script>
+								function imprimir() {
+								    window.print();
+								}
+							</script>
+						</div>
+					</div>
+				</div>
+				<?php
+	    }
+    }
 } else {  
 		header("Location: http://app.vivecolecciones.com.ve/"); /* Redirect browser */
 		exit(); 

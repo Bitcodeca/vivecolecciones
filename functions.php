@@ -16,7 +16,7 @@ function prototipo_script_enqueue() {
     wp_enqueue_script('Materialize js', 'https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js', array(), '0.97.8', true);
 
 
-    if( is_page('agregar-campana') || is_page('chat') || is_page('asignar-dependencia') || is_page('centro-de-control') || is_page('registrar-pago') || is_page('registrar-deposito-problema') || is_page('devoluciones') || is_page('denuncias') || is_page('premios') || is_page('agregar-nueva-coleccion') || is_page('agregar-nuevo-premio') || is_page('comparacion') || is_page('duplicados') || is_page('prueba') ){
+    if( is_page('agregar-campana') || is_page('chat') || is_page('asignar-dependencia') || is_page('centro-de-control') || is_page('registrar-pago') || is_page('registrar-deposito-problema') || is_page('devoluciones') || is_page('denuncias') || is_page('premios') || is_page('agregar-nueva-coleccion') || is_page('agregar-nuevo-premio') || is_page('comparacion') || is_page('duplicados') || is_page('analista') || is_page('prueba') ){
       wp_enqueue_script('angular', 'https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js', array(), '3.1.0', true);
       wp_enqueue_script('appjs', get_template_directory_uri() . '/app.js', array(), '3.1.0', true);
     }
@@ -64,6 +64,44 @@ if( !get_role('Gerente') ){
     )
   );
 }
+// Add a custom user role
+if( !get_role('Analista') ){
+  $result1 = add_role( 'Analista', __('Analista' ),
+    array(
+    'read' => true, // true allows this capability
+    'edit_posts' => false, // Allows user to edit their own posts
+    'edit_pages' => false, // Allows user to edit pages
+    'edit_others_posts' => false, // Allows user to edit others posts not just their own
+    'create_posts' => true, // Allows user to create new posts
+    'manage_categories' => false, // Allows user to manage post categories
+    'publish_posts' => true, // Allows the user to publish, otherwise posts stays in draft mode
+    'edit_themes' => false, // false denies this capability. User can’t edit your theme
+    'install_plugins' => false, // User cant add new plugins
+    'update_plugin' => false, // User can’t update any plugins
+    'update_core' => false, // user cant perform core updates
+    'upload_files' => true,
+    'manage_options' => true,
+    )
+  );
+} 
+
+//check if role exist before removing it
+if( get_role('subscriber') ){
+      remove_role( 'subscriber' );
+}
+//check if role exist before removing it
+if( get_role('contributor') ){
+      remove_role( 'contributor' );
+}
+//check if role exist before removing it
+if( get_role('author') ){
+      remove_role( 'author' );
+}
+//check if role exist before removing it
+if( get_role('editor') ){
+      remove_role( 'editor' );
+}
+
 //////////////////////////////////////////////////////////////
 ///////////////// INFO DEL USUARIO LOGGED ////////////////////
 //////////////////////////////////////////////////////////////

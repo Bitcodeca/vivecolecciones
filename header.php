@@ -257,6 +257,52 @@
                                         <div class="clear"></div>' )
                         );
                     }
+                    elseif($user_logged['rol']=='Analista'){
+                        wp_nav_menu(
+                        array( 'theme_location' => 'analista',
+                        'menu_id' => 'slide-out',
+                        'menu_class' => 'fondogris side-nav fixed',
+                        'walker' => new Materialize_Walker_Desktop_Nav_Menu(),
+                        'items_wrap' => '<ul id="%1$s" class="%2$s">
+                                            <div class="side-nav-li-height">
+                                                <li class="fondo6 sidenav-user-tab valign-wrapper paddingtop25 paddingbot25">
+                                                    <a href="'.site_url().'/account/" class="">
+                                                        <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5 paddingleft0 paddingtop5 right-align">
+                                                            '.$user_logged['avatarmd'].'
+                                                        </div>
+                                                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7 left-align paddingleft0">
+                                                            <b>'.$user_logged['login'].'</b> <br>
+                                                            <span>'.$user_logged['nombre'].' '.$user_logged['apellido'].'</span> <br>
+                                                            <i>'.$user_logged['email'].'</i> <br>
+                                                            '.$user_logged['rol'].'
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li class="divider"></li>
+
+                                                <li class="hide-on-large-only">
+                                                    <a class="efecto-zoom" href="'.site_url().'/mensajes/">
+                                                        <i class="material-icons">mail_outline</i>
+                                                        MENSAJES
+                                                        <span class="badge fondonaranja">'.$msn.'</span>
+                                                    </a>
+                                                </li>
+
+                                                <li class="divider"></li>
+                                                %3$s
+                                            </div>
+                                            <li class="fondo6 side-nav-settings center-align">
+                                                <a class="efecto-zoom center-align" href="'.site_url().'/account/" id="side-nav-settings">
+                                                    <i class="white-text small material-icons">&#xE8B8;</i>
+                                                </a>
+                                                <a class="efecto-zoom center-align" href="'.site_url().'/account/" id="side-nav-account">
+                                                    <i class="white-text small material-icons">&#xE7FF;</i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <div class="clear"></div>' )
+                        );
+                    }
                     ?>
 
                 <!--

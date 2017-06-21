@@ -355,8 +355,189 @@ if ( is_user_logged_in() ) {
 			</div>
 			<?php
 		}
-	}  ?>
-	<?php
+	} 
+
+	elseif($user_logged['rol']=='Analista'){
+	    require_once 'api/vive-db.php';
+	    if (mysqli_connect_errno()) { ?>
+			<h1>ERROR DE CONEXIÓN</h1>
+	    <?php } else {
+
+				$gerente_logged=$user_logged['login'];
+				$stmt0 = $mysqli->prepare("SELECT gerente FROM vive_analista WHERE analista = ?");
+				$stmt0->bind_param('s', $gerente_logged);
+				$stmt0->execute();
+				$stmt0->bind_result($query_gerente);
+				$stmt0->store_result();
+				$array_analista=array();
+			    while ($stmt0->fetch()) {
+			    	array_push($array_analista, $query_gerente);
+			    }
+			    $stmt0->close();
+			    $buscar_gerente = join("','",$array_analista);
+
+			    			if(isset($_POST['btn'])){
+				$varId=$_POST['id'];
+				$status=$_POST['status'.$varId];
+				$comentario=$_POST['comentario'.$varId];
+
+				$query = "UPDATE vive_averia SET status='$status', comentario='$comentario' WHERE id='$varId'";
+				if ($mysqli->query( $query ) === TRUE) { }
+			}
+			?>
+			<div class="container-fluid margintop25 marginbot25">
+				<div class="row"> 		
+		    		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		    			<h1 class="center-align margintop0">Averías</h1>
+			        	<?php
+						$query3 = "SELECT DISTINCT usuario from vive_averia WHERE usuario IN ('$buscar_gerente') ORDER BY usuario ASC";
+						$result3 = mysqli_query($mysqli, $query3);
+						if(mysqli_num_rows($result3) != 0) { ?>
+							<ul class="collapsible popout imprimir" data-collapsible="expandable">
+								<?php
+								while($row3 = mysqli_fetch_assoc($result3)) {
+									$usu=$row3['usuario'];
+									$info=user_by_login($usu);
+									?>
+									<li class="nobreak">
+										<div class="collapsible-header paddingtop5 paddingbot5">
+											<h3 class="margintop0 marginbot0 marginleft25"><img src="<?php echo $info['avatarxs']; ?>" class="circle" height="48px" width="auto"> <?php echo $usu; ?></h3>
+										</div>
+										<div class="collapsible-body white">
+
+											<table class="striped responsive-table">
+										        <thead>
+										          <tr>
+										              <th data-field="id">Status</th>
+										              <th data-field="id">Fecha</th>
+										              <th data-field="id">Artículo</th>
+										              <th data-field="id">Cantidad</th>
+										              <th data-field="id">Observación</th>
+										              <th data-field="id">Comentario</th>
+										              <th data-field="id">Acción</th>
+										          </tr>
+										        </thead>
+
+										        <tbody>
+												<?php 
+												$query = "SELECT * FROM vive_averia WHERE usuario='$usu'";
+												$result = mysqli_query ($mysqli, $query);
+												if(mysqli_num_rows($result) != 0) {
+													while ($row = mysqli_fetch_assoc($result)) {
+														$id=$row['id'];
+														if($row['status']=='pendiente'){$color='yellow';}
+														if($row['status']=='aprobado'){$color='fondo3';}
+														if($row['status']=='negado'){$color='fondo5';}
+														?>
+														<tr>
+													        <td class="<?php echo $color; ?>"><?php echo $row['status']; ?></td>
+													        <td><?php echo $row['fecha']; ?></td>
+													        <td><?php echo $row['art']; ?></td>
+													        <td><?php echo $row['can']; ?></td>
+													        <td><?php echo $row['obs']; ?></td>
+													        <td><?php echo $row['comentario']; ?></td>
+													        <td>
+													        	<a id="btn" name="btn" class="btn-floating waves-effect waves-light fondo3" href="#modal<?php echo $id; ?>">
+													        		<i class="material-icons left">create</i>
+																	EDITAR
+																</a>
+															</td>
+													    </tr>
+													    <div id="modal<?php echo $id; ?>" class="modal">
+															<form role="form" method="post" name="form<?php echo $row['id']; ?>" action="" >
+															    <div class="modal-content">
+															        <h3><?php echo $row['usuario']; ?></h3>
+															        <h4><?php echo $row['art']; ?></h4>
+															        <div class="col s12">
+																	    <p>
+																	      <input name="status<?php echo $row['id']; ?>" type="radio" id="statusp<?php echo $row['id']; ?>" value="pendiente" <?php if($row['status']=='pendiente'){echo 'checked';} ?> />
+																	      <label for="statusp<?php echo $row['id']; ?>">Pendiente</label>
+																	    </p>
+																	    <p>
+																	      <input name="status<?php echo $row['id']; ?>" type="radio" id="statusa<?php echo $row['id']; ?>" value="aprobado" <?php if($row['status']=='aprobado'){echo 'checked';} ?> />
+																	      <label for="statusa<?php echo $row['id']; ?>">Aprobado</label>
+																	    </p>
+																	    <p>
+																	      <input name="status<?php echo $row['id']; ?>" type="radio" id="statusn<?php echo $row['id']; ?>" value="negado" <?php if($row['status']=='negado'){echo 'checked';} ?> />
+																	      <label for="statusn<?php echo $row['id']; ?>">Negado</label>
+																	    </p>
+																    </div>
+															        <div class="input-field col s12 marginbot25">
+															            <textarea id="comentario<?php echo $row['id']; ?>" name="comentario<?php echo $row['id']; ?>" class="materialize-textarea" data-length="500" required></textarea>
+															            <label for="comentario">Comentario</label>
+															        </div>
+															    </div>
+
+																<input type="hidden" name="id" id="id" value="<?php echo $row['id']; ?>" />
+
+															    <div class="modal-footer">
+																	<button type="submit" name="btn" id="btn" value="editar" class="btn hoverable fondo2 waves-effect waves-light btn-radius" type="submit">
+																		<i class="material-icons left">mode_edit</i>
+																		EDITAR
+																	</button>
+																	<a href="#!" class=" modal-action modal-close btn hoverable fondo3 waves-effect waves-light btn-radius">CERRAR</a>
+															    </div>
+														    </form>
+														</div>
+													<?php
+													}
+												} ?>
+												</tbody>
+											</table>
+
+										</div>
+									</li>
+									<?php
+								} ?>
+							</ul> <?php
+						} ?>
+					</div>
+				</div>
+				<div class="row">
+					<button onclick="imprimir()" class="btn hoverable fondo3 waves-effect waves-light btn-radius"><i class="material-icons left">print</i> Imprimir</button>
+	            </div>
+	            <div class="row">
+					<button onclick="expandAll()" class="btn hoverable fondo3 waves-effect waves-light btn-radius"><i class="material-icons left">add</i> Abrir todos</button>
+					<button onclick="collapseAll()" class="btn hoverable fondo3 waves-effect waves-light btn-radius"><i class="material-icons left">remove</i> Cerrar todos</button>
+	            </div>
+
+	    		<div class="row">
+	        		<div class="col-xs-12">
+        				<div class="card-panel z-depth-2 hoverable">
+							<?php
+								$stmt = $mysqli->prepare('SELECT SUM(ABS(vive_averia.can)) FROM vive_averia');
+								$stmt->execute();
+								$stmt->bind_result($total);
+							    $stmt->fetch();
+								$stmt->close();
+							?>
+        					<h3>Total: <?php echo $total; ?></h3>
+        				 	<div id="averias"></div>
+        				</div>
+					</div>
+				</div>
+				<script>
+					function imprimir() {
+					    window.print();
+					}
+					function expandAll(){
+					  jQuery(".collapsible-header").addClass("active");
+					  jQuery(".collapsible").collapsible({accordion: false});
+					}
+
+					function collapseAll(){
+					  jQuery(".collapsible-header").removeClass(function(){
+					    return "active";
+					  });
+					  jQuery(".collapsible").collapsible({accordion: true});
+					  jQuery(".collapsible").collapsible({accordion: false});
+					}
+				</script>
+			</div>
+			<?php
+
+	    	}
+    	}
 } else {  
 		header("Location: http://app.vivecolecciones.com.ve/"); /* Redirect browser */
 		exit(); 

@@ -422,6 +422,296 @@ if ( is_user_logged_in() ) {
 		</div>
 
 		<?php
+	} 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//																		ANALISTA																			  //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	elseif($user_logged['rol']=='Analista'){
+		require_once 'api/vive-db.php'; 
+		$gerente_logged=$user_logged['login'];
+		$stmt0 = $mysqli->prepare("SELECT gerente FROM vive_analista WHERE analista = ?");
+		$stmt0->bind_param('s', $gerente_logged);
+		$stmt0->execute();
+		$stmt0->bind_result($query_gerente);
+		$stmt0->store_result();
+		$array_analista=array();
+	    while ($stmt0->fetch()) {
+	    	array_push($array_analista, $query_gerente);
+	    }
+	    $stmt0->close();
+	    $cantidad_gerente=count($array_analista);
+	    if($cantidad_gerente>=1){
+	    	$buscar_gerente = join("','",$array_analista);
+	    	?>
+
+			<div class="container-fluid margintop25 marginbot25">
+				<div class="">
+		        	<div class="">        		
+		        		<div class="row">
+		        			<h1></h1>
+			        		<div class="col-xs-12 col-sm-4">
+		        				<div class="card-panel z-depth-2 hoverable">
+		        					<h3 class="center-align bold margintop0 marginbot0"><i class="material-icons color5 verticalalignsub">content_paste</i> Campañas</h3>
+		        					<hr />
+		        					<div class="row marginbot0">
+			        					<div class="col-xs-12">
+			        						<?php
+			        							$sql="SELECT sum(can) as total FROM vive_fac WHERE usuario IN ('$buscar_gerente')";
+												$result = mysqli_query($mysqli, $sql);
+												$res = $result->fetch_assoc();	
+			        						?>
+		        							<h4 class="center-align bold marginbot0 margintop0">Total Colecciones: <?php echo $res['total']; ?></h4>
+			        						<?php
+			        						$query = "SELECT * from vive_con ORDER BY cam ASC";
+											$result = mysqli_query($mysqli, $query);
+											if(mysqli_num_rows($result) != 0) {
+												while($row = mysqli_fetch_assoc($result)) {
+													$cam=$row['cam'];
+													$sql="SELECT sum(can) as total FROM vive_fac WHERE cam='$cam' AND  usuario IN ('$buscar_gerente')";
+													$result2 = mysqli_query($mysqli, $sql);
+													while($res = mysqli_fetch_assoc($result2)) {									
+													?>
+														<h5>Campaña #<?php echo $cam; ?>: <b><?php echo $res['total']; ?></b></h5>
+												<?php }
+												}
+											} ?>
+
+			        					</div>
+		        					</div>
+		        					<hr />
+		        					<div class="row marginbot0">
+		        						<div class="col-xs-12 center-align marginbotmenos40">
+			        						<a class="waves-effect waves-light btn fondo5 btn-vive-lg hoverable" href="/buscar-factura/">Buscar Factura</a>
+			        					</div>
+		        					</div>
+		        				</div>
+							</div>
+			        		<div class="col-xs-12 col-sm-4">
+		        				<div class="card-panel z-depth-2 hoverable">
+		        					<h3 class="center-align bold margintop0 marginbot0"><i class="material-icons color5 verticalalignsub">monetization_on</i> Total Invertido</h3>
+		        					<hr />
+		        					<div class="row marginbot0">
+			        					<div class="col-xs-12">
+			        						<?php
+			        						$query = "SELECT * from vive_cam ORDER BY cam ASC";
+											$result = mysqli_query($mysqli, $query);
+											if(mysqli_num_rows($result) != 0) {
+												while($row = mysqli_fetch_assoc($result)) {
+													${$row['cam'].'art'.$row['id']}=$row['cos'];
+												}
+											}
+											$query = "SELECT * from vive_con ORDER BY cam ASC";
+											$result = mysqli_query($mysqli, $query);
+											if(mysqli_num_rows($result) != 0) {
+												$costo_total=0;
+												while($row = mysqli_fetch_assoc($result)) {
+													$cam=$row['cam'];
+													${'costo'.$cam}=0;
+					        						$query2 = "SELECT * from vive_fac WHERE cam='$cam' AND  usuario IN ('$buscar_gerente')";
+													$result2 = mysqli_query($mysqli, $query2);
+													if(mysqli_num_rows($result2) != 0) {
+														while($row2 = mysqli_fetch_assoc($result2)) {
+															${'costo'.$cam}=$row2['can']*${$row2['cam'].'art'.$row2['art_id']}+${'costo'.$cam};
+														}
+														$costo_total=$costo_total+${'costo'.$cam};
+													}
+													?>
+													<?php
+												}
+											}
+											?>
+		        							<h4 class="center-align bold marginbot0 margintop0">Total: <b>Bsf <?php $valor=formato($costo_total); echo $valor; ?></b></h4>
+		        							<?php
+			        						$query = "SELECT * from vive_con ORDER BY cam ASC";
+											$result = mysqli_query($mysqli, $query);
+											if(mysqli_num_rows($result) != 0) {
+												while($row = mysqli_fetch_assoc($result)) {
+													$cam=$row['cam'];
+													?>
+													<h5>Campaña #<?php echo $row['cam']; ?>: <b>Bsf <?php $valor=formato(${'costo'.$cam}); echo $valor; ?></b></h5>
+													<?php
+												}
+											}
+											?>
+			        					</div>
+		        					</div>
+		        					<hr />
+		        					<div class="row marginbot0">
+		        						<div class="col-xs-12 center-align marginbotmenos40">
+			        						<a class="waves-effect waves-light btn fondo5 btn-vive-lg hoverable" href="/lista-de-campanas/">Ver Campañas</a>
+			        					</div>
+		        					</div>
+		        				</div>
+							</div>
+			        		<div class="col-xs-12 col-sm-4">
+		        				<div class="card-panel z-depth-2 hoverable">
+		        					<h3 class="center-align bold margintop0 marginbot0"><i class="material-icons color5 verticalalignsub">check_circle</i> Total aprobado</h3>
+		        					<hr />
+		        					<div class="row marginbot0">
+			        					<div class="col-xs-12">
+			        						<?php
+			        							$sql="SELECT sum(monto) as total FROM vive_dep WHERE NOT status='vacio' AND  usuario IN ('$buscar_gerente')";
+												$result = mysqli_query($mysqli, $sql);
+												$res = $result->fetch_assoc();	
+												if (!empty($res['total'])){$totalaprobado=$res['total'];}else{$totalaprobado=0;}
+												
+			        						?>
+		        							<h4 class="center-align bold marginbot0 margintop0">Total: Bsf <?php $valor=formato($totalaprobado); echo $valor; ?></h4>
+
+			        						<?php $query = "SELECT * from vive_con ORDER BY cam ASC";
+											$result = mysqli_query($mysqli, $query);
+											if(mysqli_num_rows($result) != 0) {
+												while($row = mysqli_fetch_assoc($result)) {
+												$cam=$row['cam'];
+
+												$sql="SELECT sum(monto) as total FROM vive_dep WHERE cam='$cam' AND  NOT status='vacio' AND  usuario IN ('$buscar_gerente')";
+												$result2 = mysqli_query($mysqli, $sql);
+												$res = $result2->fetch_assoc();			
+												if(empty($res['total'])){$resultado=0;}else{$resultado=$res['total'];}							
+												?>
+													<h5>Campaña #<?php echo $cam; ?>: <b>Bsf <?php $valor=formato($resultado); echo $valor; ?></b></h5>
+												<?php }
+											} ?>
+			        					</div>
+		        					</div>
+		        					<hr />
+		        					<div class="row marginbot0">
+		        						<div class="col-xs-12 center-align marginbotmenos40">
+			        						<a class="waves-effect waves-light btn fondo5 btn-vive-lg hoverable" href="/buscar-deposito/">Buscar Depósitos</a>
+			        					</div>
+		        					</div>
+		        				</div>
+							</div>
+						</div>
+
+						<div class="row">
+
+			        		<div class="col-xs-12 col-sm-4">
+			        			<div class="row">
+			        				<div class="card-panel z-depth-2 hoverable">
+			        					<h3 class="center-align bold margintop0 marginbot0"><i class="material-icons color5 verticalalignsub">pause_circle_filled</i> Depósitos no asignados</h3>
+			        					<hr />
+			        					<div class="row marginbot0">
+				        					<div class="col-xs-12">
+				        						<?php
+				        							$sql="SELECT sum(monto) as total FROM vive_dep WHERE status='vacio' AND  usuario IN ('$buscar_gerente')";
+													$result = mysqli_query($mysqli, $sql);
+													$res = $result->fetch_assoc();
+													if (!empty($res['total'])){$totalaprobado=$res['total'];}else{$totalaprobado=0;}
+				        						?>
+			        							<h4 class="center-align bold marginbot0 margintop0">Total: Bsf <?php $valor=formato($totalaprobado); echo $valor; ?></h4>
+				        					</div>
+			        					</div>
+			        					<hr />
+			        					<div class="row marginbot0">
+			        						<div class="col-xs-12 center-align marginbotmenos40">
+				        						<a class="waves-effect waves-light btn fondo5 btn-vive-lg hoverable" href="/depositos-sin-asignar/">Buscar Depósitos</a>
+				        					</div>
+			        					</div>
+			        				</div>
+		        				</div>
+				        		<div class="row">
+			        				<div class="card-panel z-depth-2 hoverable">
+			        					<h3 class="bold center-align margintop0"><i class="material-icons color5 verticalalignsub">account_circle</i> Usuarios online</h3>
+			        					<?php echo do_shortcode( '[ultimatemember_online]' ); ?>
+			        				</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-8">
+		        				<div class="card-panel z-depth-2 hoverable">
+		        					<h2 class="bold center-align"><i class="material-icons color5 verticalalignsub">flag</i>Reportes</h2>
+		        					<hr />
+		        					<div class="row marginbot0">
+			        					<div class="col-xs-12 reportes">
+			        						<?php
+			        						$usercount = count_users();
+											$total_usuarios = $usercount['total_users'];
+		        							if ($result = $mysqli->query("SELECT id FROM vive_dep WHERE status<>'vacio' AND  usuario IN ('$buscar_gerente')")) {
+		        								$num_dep = mysqli_num_rows($result);
+		        							}	
+		        							if ($result = $mysqli->query("SELECT id FROM vive_dep WHERE status='vacio' AND  usuario IN ('$buscar_gerente')")) {
+		        								$num_vacio = mysqli_num_rows($result);
+		        							}	
+		        							if ($result = $mysqli->query("SELECT * FROM vive_pen WHERE status='pendiente' AND  usuario IN ('$buscar_gerente')")) {
+		        								$num_pen = mysqli_num_rows($result);
+		        							}
+		        							if ($result = $mysqli->query("SELECT * FROM vive_pen WHERE status='negado' AND  usuario IN ('$buscar_gerente')")) {
+		        								$num_neg = mysqli_num_rows($result);
+		        							}
+		        							if ($result = $mysqli->query("SELECT * FROM vive_msn")) {
+		        								$msn = mysqli_num_rows($result);
+		        							}
+		        							if ($result = $mysqli->query("SELECT * FROM vive_cambio WHERE  usuario IN ('$buscar_gerente')")) {
+		        								$aver = mysqli_num_rows($result);
+		        							}
+		        							if ($result = $mysqli->query("SELECT * FROM vive_averia WHERE  usuario IN ('$buscar_gerente')")) {
+		        								$camb = mysqli_num_rows($result);
+		        							}
+		        							if ($result = $mysqli->query("SELECT * FROM vive_dev WHERE  usuario IN ('$buscar_gerente')")) {
+		        								$dev = mysqli_num_rows($result);
+		        							}
+		        							if ($result = $mysqli->query("SELECT * FROM vive_den")) {
+		        								$den = mysqli_num_rows($result);
+		        							}
+											?>
+				        					<h5><i class="material-icons">account_circle</i> Usuarios Registrados: <b><?php echo $total_usuarios; ?></b></h5>
+				        					<h5><i class="material-icons">check_circle</i> Depósitos Aprobados: <b><?php echo $num_dep; ?></b></h5>
+				        					<h5><i class="material-icons">error</i> Depósitos Problemas: <b><?php echo $num_pen; ?></b></h5>
+				        					<h5><i class="material-icons">cancel</i> Depósitos Negados: <b><?php echo $num_neg; ?></b></h5>
+				        					<h5><i class="material-icons">panorama_fish_eye</i> Depósitos Sin Asignar: <b><?php echo $num_vacio; ?></b></h5>
+				        					<h5><i class="material-icons">cached</i> Cambios: <b><?php echo $camb; ?></b></h5>
+				        					<h5><i class="material-icons">build</i> Averías: <b><?php echo $aver; ?></b></h5>
+				        					<h5><i class="material-icons">arrow_back</i> Devoluciones: <b><?php echo $dev; ?></b></h5>
+				        					<h5><i class="material-icons">do_not_disturb</i> Denuncias: <b><?php echo $den; ?></b></h5>
+				        					<h5><i class="material-icons">message</i> Mensajes Enviados: <b><?php echo $msn; ?></b></h5>
+		        						</div>
+		        					</div>
+		        				</div>
+							</div>
+
+						</div>
+						<div class="row">
+			        		<div class="col-xs-12">
+		        				<div class="card-panel z-depth-2 hoverable" style="overflow-x: scroll;">
+		        					<h3 class="center-align bold margintop0 marginbot0"><i class="material-icons color5 verticalalignsub">trending_up</i> Ingresos Diarios</h3>
+									<div id="columnchart_material"></div>
+		        				</div>
+							</div>
+						</div>
+		        		<div class="row">
+			        		<div class="col-xs-12">
+		        				<div class="card-panel z-depth-2 hoverable">
+		        					<h2 class="bold center-align"><i class="material-icons color5 verticalalignsub">date_range</i>Calendario</h2>
+		        					<div id="calendar"></div>
+		        				</div>
+	        				</div>
+	    				</div>
+
+
+					</div>
+				</div>
+			</div>
+
+	    	<?php
+	    }
+	    else{
+			?>
+
+			<div class="container-fluid margintop25 marginbot25">     		
+        		<div class="row">
+	        		<div class="col-xs-12">
+        				<div class="card-panel z-depth-2 hoverable">
+        					<h1>No posee gerentes asignados</h1>
+        				</div>
+    				</div>
+				</div>
+			</div>
+			
+			<?php
+		}
 	}
 
 } else { 
@@ -431,6 +721,7 @@ if ( is_user_logged_in() ) {
  get_footer(); ?>
 
  
+ <?php if($user_logged['rol']=='administrator'){ ?>
  <script>
      jQuery(document).ready(function(){
 		jQuery('#calendar').fullCalendar({
@@ -464,7 +755,6 @@ if ( is_user_logged_in() ) {
 	    });
     });
  </script>
- <?php if($user_logged['rol']=='administrator'){ ?>
  <script>
       google.charts.load('current', {'packages':['bar', 'corechart']});
       google.charts.setOnLoadCallback(drawChart);
@@ -676,5 +966,69 @@ if ( is_user_logged_in() ) {
 	      var chart = new google.visualization.PieChart(document.getElementById('chart2'));
 	      chart.draw(data, options);
 	  }
+ </script>
+ <?php } ?>
+
+ <?php if($user_logged['rol']=='Analista'){ ?>
+ <script>
+     jQuery(document).ready(function(){
+		jQuery('#calendar').fullCalendar({
+		    header: {
+		        left: 'today',
+		        center: 'title',
+		        right: 'listYear month prev,next'
+		    },
+			dayNamesShort:['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+			monthNames:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+			events: [
+	        		<?php
+	        		$stmt_ORDER = $mysqli->prepare("SELECT nacimiento, usuario FROM vive_usu_inf WHERE  usuario IN ('$buscar_gerente')");
+                    $stmt_ORDER->execute();
+                    $stmt_ORDER->bind_result($nacimiento, $usuario);
+                    $stmt_ORDER->store_result();
+                    while($stmt_ORDER->fetch()){
+                    	$var=explode("/",$nacimiento);
+                    	echo "{
+                    		title  : '".$usuario."',
+				            start  : '".date('Y')."-".$var['1']."-".$var['0']."'
+			    			},";
+                    	echo "{
+                    		title  : '".$usuario."',
+				            start  : '".date('Y', strtotime('+1 year'))."-".$var['1']."-".$var['0']."'
+			    			},";
+                    }
+                    $stmt_ORDER->close();?>
+			        
+			    ]
+	    });
+    });
+ </script>
+ <script>
+      google.charts.load('current', {'packages':['bar', 'corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Fecha', 'Monto'],
+
+          <?php
+			$stmt = $mysqli->prepare("SELECT sum(vive_dep.monto), vive_dep.fecha FROM vive_dep WHERE  usuario IN ('$buscar_gerente') GROUP BY vive_dep.fecha ORDER BY UNIX_TIMESTAMP(STR_TO_DATE(vive_dep.fecha, '%d/%m/%Y')) ASC");
+			$stmt->execute();
+			$stmt->bind_result($monto, $fecha);
+			$stmt->store_result();
+		    while ($stmt->fetch()) {
+				echo "['".$fecha."', ".$monto."],";
+		    }
+			$stmt->close();
+			?>
+        ]);
+        var options = {
+        	legend: { position: "none" },
+            series: { 0: { axis: 'Bsf' }, },
+            axes: { y: {  Bsf: {label: 'Bsf'}, } }
+        };
+        var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+        chart.draw(data, options);
+      }
+
  </script>
  <?php } ?>
