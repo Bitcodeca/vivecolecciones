@@ -8,33 +8,8 @@ if ( is_user_logged_in() ) {
 	    <?php } else {
 	    		if(isset($_POST['btn'])){
 	    			$buscar_query=array();
-	    			$buscar_final='';
-	    			$x=0;
-	    			if(isset($_POST['usuario']) && !empty($_POST['usuario'])){
-	    				$var=" usuario='".$_POST['usuario']."'";
-	    				array_push($buscar_query, $var);
-	    				$x++;
-	    			}
-	    			if(isset($_POST['estado']) && !empty($_POST['estado'])){
-	    				$var=" estado='".$_POST['estado']."'";
-	    				array_push($buscar_query, $var);
-	    				$x++;
-	    			}
-	    			if(isset($_POST['cedula']) && !empty($_POST['cedula'])){
-	    				$var=" cedula='".$_POST['cedula']."'";
-	    				array_push($buscar_query, $var);
-	    				$x++;
-	    			}
-					if($x!=0){
-	    				$y=0;
-	    				foreach ($buscar_query as $value) {
-	    					if($y==0){
-	    						$buscar_final='WHERE '.$value;
-	    						$y++;
-	    					} else{
-	    						$buscar_final=$buscar_final.' AND '.$value;
-	    					}
-	    				}
+	    			if(isset($_POST['ruta']) && !empty($_POST['ruta'])){
+	    				$ruta=$_POST['ruta'];
 	    			}
 	    			 ?>
 			    	<div class="container-fluid margintop25 marginbot25">
@@ -74,28 +49,34 @@ if ( is_user_logged_in() ) {
 								        <tbody>
 
 											<?php 
-											$query = "SELECT * FROM vive_usu_inf ".$buscar_final." ORDER BY usuario ASC";
-											$result = mysqli_query ($mysqli, $query);
-											if(mysqli_num_rows($result) != 0) {
-												while ($row = mysqli_fetch_assoc($result)) { 
-													$id=user_by_login($row['usuario']);
-										     		$user_last = get_user_meta( $id['id'], '_um_last_login', true );
-										     		$ruta = get_user_meta( $id['id'], 'ruta', true ); 
-										     		
-													?>
-													<tr class="mix" data-name="<?php echo $row['usuario']; ?>" data-estado="<?php echo $row['estado']; ?>" data-ruta="<?php echo str_replace(' ', '', $ruta); ?>">
-												        <td><?php echo gmdate("d/m/Y, H:i:s", $user_last); ?></td>
-												        <td><?php echo $row['usuario']; ?></td>
-												        <td><?php echo $row['telefono']; ?></td>
-												        <td><?php echo $row['cedula']; ?></td>
-												        <td><?php echo $row['estado']; ?></td>
-												        <td><?php echo $row['direccion']; ?></td>
-												        <td><?php echo $row['comentario']; ?></td>
-												        <td><?php echo $ruta; ?></td>
-												    </tr>
-												<?php
+												 $args = array('meta_query'=> array( array( array( 'key' => 'ruta', 'value' => $ruta ) ) ) );
+
+											    $users = get_users( $args );
+												foreach ($users as $user) {
+
+													$usuario=$user->user_login;
+													$query = "SELECT * FROM vive_usu_inf where usuario='".$usuario."' ";
+													$result = mysqli_query ($mysqli, $query);
+													if(mysqli_num_rows($result) != 0) {
+														while ($row = mysqli_fetch_assoc($result)) { 
+															$id=user_by_login($row['usuario']);
+												     		$user_last = get_user_meta( $id['id'], '_um_last_login', true );
+												     		
+															?>
+															<tr class="mix" data-name="<?php echo $row['usuario']; ?>" data-estado="<?php echo $row['estado']; ?>" data-ruta="<?php echo str_replace(' ', '', $ruta); ?>">
+														        <td><?php echo gmdate("d/m/Y, H:i:s", $user_last); ?></td>
+														        <td><?php echo $row['usuario']; ?></td>
+														        <td><?php echo $row['telefono']; ?></td>
+														        <td><?php echo $row['cedula']; ?></td>
+														        <td><?php echo $row['estado']; ?></td>
+														        <td><?php echo $row['direccion']; ?></td>
+														        <td><?php echo $row['comentario']; ?></td>
+														        <td><?php echo $ruta; ?></td>
+														    </tr>
+														<?php
+														}
+													}
 												}
-											}
 											?>
 								        </tbody>
 								    </table>
@@ -129,29 +110,11 @@ if ( is_user_logged_in() ) {
 
 										<div class="row">
 											<div class="col-xs-12 col-sm-4 col-sm-offset-4">
-												<h1 class="center-align">Buscar Gerente</h1>
+												<h1 class="center-align">Buscar Gerentes en Ruta</h1>
 
 												<div class="input-field col-xs-12">
-													<h4>Usuario</h4>
-													<input type="text" id="usuario" name="usuario" class="autocomplete">
-													<label for="usuario"></label>
-												</div>
-												<div class="input-field col-xs-12">
-													<h4>Estado</h4>
-													<select name="estado" id="estado">
-														<option value="" disabled selected>Selecciona el estado</option>
-														<?php
-															$estado=estado();
-															foreach ($estado as $opcion) { ?>
-																<option value="<?php echo $opcion; ?>"><?php echo $opcion; ?></opcion>
-															<?php
-															}
-														?>
-													</select>
-										        </div>
-												<div class="input-field col-xs-12">
-													<h4>Cédula</h4>
-									        		<input type="number" placeholder="Cédula" name="cedula"  id="cedula">
+													<h4>Ruta</h4>
+									        		<input type="text" placeholder="Ruta" name="ruta"  id="ruta">
 										        </div>
 											</div>
 										</div>
@@ -178,11 +141,6 @@ if ( is_user_logged_in() ) {
  } get_footer(); ?>
 <script>
 	jQuery(document).ready(function() {
-		jQuery('input.autocomplete').autocomplete({
-			data: {
-				<?php $rol='Gerente'; $devoluciones=usuarioPorRol($rol); foreach ($devoluciones as $value) { ?> "<?php echo $value['login']; ?>": '<?php echo $value['avatarxs']; ?>', <?php } ?>
-			}
-		});
 	    jQuery('select').material_select();
 	    jQuery('.collapsible').collapsible();
 		function checkWidth() {

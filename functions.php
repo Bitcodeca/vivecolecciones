@@ -25,7 +25,7 @@ function prototipo_script_enqueue() {
       wp_enqueue_script('moment', 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.16.0/moment.min.js', array(), '1.0.0', true);
       wp_enqueue_script('fullcalendar js', 'https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.min.js', array(), '1.0.0', true);
     }
-    if ( is_page('buscar-deposito') || is_page('buscar-gerente') || is_page('devoluciones') || is_page('registrar-pago') || is_page('registrar-deposito-problema') || is_page('cambios') || is_page('averias') ){
+    if ( is_page('buscar-deposito') || is_page('buscar-gerente') || is_page('devoluciones') || is_page('registrar-pago') || is_page('registrar-deposito-problema') || is_page('cambios') || is_page('averias') || is_page('rutas') ){
       wp_enqueue_script('mixitupjs', 'https://cdnjs.cloudflare.com/ajax/libs/mixitup/2.1.11/jquery.mixitup.min.js', array(), '2.1.11', true);
       wp_enqueue_script('mixituppaginationjs',  'http://tseoc.co.uk/chris/jquery.mixitup-pagination.min.js', array(), '1.0.0', true);
     }
@@ -221,6 +221,7 @@ function usuarioPorRol($rol){
   $usuarios=get_users( $args );
 
   foreach ($usuarios as $usuario) {
+    $info['id']=$usuario->id;
     $info['login']=$usuario->user_login;
     $info['nombre']=$usuario->user_firstname;
     $info['apellido']=$usuario->user_lastname;
@@ -232,6 +233,47 @@ function usuarioPorRol($rol){
   }
   return $emailporrol;
 }
+
+
+
+/**
+ * Add new fields above 'Update' button.
+ *
+ * @param WP_User $user User object.
+ */
+function tm_additional_profile_fields( $user ) {
+
+    $ruta = wp_parse_args( get_the_author_meta( 'ruta', $user->ID ), $default );
+
+    ?>
+    <h3>Información adicional</h3>
+
+    <table class="form-table">
+     <tr>
+       <th><label for="ruta">Ruta</label></th>
+       <td><textarea type="text" name="ruta" id="ruta" /><?php echo esc_attr( get_the_author_meta( 'ruta', $user->ID ) ); ?></textarea></td>
+     </tr>
+    </table>
+    <?php
+}
+
+add_action( 'show_user_profile', 'tm_additional_profile_fields' );
+add_action( 'edit_user_profile', 'tm_additional_profile_fields' );
+add_action( 'user_new_form', 'tm_additional_profile_fields' );
+
+add_action( 'personal_options_update', 'my_save_extra_profile_fields' );
+add_action( 'edit_user_profile_update', 'my_save_extra_profile_fields' );
+
+function my_save_extra_profile_fields( $user_id ) {
+
+  if ( !current_user_can( 'edit_user', $user_id ) )
+    return false;
+
+  /* Copy and paste this line for additional fields. Make sure to change 'twitter' to the field ID. */
+  update_usermeta( $user_id, 'ruta', $_POST['ruta'] );
+}
+
+
 
 
 

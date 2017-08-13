@@ -8,10 +8,71 @@ if ( is_user_logged_in() ) {
 	    <?php } else { ?>
 
 			<div class="container-fluid margintop25 marginbot25">
+				<div class="row"> 		
+		    		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		    			<h1 class="center-align margintop0">Devoluciones</h1>
+			        	<?php
+						$query3 = "SELECT DISTINCT usuario from vive_dev ORDER BY usuario ASC";
+						$result3 = mysqli_query($mysqli, $query3);
+						if(mysqli_num_rows($result3) != 0) { ?>
+							<ul class="collapsible popout imprimir" data-collapsible="expandable">
+								<?php
+								while($row3 = mysqli_fetch_assoc($result3)) {
+									$usu=$row3['usuario'];
+									$info=user_by_login($usu);
+									?>
+									<li class="nobreak">
+										<div class="collapsible-header paddingtop5 paddingbot5">
+											<h3 class="margintop0 marginbot0 marginleft25"><img src="<?php echo $info['avatarxs']; ?>" class="circle" height="48px" width="auto"> <?php echo $usu; ?></h3>
+										</div>
+										<div class="collapsible-body white">
+
+											<table class="striped responsive-table">
+										        <thead>
+										          <tr>
+										              <th data-field="id">Fecha</th>
+										              <th data-field="id">Artículo</th>
+										              <th data-field="id">Cantidad</th>
+										          </tr>
+										        </thead>
+
+										        <tbody>
+												<?php 
+												$query = "SELECT * FROM vive_dev WHERE usuario='$usu'";
+												$result = mysqli_query ($mysqli, $query);
+												if(mysqli_num_rows($result) != 0) {
+													while ($row = mysqli_fetch_assoc($result)) {
+														$id=$row['id'];
+														if($row['status']=='pendiente'){$color='yellow';}
+														if($row['status']=='aprobado'){$color='fondo3';}
+														if($row['status']=='negado'){$color='fondo5';}
+														?>
+														<tr>
+													        <td><?php echo $row['fec']; ?></td>
+													        <td><?php echo $row['art']; ?></td>
+													        <td><?php echo $row['can']; ?></td>
+													    </tr>
+													<?php
+													}
+												} ?>
+												</tbody>
+											</table>
+
+										</div>
+									</li>
+									<?php
+								} ?>
+							</ul> <?php
+						} ?>
+					</div>
+				</div>
+
+
 	    		<div class="row">
 	        		<div class="col-xs-12">
         				<div class="card-panel z-depth-2 hoverable">
         					<?php
+        					//MUESTRA TODAS LAS VARIACIONES DISPONIBLES
 								$stmt0 = $mysqli->prepare("SELECT vive_var.var, vive_var.art, vive_var.cam, vive_cam.art FROM vive_var JOIN vive_cam ON vive_var.art=vive_cam.id WHERE vive_var.cam='20172' ORDER BY vive_var.art");
 								$stmt0->execute();
 								$stmt0->bind_result($varvar, $varart, $varcam, $camart);
@@ -28,32 +89,9 @@ if ( is_user_logged_in() ) {
 	    		<div class="row">
 	        		<div class="col-xs-12">
         				<div class="card-panel z-depth-2 hoverable">
-        					<?php
-        						$user_logged='fcastillo90';
-								$stmt0 = $mysqli->prepare("SELECT DISTINCT cam, fec, q1, q2, q3, q4 FROM vive_fac WHERE usuario = ? ORDER BY id DESC");
-								$stmt0->bind_param('s', $user_logged);
-								$stmt0->execute();
-								$stmt0->bind_result($cam, $fec, $q1, $q2, $q3, $q4);
-								$stmt0->store_result();
-								$array_cam=array();
-							    while ($stmt0->fetch()) {
-							    	array_push($array_cam, $cam);
-							    }
-							    $stmt0->close();
-
-							    print_r($array_cam);
-
-							    $key = array_search(12017, $array_cam);
-							    echo '<br>'.$key;
-        					?>
-        				</div>
-    				</div>
-				</div>
-	    		<div class="row">
-	        		<div class="col-xs-12">
-        				<div class="card-panel z-depth-2 hoverable">
 
 							<?php
+							//MUESTRA TODAS LAS COLECCIONES EN CADA CAMPA;A
 								$stmt0 = $mysqli->prepare("SELECT DISTINCT cam FROM vive_con");
 								$stmt0->execute();
 								$stmt0->bind_result($cam);
@@ -90,6 +128,7 @@ if ( is_user_logged_in() ) {
 	        		<div class="col-xs-12">
         				<div class="card-panel z-depth-2 hoverable">
 							<?php
+							//ARROJA TODAS LAS AVERIAS REGISTRADAS CON SU VARIACION Y ARTICULO
 								$stmt = $mysqli->prepare("SELECT SUM(ABS(vive_averia.can)), 
 																 vive_var.art, 
 																 vive_cam.art, 
@@ -119,6 +158,7 @@ if ( is_user_logged_in() ) {
         				<div class="card-panel z-depth-2 hoverable" style="overflow-x: scroll;">
         					
 								<?php
+								//ARROJA TODOS LOS PREMIOS SELECCIONADOS POR CADA CAMPA;A
 								$stmt0 = $mysqli->prepare("SELECT DISTINCT cam FROM vive_con");
 								$stmt0->execute();
 								$stmt0->bind_result($cam);
@@ -148,8 +188,8 @@ if ( is_user_logged_in() ) {
 
 	    		<div class="row">
 	        		<div class="col-xs-12">
-	        			<h1 class="center-align">Depósitos Problemas con MATCH en la DATA</h1>
         				<div class="card-panel z-depth-2 hoverable">
+        				<!-- ARROJA UN GRAFICO DE TODOS LOS PREMIOS EN LA BASE DE DATOS -->
         				 	<div id="premios"></div>
         				</div>
 					</div>

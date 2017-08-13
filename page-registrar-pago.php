@@ -7,11 +7,100 @@ if ( is_user_logged_in() ) {
 			<h1>ERROR DE CONEXIÓN</h1>
 	    <?php } else {  ?>
 
-			    	<div class="container margintop25 marginbot25">
+			    	<div class="container-fluid margintop25 marginbot25">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<div class="card-panel z-depth-2 hoverable">
+							<div class="card-panel z-depth-2 hoverable" ng-controller="customersCtrlADMIN">
 								<h1 class="center-align imprimir">Registrar Pago</h1>
 
+
+								<div ng-app="contactApp">
+							     	<div class="row margintop25">
+								     	<div class="col-xs-12 col-md-2">
+											<div class="input-field">
+												<h4>Gerente</h4>
+												<input placeholder="Seleccionar gerente" type="text" name="usuario" id="usuario" class="autocomplete">
+												<label for="usuario"></label>
+									        </div>
+								     	</div>
+								     	<div class="col-xs-12 col-md-2">
+											<div class="input-field">
+												<h4>Fecha</h4>
+												<input type="date" class="datepicker" id="fec" name="fec">
+											</div>
+								     	</div>
+								     	<div class="col-xs-12 col-md-2">
+											<h4>Banco</h4>
+											<select name="ban" id="ban" required>
+												<option value="" disabled selected>Selecciona el banco</option>
+												<?php
+													$bancos=bancos();
+													foreach ($bancos as $opcion) { ?>
+														<option value="<?php echo $opcion; ?>"><?php echo $opcion; ?></opcion>
+													<?php
+													}
+												?>
+											</select>
+								     	</div>
+								     	<div class="col-xs-12 col-md-2">
+											<div class="input-field">
+												<h4>Referencia</h4>
+								        		<input type="number" placeholder="Referencia" name="ref"  id="ref" required>
+											</div>
+								     	</div>
+								     	<div class="col-xs-12 col-md-2">
+											<div class="input-field">
+												<h4>Monto</h4>
+								        		<input type="number" placeholder="Monto" name="mon"  id="mon" required>
+											</div>
+								     	</div>
+								     	<div class="col-xs-12 col-md-2">
+											<div class="input-field">
+												<h4>Campaña</h4>
+												<select name="cam" id="cam" required>
+													<?php
+
+														$stmt0 = $mysqli->prepare("SELECT DISTINCT cam FROM vive_fac WHERE usuario = ? ORDER BY id DESC");
+														$stmt0->bind_param('s', $gerente_logged);
+														$stmt0->execute();
+														$stmt0->bind_result($cam);
+														$stmt0->store_result();
+														$array_cam=array();
+													    while ($stmt0->fetch()) {
+													    	array_push($array_cam, $cam);
+													    }
+													    $stmt0->close();
+
+
+														$stmt = $mysqli->prepare('SELECT DISTINCT cam FROM vive_fac WHERE usuario = ? ORDER BY cam ASC');
+														$stmt->bind_param('s', $gerente_logged);
+														$stmt->execute();
+														$stmt->bind_result($cam);
+														$stmt->store_result();
+													    while ($stmt->fetch()) {
+													    	if ($cam==$array_cam[0]){
+																?>
+																<option selected value="<?php echo $cam; ?>">Campaña #<?php echo $cam; ?></option>
+																<?php
+															}else{
+																?>
+																<option disabled value="<?php echo $cam; ?>">Campaña #<?php echo $cam; ?></option>
+																<?php
+															}
+													    }
+														$stmt->close();
+													?>
+													<label>Seleccionar</label>
+												</select>
+											</div>
+								     	</div>
+										<div class="row center-align">
+											<button  ng-disabled="reg_Button" ng-click="reg_PUSH()" class="btn btn-radius fondo3 waves-effect waves-light">
+												<i class="material-icons medium right">cloud_upload</i>
+												REGISTRAR
+											</button>
+										</div>
+							     	</div>
+						     	</div>
 
 							</div>
 						</div>
@@ -49,7 +138,7 @@ if ( is_user_logged_in() ) {
 							     	<div class="col-xs-12 col-md-2">
 										<h4>Banco</h4>
 										<select name="ban" id="ban" required>
-											<option value="" disabled selected>Selecciona el status</option>
+											<option value="" disabled selected>Selecciona el banco</option>
 											<?php
 												$bancos=bancos();
 												foreach ($bancos as $opcion) { ?>
@@ -246,6 +335,21 @@ if ( is_user_logged_in() ) {
 </script>
 <script>
 	jQuery(document).ready(function() {
+
+		jQuery('input.autocomplete').autocomplete({
+			data: {
+				<?php
+					$rol='Gerente';
+					$devoluciones=usuarioPorRol($rol);
+					foreach ($devoluciones as $value) {
+					?>
+			  			"<?php echo $value['login']; ?>": '<?php echo $value['avatarxs']; ?>',
+					<?php
+					}
+				?>
+			}
+		});
+
 	    jQuery('select').material_select();
 	    jQuery('.datepicker').pickadate({
 	    	monthsFull: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
@@ -293,44 +397,97 @@ if ( is_user_logged_in() ) {
         jQuery(window).resize(checkWidth);
 	  });
 </script>
-<script>
-	app.controller('customersCtrl', function($scope, $http, $timeout) { 
+<?php
 
-		$scope.reg_PUSH = function() {
-			var usuario = '<?php echo $gerente_logged; ?>';
-			var fec = jQuery('#fec').val();
-			var mon = jQuery('#mon').val();
-			var ref = jQuery('#ref').val();
-			var ban = jQuery('#ban').val();
-			var cam = jQuery('#cam').val();
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/registrar-pago.php", {params:{"usuario": usuario, "fec": fec, "mon": mon, "ref": ref, "ban": ban, "cam": cam }})
-			.then(function (data) {
-                if (data.data.success) {
-                    window.alert(data.data.message);
-					$scope.reg_PULL();
-					jQuery('#ref').val('');
-					jQuery('#fec').val('');
-					jQuery('#mon').val('');
-                } else {
-                    window.alert(data.data.message);
-                }
-				$scope.reg_Button = true;
-				$timeout(function() { $scope.reg_Button = false; }, 2000)
-			}); 
-		}
-		
-		$scope.reg_PULL = function() {
-			var usuario = '<?php echo $gerente_logged; ?>';
-			var camact = '<?php echo $camact; ?>';
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/gerente-depositos-pull.php", {params:{"usuario": usuario, "camact": camact }})
-			.then(function (response) {
-				$scope.pulldata = response.data.records;
-				var $users = jQuery('.variable');
-				jQuery('#Container').mixItUp('append', $users , null);
-				jQuery('#Container').mixItUp('sort', 'name:asc');
-			}); 
-		}
+	if($user_logged['rol']=='administrator'){
+	 	?>
+		<script>
+			app.controller('customersCtrlADMIN', function($scope, $http, $timeout) { 
 
-		$scope.reg_PULL();
-	});
-</script>
+				$scope.reg_PUSH = function() {
+					var usuario = jQuery('#usuario').val();
+					var fec = jQuery('#fec').val();
+					var mon = jQuery('#mon').val();
+					var ref = jQuery('#ref').val();
+					var ban = jQuery('#ban').val();
+					var cam = jQuery('#cam').val();
+					$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/registrar-pago.php", {params:{"usuario": usuario, "fec": fec, "mon": mon, "ref": ref, "ban": ban, "cam": cam }})
+					.then(function (data) {
+			            if (data.data.success) {
+			                window.alert(data.data.message);
+							$scope.reg_PULL();
+							jQuery('#ref').val('');
+							jQuery('#fec').val('');
+							jQuery('#mon').val('');
+			            } else {
+			                window.alert(data.data.message);
+			            }
+						$scope.reg_Button = true;
+						$timeout(function() { $scope.reg_Button = false; }, 2000)
+					}); 
+				}
+				
+				$scope.reg_PULL = function() {
+					var usuario = '<?php echo $gerente_logged; ?>';
+					var camact = '<?php echo $camact; ?>';
+					$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/gerente-depositos-pull.php", {params:{"usuario": usuario, "camact": camact }})
+					.then(function (response) {
+						$scope.pulldata = response.data.records;
+						var $users = jQuery('.variable');
+						jQuery('#Container').mixItUp('append', $users , null);
+						jQuery('#Container').mixItUp('sort', 'name:asc');
+					}); 
+				}
+
+				$scope.reg_PULL();
+			});
+		</script>
+		<?php
+	}
+
+	elseif ($user_logged['rol']=='Gerente') {
+	 	?>
+		<script>
+			app.controller('customersCtrl', function($scope, $http, $timeout) { 
+
+				$scope.reg_PUSH = function() {
+					var usuario = '<?php echo $gerente_logged; ?>';
+					var fec = jQuery('#fec').val();
+					var mon = jQuery('#mon').val();
+					var ref = jQuery('#ref').val();
+					var ban = jQuery('#ban').val();
+					var cam = jQuery('#cam').val();
+					$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/registrar-pago.php", {params:{"usuario": usuario, "fec": fec, "mon": mon, "ref": ref, "ban": ban, "cam": cam }})
+					.then(function (data) {
+			            if (data.data.success) {
+			                window.alert(data.data.message);
+							$scope.reg_PULL();
+							jQuery('#ref').val('');
+							jQuery('#fec').val('');
+							jQuery('#mon').val('');
+			            } else {
+			                window.alert(data.data.message);
+			            }
+						$scope.reg_Button = true;
+						$timeout(function() { $scope.reg_Button = false; }, 2000)
+					}); 
+				}
+				
+				$scope.reg_PULL = function() {
+					var usuario = '<?php echo $gerente_logged; ?>';
+					var camact = '<?php echo $camact; ?>';
+					$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/gerente-depositos-pull.php", {params:{"usuario": usuario, "camact": camact }})
+					.then(function (response) {
+						$scope.pulldata = response.data.records;
+						var $users = jQuery('.variable');
+						jQuery('#Container').mixItUp('append', $users , null);
+						jQuery('#Container').mixItUp('sort', 'name:asc');
+					}); 
+				}
+
+				$scope.reg_PULL();
+			});
+		</script>
+		<?php 
+	}
+	?>
