@@ -8,65 +8,6 @@ if ( is_user_logged_in() ) {
 	    <?php } else { ?>
 
 			<div class="container-fluid margintop25 marginbot25">
-				<div class="row"> 		
-		    		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		    			<h1 class="center-align margintop0">Devoluciones</h1>
-			        	<?php
-						$query3 = "SELECT DISTINCT usuario from vive_dev ORDER BY usuario ASC";
-						$result3 = mysqli_query($mysqli, $query3);
-						if(mysqli_num_rows($result3) != 0) { ?>
-							<ul class="collapsible popout imprimir" data-collapsible="expandable">
-								<?php
-								while($row3 = mysqli_fetch_assoc($result3)) {
-									$usu=$row3['usuario'];
-									$info=user_by_login($usu);
-									?>
-									<li class="nobreak">
-										<div class="collapsible-header paddingtop5 paddingbot5">
-											<h3 class="margintop0 marginbot0 marginleft25"><img src="<?php echo $info['avatarxs']; ?>" class="circle" height="48px" width="auto"> <?php echo $usu; ?></h3>
-										</div>
-										<div class="collapsible-body white">
-
-											<table class="striped responsive-table">
-										        <thead>
-										          <tr>
-										              <th data-field="id">Fecha</th>
-										              <th data-field="id">Artículo</th>
-										              <th data-field="id">Cantidad</th>
-										          </tr>
-										        </thead>
-
-										        <tbody>
-												<?php 
-												$query = "SELECT * FROM vive_dev WHERE usuario='$usu'";
-												$result = mysqli_query ($mysqli, $query);
-												if(mysqli_num_rows($result) != 0) {
-													while ($row = mysqli_fetch_assoc($result)) {
-														$id=$row['id'];
-														if($row['status']=='pendiente'){$color='yellow';}
-														if($row['status']=='aprobado'){$color='fondo3';}
-														if($row['status']=='negado'){$color='fondo5';}
-														?>
-														<tr>
-													        <td><?php echo $row['fec']; ?></td>
-													        <td><?php echo $row['art']; ?></td>
-													        <td><?php echo $row['can']; ?></td>
-													    </tr>
-													<?php
-													}
-												} ?>
-												</tbody>
-											</table>
-
-										</div>
-									</li>
-									<?php
-								} ?>
-							</ul> <?php
-						} ?>
-					</div>
-				</div>
-
 
 	    		<div class="row">
 	        		<div class="col-xs-12">

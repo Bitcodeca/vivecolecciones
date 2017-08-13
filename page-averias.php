@@ -14,6 +14,12 @@ if ( is_user_logged_in() ) {
 
 				$query = "UPDATE vive_averia SET status='$status', comentario='$comentario' WHERE id='$varId'";
 				if ($mysqli->query( $query ) === TRUE) { }
+			} elseif ($_POST['borrar']){
+				$artId=$_POST['id'];
+				$query2 = "DELETE FROM vive_averia WHERE id=$artId";
+				if ($mysqli->query( $query2 ) === TRUE) {
+				}
+
 			}
 			?>
 			<div class="container-fluid margintop25 marginbot25">
@@ -102,6 +108,10 @@ if ( is_user_logged_in() ) {
 																<input type="hidden" name="id" id="id" value="<?php echo $row['id']; ?>" />
 
 															    <div class="modal-footer">
+																	<button type="submit" name="borrar" id="borrar" value="borrar" class="btn hoverable fondo5 waves-effect waves-light btn-radius" type="submit">
+																		<i class="material-icons left">mode_edit</i>
+																		BORRAR
+																	</button>
 																	<button type="submit" name="btn" id="btn" value="editar" class="btn hoverable fondo2 waves-effect waves-light btn-radius" type="submit">
 																		<i class="material-icons left">mode_edit</i>
 																		EDITAR
