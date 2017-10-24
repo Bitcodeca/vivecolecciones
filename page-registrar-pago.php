@@ -59,33 +59,14 @@ if ( is_user_logged_in() ) {
 												<select name="cam" id="cam" required>
 													<?php
 
-														$stmt0 = $mysqli->prepare("SELECT DISTINCT cam FROM vive_fac WHERE usuario = ? ORDER BY id DESC");
-														$stmt0->bind_param('s', $gerente_logged);
-														$stmt0->execute();
-														$stmt0->bind_result($cam);
-														$stmt0->store_result();
-														$array_cam=array();
-													    while ($stmt0->fetch()) {
-													    	array_push($array_cam, $cam);
-													    }
-													    $stmt0->close();
-
-
-														$stmt = $mysqli->prepare('SELECT DISTINCT cam FROM vive_fac WHERE usuario = ? ORDER BY cam ASC');
-														$stmt->bind_param('s', $gerente_logged);
+														$stmt = $mysqli->prepare('SELECT DISTINCT cam FROM vive_fac ORDER BY cam ASC');
 														$stmt->execute();
 														$stmt->bind_result($cam);
 														$stmt->store_result();
 													    while ($stmt->fetch()) {
-													    	if ($cam==$array_cam[0]){
-																?>
-																<option selected value="<?php echo $cam; ?>">Campaña #<?php echo $cam; ?></option>
-																<?php
-															}else{
-																?>
-																<option disabled value="<?php echo $cam; ?>">Campaña #<?php echo $cam; ?></option>
-																<?php
-															}
+															?>
+															<option selected value="<?php echo $cam; ?>">Campaña #<?php echo $cam; ?></option>
+															<?php
 													    }
 														$stmt->close();
 													?>

@@ -89,6 +89,7 @@ if ( is_user_logged_in() ) {
 										}
 										?>
 										
+										<input type="hidden" name="usuario" id="usuario" value="<?php echo $usuario; ?>" />
 										<input type="hidden" name="articulos" id="articulos" value="<?php echo $x; ?>" />
 										<div class="row center-align marginbotmenos40">
 											<button  type="submit" value="grabar" id="btn" name="btn" class="btn btn-radius fondo3 waves-effect waves-light margintop25">

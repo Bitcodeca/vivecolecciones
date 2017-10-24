@@ -10,8 +10,8 @@ if ( is_user_logged_in() ) {
 			<div class="container-fluid margintop25 marginbot25">	
 	    		<div class="row">
 					<div class="col-md-12">
-						<div class="card-panel z-depth-2 hoverable">
-					     	<h1 class="center-align">Depósitos Problemas</h1>
+						<div class="card-panel z-depth-2 hoverable imprimir">
+					     	<h1 class="center-align ">Depósitos Problemas</h1>
 
 
 

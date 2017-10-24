@@ -167,6 +167,8 @@ function bancos(){
   array_push($bancos, 'bnc');
   array_push($bancos, 'venezolano');
   array_push($bancos, 'tesoro');
+  array_push($bancos, 'bancrecer');
+  array_push($bancos, '100%banco');
   return $bancos;
 }
 
