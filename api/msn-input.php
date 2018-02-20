@@ -1,5 +1,5 @@
 <?php
-	$mysqli  = new mysqli("localhost","bitcode_bitvcv2","IRV$#eTDk]u4","bitcode_vcv2150117");
+	$mysqli  = new mysqli("localhost","adbddvc280118","cdadbddvc280118","vivebdd280118");
     if (mysqli_connect_errno()) {
         $data = array('success' => false, 'message' => 'error de conexion');
         echo json_encode($data);

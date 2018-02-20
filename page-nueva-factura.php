@@ -97,20 +97,24 @@ if ( is_user_logged_in() ) {
 					$fechacambiadadep = DateTime::createFromFormat("d/m/Y", $fec);
 					$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
 					$fechaunixdep=strtotime($fechacambiadadep);
-					$q1unix = strtotime('+15 days', $fechaunixdep);
-					$q2unix = strtotime('+15 days', $q1unix);
-					$q3unix = strtotime('+15 days', $q2unix);
-					$q4unix = strtotime('+15 days', $q3unix);
+					$q1unix = strtotime('+7 days', $fechaunixdep);
+					$q2unix = strtotime('+7 days', $q1unix);
+					$q3unix = strtotime('+7 days', $q2unix);
+					$q4unix = strtotime('+7 days', $q3unix);
+					$q5unix = strtotime('+7 days', $q4unix);
+					$q6unix = strtotime('+7 days', $q5unix);
 					$q1=gmdate("d/m/Y", $q1unix);
 					$q2=gmdate("d/m/Y", $q2unix);
 					$q3=gmdate("d/m/Y", $q3unix);
 					$q4=gmdate("d/m/Y", $q4unix);
+					$q5=gmdate("d/m/Y", $q5unix);
+					$q6=gmdate("d/m/Y", $q6unix);
 
 	    			for ($i = 0; $i < $articulos; $i++) {
 	    				if(isset($_POST[$i])){
 	    					$can=$_POST['can'.$i];
 	    					$art_id=$_POST['id'.$i];
-			                $query="INSERT INTO  vive_fac ( usuario, cam, art_id, can, fecha_creada, fec, q1, q2, q3, q4 ) VALUES ( '$usuario', '$cam', '$art_id', '$can', '$fecha_creada', '$fec', '$q1', '$q2', '$q3', '$q4' )";
+			                $query="INSERT INTO  vive_fac ( usuario, cam, art_id, can, fecha_creada, fec, q1, q2, q3, q4, q5, q6 ) VALUES ( '$usuario', '$cam', '$art_id', '$can', '$fecha_creada', '$fec', '$q1', '$q2', '$q3', '$q4', '$q5', '$q6' )";
 			                if( $mysqli->query( $query ) ){}
 	    				}
 	    			}

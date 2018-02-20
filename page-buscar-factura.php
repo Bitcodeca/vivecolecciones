@@ -36,6 +36,9 @@ if ( is_user_logged_in() ) {
 										$q1=$row['q1'];
 										$q2=$row['q2'];
 										$q3=$row['q3'];
+										$q4=$row['q4'];
+										$q5=$row['q5'];
+										
 										$query1 = "SELECT * from vive_fac WHERE usuario='$usuario' AND cam='$cam'";
 										$result1 = mysqli_query($mysqli, $query1);
 										if(mysqli_num_rows($result1) != 0) { ?>
@@ -89,6 +92,8 @@ if ( is_user_logged_in() ) {
 																				$corte_q2=$row2['q2'];
 																				$corte_q3=$row2['q3'];
 																				$corte_q4=$row2['q4'];
+																				$corte_q5=$row2['q5'];
+																				$corte_q6=$row2['q6'];
 																			}
 																		} ?>
 
@@ -194,18 +199,28 @@ if ( is_user_logged_in() ) {
 																<h3><b><?php echo $corte_q3; ?></b></h3>
 															</div>
 															<div class="col-xs-12 col-sm-3">
-																<h2>Cierre:</h2>
+																<h2>Cuarto corte:</h2>
 																<h3><b><?php echo $corte_q4; ?></b></h3>
+															</div>
+															<div class="col-xs-12 col-sm-3">
+																<h2>Quinto corte:</h2>
+																<h3><b><?php echo $corte_q5; ?></b></h3>
+															</div>
+															<div class="col-xs-12 col-sm-3">
+																<h2>Cierre:</h2>
+																<h3><b><?php echo $corte_q6; ?></b></h3>
 															</div>
 													    </div>
 
 											        <?php
-											        	$total_a_depositar_quincenal=$total/4;
+											        	$total_a_depositar_quincenal=$total/6;
 
 											        	$depositado_q1=0;
 											        	$depositado_q2=0;
 											        	$depositado_q3=0;
 											        	$depositado_q4=0;
+											        	$depositado_q5=0;
+											        	$depositado_q6=0;
 											        	$depositado_total=0;
 
 														    $fechacambiadadep = DateTime::createFromFormat("d/m/Y", $corte_fecha_creada);
@@ -227,6 +242,14 @@ if ( is_user_logged_in() ) {
 														    $fechacambiadadep = DateTime::createFromFormat("d/m/Y", $corte_q4);
 																$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
 																$q4_unix=strtotime($fechacambiadadep);
+
+														    $fechacambiadadep = DateTime::createFromFormat("d/m/Y", $corte_q5);
+																$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
+																$q5_unix=strtotime($fechacambiadadep);
+
+														    $fechacambiadadep = DateTime::createFromFormat("d/m/Y", $corte_q6);
+																$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
+																$q6_unix=strtotime($fechacambiadadep);
 
 
 																
@@ -273,18 +296,24 @@ if ( is_user_logged_in() ) {
 																	$depositado_q3=$depositado_q3+$depMonto;
 																	$depositado_total=$depositado_total+$depMonto;
 																/*}elseif($fechaunixdep>$q3_unix && $fechaunixdep<=$q4_unix){*/
-																}elseif($fechaunixdep>$q3_unix){
+																}elseif($fechaunixdep>$q3_unix && $fechaunixdep<=$q4_unix){
+																	$depositado_q4=$depositado_q4+$depMonto;
+																	$depositado_total=$depositado_total+$depMonto;
+																}elseif($fechaunixdep>$q4_unix && $fechaunixdep<=$q5_unix){
+																	$depositado_q5=$depositado_q5+$depMonto;
+																	$depositado_total=$depositado_total+$depMonto;
+																}elseif($fechaunixdep>$q6_unix){
 
 																	if($orden=='ultima'){
-																		$depositado_q4=$depositado_q4+$depMonto;
+																		$depositado_q6=$depositado_q6+$depMonto;
 																		$depositado_total=$depositado_total+$depMonto;
 																	}elseif($orden=='antigua'){
-																		if($fechaunixdep>$q3_unix && $fechaunixdep<=$corte_comp_unix){
-																			$depositado_q4=$depositado_q4+$depMonto;
+																		if($fechaunixdep>$q6_unix && $fechaunixdep<=$corte_comp_unix){
+																			$depositado_q6=$depositado_q6+$depMonto;
 																			$depositado_total=$depositado_total+$depMonto;
 																		}
 																	}else{
-																		$depositado_q4=$depositado_q4+$depMonto;
+																		$depositado_q6=$depositado_q6+$depMonto;
 																		$depositado_total=$depositado_total+$depMonto;
 																	}
 
@@ -292,71 +321,91 @@ if ( is_user_logged_in() ) {
 														    }
 															$stmt->close();
 
-
+															echo $total_a_depositar_quincenal;
 															$porcentaje_q1=($depositado_q1*$total_colecciones)/$total_a_depositar_quincenal;
 															$porcentaje_q2=($depositado_q2*$total_colecciones)/$total_a_depositar_quincenal;
 															$porcentaje_q3=($depositado_q3*$total_colecciones)/$total_a_depositar_quincenal;
-															$porcentaje_q4=0;
+															$porcentaje_q4=($depositado_q4*$total_colecciones)/$total_a_depositar_quincenal;
+															$porcentaje_q5=($depositado_q5*$total_colecciones)/$total_a_depositar_quincenal;
+															$porcentaje_q6=0;
 
 															if($porcentaje_q1>=$total_colecciones){$porcentaje_q1=$total_colecciones;}
 															if($porcentaje_q2>=$total_colecciones){$porcentaje_q2=$total_colecciones;}
 															if($porcentaje_q3>=$total_colecciones){$porcentaje_q3=$total_colecciones;}
 															if($porcentaje_q4>=$total_colecciones){$porcentaje_q4=$total_colecciones;}
+															if($porcentaje_q5>=$total_colecciones){$porcentaje_q5=$total_colecciones;}
+															if($porcentaje_q6>=$total_colecciones){$porcentaje_q6=$total_colecciones;}
 
-															$porcentaje_total=$porcentaje_q1+$porcentaje_q2+$porcentaje_q3+$porcentaje_q4;
+															$porcentaje_total=$porcentaje_q1+$porcentaje_q2+$porcentaje_q3+$porcentaje_q4+$porcentaje_q5+$porcentaje_q6;
 															
 															$porcentaje_q1=decimales($porcentaje_q1);
 															$porcentaje_q2=decimales($porcentaje_q2);
 															$porcentaje_q3=decimales($porcentaje_q3);
 															$porcentaje_q4=decimales($porcentaje_q4);
+															$porcentaje_q5=decimales($porcentaje_q5);
+															$porcentaje_q6=decimales($porcentaje_q6);
 															$porcentaje_total=decimales($porcentaje_total);
 
 
 															$ganancia_q1=$q1*$porcentaje_q1;
 															$ganancia_q2=$q2*$porcentaje_q2;
 															$ganancia_q3=$q3*$porcentaje_q3;
-															$ganancia_q4=0;
+															$ganancia_q4=$q4*$porcentaje_q4;
+															$ganancia_q5=$q5*$porcentaje_q5;
+															$ganancia_q6=0;
 
-															$ganancia_total=$ganancia_q1+$ganancia_q2+$ganancia_q3+$ganancia_q4;
+															$ganancia_total=$ganancia_q1+$ganancia_q2+$ganancia_q3+$ganancia_q4+$ganancia_q5+$ganancia_q6;
 
 															$deuda_pendiente=$total_a_cancelar-$depositado_total;
 														?>
-														<blockquote><h3>Premios Quincenales</h3></blockquote>
-													  <h3 class="left-align bold paddingleft15 paddingtop10 paddingbot10 fondo3">Total a depositar quincenal <small>Bsf <?php $valor=formato($total_a_depositar_quincenal); echo $valor; ?></small></h3>
+														<blockquote><h3>Premios Semanales</h3></blockquote>
+													  <h3 class="left-align bold paddingleft15 paddingtop10 paddingbot10 fondo3">Total a depositar semanal <small>Bsf <?php $valor=formato($total_a_depositar_quincenal); echo $valor; ?></small></h3>
 														<div class="row nobreak">
 															<table class="responsive-table striped centered">
 															        <thead>
 															          <tr class="fondo1 white-text">
-																	    <th>Quincena</th>
+																	    <th>Semaa</th>
 																	    <th>Depositado</th>
-																	    <th>Quincenales</th>
+																	    <th>Semanales</th>
 																	    <th>Premios Bsf</th>
 															          </tr>
 															        </thead>
 															        <tbody>
 																          <tr>
-																	          <td>Depósito 1era quincena<br>(<?php echo $corte_q1; ?>)</td>
+																	          <td>Depósito 1er corte<br>(<?php echo $corte_q1; ?>)</td>
 																	          <td>Bsf <?php $valor=formato($depositado_q1); echo $valor; ?></td>
 																	          <td><?php echo $porcentaje_q1; ?></td>
 																	          <td>Bsf <?php $valor=formato($ganancia_q1); echo $valor; ?></td>
 																          </tr>
 																          <tr>
-																	          <td>Depósito 2da quincena<br>(<?php echo $corte_q2; ?>)</td>
+																	          <td>Depósito 2do corte<br>(<?php echo $corte_q2; ?>)</td>
 																	          <td>Bsf <?php $valor=formato($depositado_q2); echo $valor; ?></td>
 																	          <td><?php echo $porcentaje_q2; ?></td>
 																	          <td>Bsf <?php $valor=formato($ganancia_q2); echo $valor; ?></td>
 																          </tr>
 																          <tr>
-																	          <td>Depósito 3ra quincena<br>(<?php echo $corte_q3; ?>)</td>
+																	          <td>Depósito 3r corte<br>(<?php echo $corte_q3; ?>)</td>
 																	          <td>Bsf <?php $valor=formato($depositado_q3); echo $valor; ?></td>
 																	          <td><?php echo $porcentaje_q3; ?></td>
 																	          <td>Bsf <?php $valor=formato($ganancia_q3); echo $valor; ?></td>
 																          </tr>
 																          <tr>
-																	          <td>Cuarto cierre<br>(<?php echo $corte_q4; ?>)</td>
+																	          <td>Depósito 4to corte<br>(<?php echo $corte_q4; ?>)</td>
 																	          <td>Bsf <?php $valor=formato($depositado_q4); echo $valor; ?></td>
 																	          <td><?php echo $porcentaje_q4; ?></td>
 																	          <td>Bsf <?php $valor=formato($ganancia_q4); echo $valor; ?></td>
+																          </tr>
+																          <tr>
+																	          <td>Depósito 5to corte<br>(<?php echo $corte_q5; ?>)</td>
+																	          <td>Bsf <?php $valor=formato($depositado_q5); echo $valor; ?></td>
+																	          <td><?php echo $porcentaje_q5; ?></td>
+																	          <td>Bsf <?php $valor=formato($ganancia_q5); echo $valor; ?></td>
+																          </tr>
+																          <tr>
+																	          <td>Sexto cierre<br>(<?php echo $corte_q6; ?>)</td>
+																	          <td>Bsf <?php $valor=formato($depositado_q6); echo $valor; ?></td>
+																	          <td><?php echo $porcentaje_q6; ?></td>
+																	          <td>Bsf <?php $valor=formato($ganancia_q6); echo $valor; ?></td>
 																          </tr>
 																          <tr>
 																	          <td class="bold">Total depositado</td>
@@ -530,6 +579,9 @@ if ( is_user_logged_in() ) {
 											$q1=$row['q1'];
 											$q2=$row['q2'];
 											$q3=$row['q3'];
+											$q4=$row['q4'];
+											$q5=$row['q5'];
+
 											$query1 = "SELECT * from vive_fac WHERE usuario='$usuario' AND cam='$cam'";
 											$result1 = mysqli_query($mysqli, $query1);
 											if(mysqli_num_rows($result1) != 0) { ?>
@@ -583,6 +635,8 @@ if ( is_user_logged_in() ) {
 																					$corte_q2=$row2['q2'];
 																					$corte_q3=$row2['q3'];
 																					$corte_q4=$row2['q4'];
+																				$corte_q5=$row2['q5'];
+																				$corte_q6=$row2['q6'];
 																				}
 																			} ?>
 
@@ -688,18 +742,28 @@ if ( is_user_logged_in() ) {
 																	<h3><b><?php echo $corte_q3; ?></b></h3>
 																</div>
 																<div class="col-xs-12 col-sm-3">
-																	<h2>Cierre:</h2>
+																	<h2>Cuarto corte:</h2>
 																	<h3><b><?php echo $corte_q4; ?></b></h3>
 																</div>
+															<div class="col-xs-12 col-sm-3">
+																<h2>Quinto corte:</h2>
+																<h3><b><?php echo $corte_q5; ?></b></h3>
+															</div>
+															<div class="col-xs-12 col-sm-3">
+																<h2>Cierre:</h2>
+																<h3><b><?php echo $corte_q6; ?></b></h3>
+															</div>
 														    </div>
 
 												        <?php
-												        	$total_a_depositar_quincenal=$total/4;
+												        	$total_a_depositar_quincenal=$total/6;
 
 												        	$depositado_q1=0;
 												        	$depositado_q2=0;
 												        	$depositado_q3=0;
 												        	$depositado_q4=0;
+											        	$depositado_q5=0;
+											        	$depositado_q6=0;
 												        	$depositado_total=0;
 
 															    $fechacambiadadep = DateTime::createFromFormat("d/m/Y", $corte_fecha_creada);
@@ -721,6 +785,16 @@ if ( is_user_logged_in() ) {
 															    $fechacambiadadep = DateTime::createFromFormat("d/m/Y", $corte_q4);
 																	$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
 																	$q4_unix=strtotime($fechacambiadadep);
+
+														    $fechacambiadadep = DateTime::createFromFormat("d/m/Y", $corte_q5);
+																$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
+																$q5_unix=strtotime($fechacambiadadep);
+
+														    $fechacambiadadep = DateTime::createFromFormat("d/m/Y", $corte_q6);
+																$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
+																$q6_unix=strtotime($fechacambiadadep);
+
+
 
 
 																	
@@ -757,101 +831,127 @@ if ( is_user_logged_in() ) {
 																	$fechacambiadadep = DateTime::createFromFormat("d/m/Y", $depFecha);
 																	$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
 																	$fechaunixdep=strtotime($fechacambiadadep);
-																	if($fechaunixdep>=$fecha_creada_unix && $fechaunixdep<=$q1_unix){
-																		$depositado_q1=$depositado_q1+$depMonto;
-																		$depositado_total=$depositado_total+$depMonto;
-																	}elseif($fechaunixdep>$q1_unix && $fechaunixdep<=$q2_unix){
-																		$depositado_q2=$depositado_q2+$depMonto;
-																		$depositado_total=$depositado_total+$depMonto;
-																	}elseif($fechaunixdep>$q2_unix && $fechaunixdep<=$q3_unix){
-																		$depositado_q3=$depositado_q3+$depMonto;
-																		$depositado_total=$depositado_total+$depMonto;
-																	/*}elseif($fechaunixdep>$q3_unix && $fechaunixdep<=$q4_unix){*/
-																	}elseif($fechaunixdep>$q3_unix){
+																if($fechaunixdep>=$fecha_creada_unix && $fechaunixdep<=$q1_unix){
+																	$depositado_q1=$depositado_q1+$depMonto;
+																	$depositado_total=$depositado_total+$depMonto;
+																}elseif($fechaunixdep>$q1_unix && $fechaunixdep<=$q2_unix){
+																	$depositado_q2=$depositado_q2+$depMonto;
+																	$depositado_total=$depositado_total+$depMonto;
+																}elseif($fechaunixdep>$q2_unix && $fechaunixdep<=$q3_unix){
+																	$depositado_q3=$depositado_q3+$depMonto;
+																	$depositado_total=$depositado_total+$depMonto;
+																/*}elseif($fechaunixdep>$q3_unix && $fechaunixdep<=$q4_unix){*/
+																}elseif($fechaunixdep>$q3_unix && $fechaunixdep<=$q4_unix){
+																	$depositado_q4=$depositado_q4+$depMonto;
+																	$depositado_total=$depositado_total+$depMonto;
+																}elseif($fechaunixdep>$q4_unix && $fechaunixdep<=$q5_unix){
+																	$depositado_q5=$depositado_q5+$depMonto;
+																	$depositado_total=$depositado_total+$depMonto;
+																}elseif($fechaunixdep>$q6_unix){
 
-																		if($orden=='ultima'){
-																			$depositado_q4=$depositado_q4+$depMonto;
-																			$depositado_total=$depositado_total+$depMonto;
-																		}elseif($orden=='antigua'){
-																			if($fechaunixdep>$q3_unix && $fechaunixdep<=$corte_comp_unix){
-																				$depositado_q4=$depositado_q4+$depMonto;
-																				$depositado_total=$depositado_total+$depMonto;
-																			}
-																		}else{
-																			$depositado_q4=$depositado_q4+$depMonto;
+																	if($orden=='ultima'){
+																		$depositado_q6=$depositado_q6+$depMonto;
+																		$depositado_total=$depositado_total+$depMonto;
+																	}elseif($orden=='antigua'){
+																		if($fechaunixdep>$q6_unix && $fechaunixdep<=$corte_comp_unix){
+																			$depositado_q6=$depositado_q6+$depMonto;
 																			$depositado_total=$depositado_total+$depMonto;
 																		}
-
+																	}else{
+																		$depositado_q6=$depositado_q6+$depMonto;
+																		$depositado_total=$depositado_total+$depMonto;
 																	}
-															    }
-																$stmt->close();
+
+																}
+														    }
+															$stmt->close();
 
 
-																$porcentaje_q1=($depositado_q1*$total_colecciones)/$total_a_depositar_quincenal;
-																$porcentaje_q2=($depositado_q2*$total_colecciones)/$total_a_depositar_quincenal;
-																$porcentaje_q3=($depositado_q3*$total_colecciones)/$total_a_depositar_quincenal;
-																$porcentaje_q4=0;
+															$porcentaje_q1=($depositado_q1*$total_colecciones)/$total_a_depositar_quincenal;
+															$porcentaje_q2=($depositado_q2*$total_colecciones)/$total_a_depositar_quincenal;
+															$porcentaje_q3=($depositado_q3*$total_colecciones)/$total_a_depositar_quincenal;
+															$porcentaje_q4=($depositado_q4*$total_colecciones)/$total_a_depositar_quincenal;
+															$porcentaje_q5=($depositado_q5*$total_colecciones)/$total_a_depositar_quincenal;
+															$porcentaje_q6=0;
 
-																if($porcentaje_q1>=$total_colecciones){$porcentaje_q1=$total_colecciones;}
-																if($porcentaje_q2>=$total_colecciones){$porcentaje_q2=$total_colecciones;}
-																if($porcentaje_q3>=$total_colecciones){$porcentaje_q3=$total_colecciones;}
-																if($porcentaje_q4>=$total_colecciones){$porcentaje_q4=$total_colecciones;}
+															if($porcentaje_q1>=$total_colecciones){$porcentaje_q1=$total_colecciones;}
+															if($porcentaje_q2>=$total_colecciones){$porcentaje_q2=$total_colecciones;}
+															if($porcentaje_q3>=$total_colecciones){$porcentaje_q3=$total_colecciones;}
+															if($porcentaje_q4>=$total_colecciones){$porcentaje_q4=$total_colecciones;}
+															if($porcentaje_q5>=$total_colecciones){$porcentaje_q5=$total_colecciones;}
+															if($porcentaje_q6>=$total_colecciones){$porcentaje_q6=$total_colecciones;}
 
-																$porcentaje_total=$porcentaje_q1+$porcentaje_q2+$porcentaje_q3+$porcentaje_q4;
-																
-																$porcentaje_q1=decimales($porcentaje_q1);
-																$porcentaje_q2=decimales($porcentaje_q2);
-																$porcentaje_q3=decimales($porcentaje_q3);
-																$porcentaje_q4=decimales($porcentaje_q4);
-																$porcentaje_total=decimales($porcentaje_total);
+															$porcentaje_total=$porcentaje_q1+$porcentaje_q2+$porcentaje_q3+$porcentaje_q4+$porcentaje_q5+$porcentaje_q6;
+															
+															$porcentaje_q1=decimales($porcentaje_q1);
+															$porcentaje_q2=decimales($porcentaje_q2);
+															$porcentaje_q3=decimales($porcentaje_q3);
+															$porcentaje_q4=decimales($porcentaje_q4);
+															$porcentaje_q5=decimales($porcentaje_q5);
+															$porcentaje_q6=decimales($porcentaje_q6);
+															$porcentaje_total=decimales($porcentaje_total);
 
 
-																$ganancia_q1=$q1*$porcentaje_q1;
-																$ganancia_q2=$q2*$porcentaje_q2;
-																$ganancia_q3=$q3*$porcentaje_q3;
-																$ganancia_q4=0;
+															$ganancia_q1=$q1*$porcentaje_q1;
+															$ganancia_q2=$q2*$porcentaje_q2;
+															$ganancia_q3=$q3*$porcentaje_q3;
+															$ganancia_q4=$q4*$porcentaje_q4;
+															$ganancia_q5=$q5*$porcentaje_q5;
+															$ganancia_q6=0;
 
-																$ganancia_total=$ganancia_q1+$ganancia_q2+$ganancia_q3+$ganancia_q4;
+															$ganancia_total=$ganancia_q1+$ganancia_q2+$ganancia_q3+$ganancia_q4+$ganancia_q5+$ganancia_q6;
 
-																$deuda_pendiente=$total_a_cancelar-$depositado_total;
+															$deuda_pendiente=$total_a_cancelar-$depositado_total;
 															?>
-															<blockquote><h3>Premios Quincenales</h3></blockquote>
-														  <h3 class="left-align bold paddingleft15 paddingtop10 paddingbot10 fondo3">Total a depositar quincenal <small>Bsf <?php $valor=formato($total_a_depositar_quincenal); echo $valor; ?></small></h3>
+															<blockquote><h3>Premios Semanales</h3></blockquote>
+														  <h3 class="left-align bold paddingleft15 paddingtop10 paddingbot10 fondo3">Total a depositar semanal <small>Bsf <?php $valor=formato($total_a_depositar_quincenal); echo $valor; ?></small></h3>
 															<div class="row nobreak">
 																<table class="responsive-table striped centered">
 																        <thead>
 																          <tr class="fondo1 white-text">
-																		    <th>Quincena</th>
+																		    <th>Semana</th>
 																		    <th>Depositado</th>
-																		    <th>Quincenales</th>
+																		    <th>Semanales</th>
 																		    <th>Premios Bsf</th>
 																          </tr>
 																        </thead>
 																        <tbody>
-																	          <tr>
-																		          <td>Depósito 1era quincena<br>(<?php echo $corte_q1; ?>)</td>
-																		          <td>Bsf <?php $valor=formato($depositado_q1); echo $valor; ?></td>
-																		          <td><?php echo $porcentaje_q1; ?></td>
-																		          <td>Bsf <?php $valor=formato($ganancia_q1); echo $valor; ?></td>
-																	          </tr>
-																	          <tr>
-																		          <td>Depósito 2da quincena<br>(<?php echo $corte_q2; ?>)</td>
-																		          <td>Bsf <?php $valor=formato($depositado_q2); echo $valor; ?></td>
-																		          <td><?php echo $porcentaje_q2; ?></td>
-																		          <td>Bsf <?php $valor=formato($ganancia_q2); echo $valor; ?></td>
-																	          </tr>
-																	          <tr>
-																		          <td>Depósito 3ra quincena<br>(<?php echo $corte_q3; ?>)</td>
-																		          <td>Bsf <?php $valor=formato($depositado_q3); echo $valor; ?></td>
-																		          <td><?php echo $porcentaje_q3; ?></td>
-																		          <td>Bsf <?php $valor=formato($ganancia_q3); echo $valor; ?></td>
-																	          </tr>
-																	          <tr>
-																		          <td>Cuarto cierre<br>(<?php echo $corte_q4; ?>)</td>
-																		          <td>Bsf <?php $valor=formato($depositado_q4); echo $valor; ?></td>
-																		          <td><?php echo $porcentaje_q4; ?></td>
-																		          <td>Bsf <?php $valor=formato($ganancia_q4); echo $valor; ?></td>
-																	          </tr>
+																          <tr>
+																	          <td>Depósito 1er corte<br>(<?php echo $corte_q1; ?>)</td>
+																	          <td>Bsf <?php $valor=formato($depositado_q1); echo $valor; ?></td>
+																	          <td><?php echo $porcentaje_q1; ?></td>
+																	          <td>Bsf <?php $valor=formato($ganancia_q1); echo $valor; ?></td>
+																          </tr>
+																          <tr>
+																	          <td>Depósito 2do corte<br>(<?php echo $corte_q2; ?>)</td>
+																	          <td>Bsf <?php $valor=formato($depositado_q2); echo $valor; ?></td>
+																	          <td><?php echo $porcentaje_q2; ?></td>
+																	          <td>Bsf <?php $valor=formato($ganancia_q2); echo $valor; ?></td>
+																          </tr>
+																          <tr>
+																	          <td>Depósito 3r corte<br>(<?php echo $corte_q3; ?>)</td>
+																	          <td>Bsf <?php $valor=formato($depositado_q3); echo $valor; ?></td>
+																	          <td><?php echo $porcentaje_q3; ?></td>
+																	          <td>Bsf <?php $valor=formato($ganancia_q3); echo $valor; ?></td>
+																          </tr>
+																          <tr>
+																	          <td>Depósito 4to corte<br>(<?php echo $corte_q4; ?>)</td>
+																	          <td>Bsf <?php $valor=formato($depositado_q4); echo $valor; ?></td>
+																	          <td><?php echo $porcentaje_q4; ?></td>
+																	          <td>Bsf <?php $valor=formato($ganancia_q4); echo $valor; ?></td>
+																          </tr>
+																          <tr>
+																	          <td>Depósito 5to corte<br>(<?php echo $corte_q5; ?>)</td>
+																	          <td>Bsf <?php $valor=formato($depositado_q5); echo $valor; ?></td>
+																	          <td><?php echo $porcentaje_q5; ?></td>
+																	          <td>Bsf <?php $valor=formato($ganancia_q5); echo $valor; ?></td>
+																          </tr>
+																          <tr>
+																	          <td>Sexto cierre<br>(<?php echo $corte_q6; ?>)</td>
+																	          <td>Bsf <?php $valor=formato($depositado_q6); echo $valor; ?></td>
+																	          <td><?php echo $porcentaje_q6; ?></td>
+																	          <td>Bsf <?php $valor=formato($ganancia_q6); echo $valor; ?></td>
+																          </tr>
 																	          <tr>
 																		          <td class="bold">Total depositado</td>
 																		          <td class="bold">Bsf <?php $valor=formato($depositado_total); echo $valor; ?></td>

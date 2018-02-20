@@ -371,10 +371,10 @@ if ( is_user_logged_in() ) {
 				</div>
 			</div>
 			<?php
-				$stmt = $mysqli->prepare('SELECT q1, q2, q3, q4 FROM vive_fac WHERE usuario = ? AND cam = ? LIMIT 1');
+				$stmt = $mysqli->prepare('SELECT q1, q2, q3, q4, q5, q6 FROM vive_fac WHERE usuario = ? AND cam = ? LIMIT 1');
 				$stmt->bind_param('ss', $user_logged['login'], $ultima_cam);
 				$stmt->execute();
-				$stmt->bind_result($q1, $q2, $q3, $q4);
+				$stmt->bind_result($q1, $q2, $q3, $q4, $q5, $q6);
 			    $stmt->fetch();
 				$stmt->close();
 	    	?>
@@ -399,8 +399,20 @@ if ( is_user_logged_in() ) {
 				</div>
         		<div class="col-xs-12 col-sm-3">
     				<div class="card-panel z-depth-2 hoverable">
-						<h3 class="center-align"><i class="material-icons color5 verticalalignsub">date_range</i> Cierre</h3>
+						<h3 class="center-align"><i class="material-icons color5 verticalalignsub">date_range</i> Cuarta Cuota</h3>
 						<h4 class="center-align"><?php echo $q4; ?></h4>
+					</div>
+				</div>
+        		<div class="col-xs-12 col-sm-3">
+    				<div class="card-panel z-depth-2 hoverable">
+						<h3 class="center-align"><i class="material-icons color5 verticalalignsub">date_range</i> Quinta Cuota</h3>
+						<h4 class="center-align"><?php echo $q5; ?></h4>
+					</div>
+				</div>
+        		<div class="col-xs-12 col-sm-3">
+    				<div class="card-panel z-depth-2 hoverable">
+						<h3 class="center-align"><i class="material-icons color5 verticalalignsub">date_range</i> Cierre</h3>
+						<h4 class="center-align"><?php echo $q6; ?></h4>
 					</div>
 				</div>
 			</div>

@@ -55,7 +55,7 @@ if ( is_user_logged_in() ) {
 					<div class="col-md-12">
 						<div class="card-panel z-depth-2 hoverable">
 							<?php
-							echo do_shortcode( '[ultimatemember form_id=9]' );
+							echo do_shortcode( '[ultimatemember form_id=6]' );
 		                    $stmt_ORDER = $mysqli->prepare("SELECT id, telefono, cedula, estado, direccion, comentario, nacimiento FROM vive_usu_inf WHERE usuario=?");
 		                    $stmt_ORDER->bind_param('s', $gerente_logged);
 		                    $stmt_ORDER->execute();

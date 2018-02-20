@@ -2,7 +2,7 @@
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
-$mysqli = new mysqli("localhost","bitcode_bitvcv2","IRV$#eTDk]u4","bitcode_vcv2150117");
+$mysqli  = new mysqli("localhost","adbddvc280118","cdadbddvc280118","vivebdd280118");
 
 $gerente_logged=$_GET['usuario'];
 $camact=$_GET['camact'];

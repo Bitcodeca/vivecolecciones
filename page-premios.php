@@ -9,7 +9,90 @@ if ( is_user_logged_in() ) {
 			<div class="container-fluid margintop25 marginbot25">
 				<div class="row"> 		
 		    		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		    			<h1 class="center-align margintop0">Premios</h1>
+		    			<h1 class="center-align margintop0">PREMIOS</h1>
+		    			<h2 class="left-align">POR CAMPAÑA</h2>
+        				<div class="">
+							<ul class="collapsible popout imprimir" data-collapsible="expandable">
+							<?php
+							$stmt0 = $mysqli->prepare("SELECT DISTINCT cam FROM vive_con");
+							$stmt0->execute();
+							$stmt0->bind_result($cam);
+							$stmt0->store_result();
+						    while ($stmt0->fetch()) {
+						    	$premioCategoriaTipo='';
+						    	$premioCategoriaSum=0;
+								?>
+								
+									<li class="nobreak">
+										<div class="collapsible-header paddingtop5 paddingbot5">
+											<h3 class="margintop0 marginbot0 marginleft25">Campaña <?php echo $cam; ?></h3>
+										</div>
+										<div class="collapsible-body white">
+								<?php
+								$stmt = $mysqli->prepare("SELECT sum(vive_fac_prem.cantidad), vive_fac_prem.nombre, vive_pre.tipo FROM vive_fac_prem JOIN vive_pre WHERE vive_fac_prem.nombre = vive_pre.articulo AND vive_pre.cam = '$cam' GROUP BY vive_fac_prem.nombre ORDER BY vive_pre.tipo");
+								$stmt->execute();
+								$stmt->bind_result($premioCan, $premioNombre, $premioCategoria);
+								$stmt->store_result();
+								?>
+								<table class="striped responsive-table">
+									<thead>
+									  <tr>
+									      <th>Nombre</th>
+									      <th>Categoría</th>
+									      <th>Cantidad</th>
+									  </tr>
+									</thead>
+
+									<tbody>
+								<?php
+							    while ($stmt->fetch()) {
+							    	if($premioCategoriaTipo != $premioCategoria && $premioCategoriaTipo != ''){
+							    		?>
+							    		<tr>
+										    <td><h3>TOTAL <?php echo $premioCategoriaTipo; ?></h3></td>
+										    <td></td>
+										    <td><h3><?php echo $premioCategoriaSum; ?></h3></td>
+										</tr>
+									  <?php
+							    	}
+							    	?> 
+							    	<tr>
+									    <td><?php echo $premioNombre; ?></td>
+									    <td><?php echo $premioCategoria; ?></td>
+									    <td><?php echo $premioCan; ?></td>
+									  </tr>
+							    	<?
+							    	if($premioCategoriaTipo != $premioCategoria){
+							    		$premioCategoriaSum=$premioCan;
+							    		$premioCategoriaTipo = $premioCategoria;
+							    	} else {
+							    		$premioCategoriaSum=$premioCategoriaSum+$premioCan;
+							    	}
+								}
+								$stmt->close();
+							    		?>
+							    		<tr>
+										    <td><h3>TOTAL <?php echo $premioCategoriaTipo; ?></h3></td>
+										    <td></td>
+										    <td><h3><?php echo $premioCategoriaSum; ?></h3></td>
+										</tr>
+									  <?php
+								?>
+									</tbody>
+								</table>
+										</div>
+									</li> 
+								<?php
+							}
+							$stmt0->close();
+							?>
+								</ul>
+						</div>
+					</div>
+				</div>
+				<div class="row"> 		
+		    		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		    			<h2 class="left-align">POR GERENTE</h2>
 			        	<?php
 						$query3 = "SELECT DISTINCT usuario from vive_fac_prem ORDER BY usuario ASC";
 						$result3 = mysqli_query($mysqli, $query3);
@@ -84,35 +167,6 @@ if ( is_user_logged_in() ) {
 								} ?>
 							</ul> <?php
 						} ?>
-					</div>
-				</div>
-				<div class="row"> 		
-		    		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        				<div class="card-panel z-depth-2 hoverable">
-							<?php
-							$stmt0 = $mysqli->prepare("SELECT DISTINCT cam FROM vive_con");
-							$stmt0->execute();
-							$stmt0->bind_result($cam);
-							$stmt0->store_result();
-						    while ($stmt0->fetch()) {
-								$stmt = $mysqli->prepare("SELECT sum(vive_fac_prem.cantidad), 
-									 							 vive_fac_prem.nombre
-									 							 FROM vive_fac_prem 
-																 GROUP BY vive_fac_prem.nombre");
-								$stmt->execute();
-								$stmt->bind_result($premioCan, $premioNombre);
-								$stmt->store_result();
-								$costo=0;
-							    while ($stmt->fetch()) {
-							    	?>
-							    	<h5> <?php echo $premioNombre.' <b>total:'.$premioCan.'</b>'; ?></h5>
-							    	<?
-								}
-								$stmt->close();
-							}
-							$stmt0->close();
-							?>
-						</div>
 					</div>
 				</div>
 				<div class="row">

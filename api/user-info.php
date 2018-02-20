@@ -3,7 +3,7 @@
 	header("Content-Type: application/json; charset=UTF-8");
 	$login=$_GET['usuario'];
 
-	$conn = new mysqli("localhost","bitcode_bitvcv2","IRV$#eTDk]u4","bitcode_vcv2150117");
+	$conn = new mysqli("localhost","adbddvc280118","cdadbddvc280118","vivebdd280118");
 	$query = "SELECT * from wp_usermeta WHERE meta_value='$login'";
 	$result = mysqli_query($conn, $query);
 

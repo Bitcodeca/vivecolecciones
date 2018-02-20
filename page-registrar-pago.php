@@ -39,6 +39,11 @@ if ( is_user_logged_in() ) {
 													<?php
 													}
 												?>
+														<option value="COMISIONES">COMISIONES</opcion>
+														<option value="BONOS">BONOS</opcion>
+														<option value="QUINCENALES">QUINCENALES</opcion>
+														<option value="PREMIOS_EFECTIVO">PREMIOS_EFECTIVO</opcion>
+														<option value="EXCEDENTES">EXCEDENTES</opcion>
 											</select>
 								     	</div>
 								     	<div class="col-xs-12 col-md-2">

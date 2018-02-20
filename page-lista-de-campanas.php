@@ -40,6 +40,8 @@ if ( is_user_logged_in() ) {
 				        						<h5>Q1: <b>Bsf <?php $valor=formato($row['q1']); echo $valor; ?></b></h5>
 				        						<h5>Q2: <b>Bsf <?php $valor=formato($row['q2']); echo $valor; ?></b></h5>
 				        						<h5>Q3: <b>Bsf <?php $valor=formato($row['q3']); echo $valor; ?></b></h5>
+				        						<h5>Q4: <b>Bsf <?php $valor=formato($row['q4']); echo $valor; ?></b></h5>
+				        						<h5>Q5: <b>Bsf <?php $valor=formato($row['q5']); echo $valor; ?></b></h5>
 
 											
 				        					</div>

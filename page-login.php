@@ -4,7 +4,7 @@
 		exit(); 
 	} else {  ?>
 		<div class="container">
-			<?php echo do_shortcode( '[ultimatemember form_id=8]' ); ?>
+			<?php echo do_shortcode( '[ultimatemember form_id=5]' ); ?>
 		</div>
 	<?php }
  get_footer(); ?>

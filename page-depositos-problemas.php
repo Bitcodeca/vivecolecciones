@@ -118,7 +118,7 @@ if(isset($_POST['btn'])){
 	}
 }
 // Establish Connection to the Database
-$con = mysqli_connect("localhost","bitcode_bitvcv2","IRV$#eTDk]u4","bitcode_vcv2150117");//Records per page
+$con = mysqli_connect("localhost","adbddvc280118","cdadbddvc280118","vivebdd280118");//Records per page
 $per_page=20;
 
 $actual_link = "$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";

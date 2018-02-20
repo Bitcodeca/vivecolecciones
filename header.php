@@ -25,7 +25,7 @@
                 $user_logged=user_logged();
 
                 $buscarlogged=$user_logged['login'];
-                $conn = new mysqli("localhost","bitcode_bitvcv2","IRV$#eTDk]u4","bitcode_vcv2150117");
+                $conn = new mysqli("localhost","adbddvc280118","cdadbddvc280118","vivebdd280118");
 
                 $stmt_ORDER = $conn->prepare("SELECT sum(case when visto = 'N' then 1 else 0 end) as notifMSN FROM vive_msn WHERE fin='$buscarlogged'");
                 $stmt_ORDER->execute();

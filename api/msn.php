@@ -2,7 +2,7 @@
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
-$conn = new mysqli("localhost","bitcode_bitvcv2","IRV$#eTDk]u4","bitcode_vcv2150117");
+$conn = new mysqli("localhost","adbddvc280118","cdadbddvc280118","vivebdd280118");
 $usuario=$_GET['usuario'];
 $logged=$_GET['logged'];
 $result = $conn->query("SELECT * FROM vive_msn WHERE (ini='$usuario' AND fin='$logged') OR (ini='$logged' AND fin='$usuario') ORDER BY id ASC");

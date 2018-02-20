@@ -3,7 +3,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
 
-if (isset($_POST['cam']) && isset($_POST['art0']) && isset($_POST['gven']) && isset($_POST['pbas']) && isset($_POST['dis']) && isset($_POST['ger']) && isset($_POST['q1']) && isset($_POST['q2']) && isset($_POST['q3'])) {
+if (isset($_POST['cam']) && isset($_POST['art0']) && isset($_POST['gven']) && isset($_POST['pbas']) && isset($_POST['dis']) && isset($_POST['ger']) && isset($_POST['q1']) && isset($_POST['q2']) && isset($_POST['q3'])  && isset($_POST['q3'])  && isset($_POST['q3'])) {
 
     //check if any of the inputs are empty
     if (empty($_POST['cam']) || empty($_POST['art0'])) {
@@ -31,7 +31,9 @@ if (isset($_POST['cam']) && isset($_POST['art0']) && isset($_POST['gven']) && is
         $q1=$_POST['q1'];
         $q2=$_POST['q2'];
         $q3=$_POST['q3'];
-        $query="INSERT INTO  vive_con ( cam, gven, pbas, dis, ger, q1, q2, q3 ) VALUES ( $cam, $gven, $pbas, $dis, $ger, $q1, $q2, $q3 )";
+        $q4=$_POST['q4'];
+        $q5=$_POST['q5'];
+        $query="INSERT INTO  vive_con ( cam, gven, pbas, dis, ger, q1, q2, q3, q4, q5 ) VALUES ( $cam, $gven, $pbas, $dis, $ger, $q1, $q2, $q3, $q4, $q5 )";
         if( $mysqli->query( $query ) ){
             $x=0;
             $i=0;

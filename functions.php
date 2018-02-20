@@ -209,9 +209,11 @@ function estado(){
 }
 function premiosTipo(){
   $premio=array();
-  array_push($premio, 'Regalo Basico');
-  array_push($premio, 'Regalo con Aporte');
-  array_push($premio, 'Premio Efectivo');
+  array_push($premio, 'PREMIO EN EFECTIVO');
+  array_push($premio, 'PREMIO BASICOS');
+  array_push($premio, 'PREMIO CON APORTE');
+  array_push($premio, 'PREMIO DOBLE FULL');
+  array_push($premio, 'PREMIO TRIPLE FULL');
   return $premio;
 }
 

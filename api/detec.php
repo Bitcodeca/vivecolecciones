@@ -14,8 +14,9 @@ extract($_POST);
     if (file_exists ('.$destino.')) {
     
 	    require_once('Classes/PHPExcel.php');
+	    
 
-	    $con =  mysqli_connect("localhost","bitcode_bitvcv2","IRV$#eTDk]u4","bitcode_vcv2150117");
+	    $con =  mysqli_connect("localhost","adbddvc280118","cdadbddvc280118","vivebdd280118");
 	    
 		
 	    
