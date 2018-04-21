@@ -333,7 +333,7 @@ if ( is_user_logged_in() ) {
 																}elseif($fechaunixdep>$q4_unix && $fechaunixdep<=$q5_unix){
 																	$depositado_q5=$depositado_q5+$depMonto;
 																	$depositado_total=$depositado_total+$depMonto;
-																}elseif($fechaunixdep>$q6_unix){
+																}elseif($fechaunixdep<=$q6_unix){
 																	if($orden=='ultima'){
 																		$depositado_q6=$depositado_q6+$depMonto;
 																		$depositado_total=$depositado_total+$depMonto;

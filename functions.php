@@ -16,7 +16,7 @@ function prototipo_script_enqueue() {
     wp_enqueue_script('Materialize js', 'https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js', array(), '0.97.8', true);
 
 
-    if( is_page('agregar-campana') || is_page('chat') || is_page('asignar-dependencia') || is_page('centro-de-control') || is_page('registrar-pago') || is_page('registrar-deposito-problema') || is_page('devoluciones') || is_page('denuncias') || is_page('premios') || is_page('agregar-nueva-coleccion') || is_page('agregar-nuevo-premio') || is_page('comparacion') || is_page('duplicados') || is_page('analista') || is_page('prueba') ){
+    if( is_page('agregar-campana') || is_page('chat') || is_page('asignar-dependencia') || is_page('centro-de-control') || is_page('registrar-pago') || is_page('registrar-deposito-problema') || is_page('devoluciones') || is_page('denuncias') || is_page('premios') || is_page('agregar-nueva-coleccion') || is_page('agregar-nuevo-premio') || is_page('comparacion') || is_page('duplicados') || is_page('analista') || is_page('analisis-de-premios') || is_page('prueba') || is_page('prueba2') ){
       wp_enqueue_script('angular', 'https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js', array(), '3.1.0', true);
       wp_enqueue_script('appjs', get_template_directory_uri() . '/app.js', array(), '3.1.0', true);
     }
@@ -169,6 +169,7 @@ function bancos(){
   array_push($bancos, 'tesoro');
   array_push($bancos, 'bancrecer');
   array_push($bancos, '100%banco');
+  array_push($bancos, 'PANDCO');
   return $bancos;
 }
 
