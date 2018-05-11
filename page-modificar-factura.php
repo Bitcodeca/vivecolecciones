@@ -63,18 +63,12 @@ if ( is_user_logged_in() ) {
 		    				$fechacambiadadep = DateTime::createFromFormat("d/m/Y", $fec);
 							$fechacambiadadep=date_format($fechacambiadadep,"d-m-Y");
 							$fechaunixdep=strtotime($fechacambiadadep);
-							$q1unix = strtotime('+7 days', $fechaunixdep);
-							$q2unix = strtotime('+7 days', $q1unix);
-							$q3unix = strtotime('+7 days', $q2unix);
-							$q4unix = strtotime('+7 days', $q3unix);
-							$q5unix = strtotime('+7 days', $q4unix);
-							$q6unix = strtotime('+7 days', $q5unix);
+							$q1unix = strtotime('+15 days', $fechaunixdep);
+							$q2unix = strtotime('+15 days', $q1unix);
+							$q3unix = strtotime('+15 days', $q2unix);
 							$q1=gmdate("d/m/Y", $q1unix);
 							$q2=gmdate("d/m/Y", $q2unix);
 							$q3=gmdate("d/m/Y", $q3unix);
-							$q4=gmdate("d/m/Y", $q4unix);
-							$q5=gmdate("d/m/Y", $q5unix);
-							$q6=gmdate("d/m/Y", $q6unix);
 
 		    				for ($i = 0; $i < $numart; $i++) {
 		    					if(!empty($_POST['vnombre'.$i])){
@@ -83,7 +77,7 @@ if ( is_user_logged_in() ) {
 		    						$art_can=$_POST['vcan'.$i];
 		    						$post_id=$_POST['id'.$i];
 
-									$query = "UPDATE vive_fac SET art_id='$art_id', can='$art_can', fec='$fec', q1='$q1', q2='$q2', q3='$q3', q4='$q4', q5='$q5', q6='$q6' WHERE id='$post_id'";
+									$query = "UPDATE vive_fac SET art_id='$art_id', can='$art_can', fec='$fec', q1='$q1', q2='$q2', q3='$q3' WHERE id='$post_id'";
 									if ($mysqli->query( $query ) === TRUE) { }
 
 		    					}

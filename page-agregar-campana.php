@@ -66,30 +66,6 @@ if ( is_user_logged_in() ) {
 				        	</span>
 				        </div>
 			        </div>
-					<div class="row marginbot0">
-						<div class="input-field col-xs-12 col-sm-4 col-sm-offset-4">
-							<h4>Q3</h4>
-							<span ng-class="{ 'has-error': contactform.q3.$invalid && submitted }">
-				        		<input type="number" placeholder="Q3" name="q3"  id="q3"  class="inputfield" ng-model="formData.q3" min="0" required>
-				        	</span>
-				        </div>
-			        </div>
-					<div class="row marginbot0">
-						<div class="input-field col-xs-12 col-sm-4 col-sm-offset-4">
-							<h4>Q4</h4>
-							<span ng-class="{ 'has-error': contactform.q4.$invalid && submitted }">
-				        		<input type="number" placeholder="Q4" name="q4"  id="q4"  class="inputfield" ng-model="formData.q4" min="0" required>
-				        	</span>
-				        </div>
-			        </div>
-					<div class="row marginbot0">
-						<div class="input-field col-xs-12 col-sm-4 col-sm-offset-4">
-							<h4>Q5</h4>
-							<span ng-class="{ 'has-error': contactform.q5.$invalid && submitted }">
-				        		<input type="number" placeholder="Q5" name="q5"  id="q5"  class="inputfield" ng-model="formData.q5" min="0" required>
-				        	</span>
-				        </div>
-			        </div>
                     <div ng-app="myApp" class="">
                         <div add-input class="center-align">
 
