@@ -123,7 +123,7 @@ if ( is_user_logged_in() ) {
 		$scope.APROBAR = function(e) {
 			var id = jQuery(e.currentTarget).attr("data-id");
 			var depid = jQuery('#depid'+id).val();
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/duplicados.php", {params:{"id": depid }})
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/duplicados.php", {params:{"id": depid }})
 			.then(function (response) {
 				jQuery("#btn"+id).removeClass("red").addClass("grey");
 				jQuery('#btn'+id).prop('disabled', true);

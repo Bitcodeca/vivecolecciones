@@ -397,7 +397,7 @@ if ( is_user_logged_in() ) {
 					var ref = jQuery('#ref').val();
 					var ban = jQuery('#ban').val();
 					var cam = jQuery('#cam').val();
-					$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/registrar-pago.php", {params:{"usuario": usuario, "fec": fec, "mon": mon, "ref": ref, "ban": ban, "cam": cam }})
+					$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/registrar-pago.php", {params:{"usuario": usuario, "fec": fec, "mon": mon, "ref": ref, "ban": ban, "cam": cam }})
 					.then(function (data) {
 			            if (data.data.success) {
 			                window.alert(data.data.message);
@@ -416,7 +416,7 @@ if ( is_user_logged_in() ) {
 				$scope.reg_PULL = function() {
 					var usuario = '<?php echo $gerente_logged; ?>';
 					var camact = '<?php echo $camact; ?>';
-					$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/gerente-depositos-pull.php", {params:{"usuario": usuario, "camact": camact }})
+					$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/gerente-depositos-pull.php", {params:{"usuario": usuario, "camact": camact }})
 					.then(function (response) {
 						$scope.pulldata = response.data.records;
 						var $users = jQuery('.variable');
@@ -443,7 +443,7 @@ if ( is_user_logged_in() ) {
 					var ref = jQuery('#ref').val();
 					var ban = jQuery('#ban').val();
 					var cam = jQuery('#cam').val();
-					$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/registrar-pago.php", {params:{"usuario": usuario, "fec": fec, "mon": mon, "ref": ref, "ban": ban, "cam": cam }})
+					$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/registrar-pago.php", {params:{"usuario": usuario, "fec": fec, "mon": mon, "ref": ref, "ban": ban, "cam": cam }})
 					.then(function (data) {
 			            if (data.data.success) {
 			                window.alert(data.data.message);
@@ -462,7 +462,7 @@ if ( is_user_logged_in() ) {
 				$scope.reg_PULL = function() {
 					var usuario = '<?php echo $gerente_logged; ?>';
 					var camact = '<?php echo $camact; ?>';
-					$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/gerente-depositos-pull.php", {params:{"usuario": usuario, "camact": camact }})
+					$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/gerente-depositos-pull.php", {params:{"usuario": usuario, "camact": camact }})
 					.then(function (response) {
 						$scope.pulldata = response.data.records;
 						var $users = jQuery('.variable');

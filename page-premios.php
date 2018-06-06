@@ -394,7 +394,7 @@ if ($user_logged['rol']=='Gerente') { ?>
 	        		$scope.submitButtonDisabled = true;
 		            $http({
 		                method  : 'POST',
-		                url     : '<?php site_url(); ?>/wp-content/themes/Vivev2/api/registrar-premios.php',
+		                url     : '<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/registrar-premios.php',
 		                data    : jQuery.param($scope.formData),
 		                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
 		            }).success(function(data){

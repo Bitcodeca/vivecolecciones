@@ -80,7 +80,7 @@ if ( is_user_logged_in() ) {
 			var cam = jQuery('#cam').val();
 			var nombre = jQuery('#nombre').val();
 			var tipo = jQuery('#tipo').val();
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/premio-nuevo-push.php", {params:{"cam": cam, "art": nombre, "tipo": tipo }})
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/premio-nuevo-push.php", {params:{"cam": cam, "art": nombre, "tipo": tipo }})
 			.then(function (response) {
 				$scope.agregar_Button = true;
 				jQuery('#nombre').val('');

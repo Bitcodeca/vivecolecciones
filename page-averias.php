@@ -239,7 +239,6 @@ if ( is_user_logged_in() ) {
 
 											$x=0;
 								        	$query2 = "SELECT DISTINCT art_id FROM vive_fac WHERE usuario='$gerente_logged' AND cam='$cam'";
-											echo '<script>console.log("'.$query2.'")</script>';
 											$result2 = mysqli_query($mysqli, $query2);
 											if(mysqli_num_rows($result2) != 0) { 
 												while($row2 = mysqli_fetch_assoc($result2)) {

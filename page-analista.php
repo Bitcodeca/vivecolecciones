@@ -134,7 +134,7 @@ if ( is_user_logged_in() ) {
 					var gerente = jQuery('#analista').val();
 					console.log(analista);
 					console.log(gerente);
-					$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/analista-push.php", {params:{"analista": analista, "gerente": gerente }})
+					$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/analista-push.php", {params:{"analista": analista, "gerente": gerente }})
 					.then(function (response) {
 						$scope.analista_Button = true;
 						jQuery('#analista').val('');
@@ -144,7 +144,7 @@ if ( is_user_logged_in() ) {
 				}
 				$scope.analista_PULL = function() {
 					var analista = '<?php echo $analista; ?>';
-					$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/analista-pull.php", {params:{"analista": analista }})
+					$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/analista-pull.php", {params:{"analista": analista }})
 					.then(function (response) {
 						$scope.analista_info = response.data.records;
 					}); 
@@ -152,7 +152,7 @@ if ( is_user_logged_in() ) {
 
 				$scope.analista_DEL = function(devId) {
 					var valor = devId;
-					$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/analista-del.php", {params:{"id": valor }})
+					$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/analista-del.php", {params:{"id": valor }})
 					.then(function (response) {
 						$scope.analista_PULL();
 					}); 

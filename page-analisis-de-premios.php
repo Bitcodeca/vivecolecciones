@@ -229,7 +229,7 @@ if ( is_user_logged_in() ) {
 				var query = " ";
 			}
 
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/premios_query.php", {params:{"query": query }})
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/premios_query.php", {params:{"query": query }})
 			.then(function (response) {
 				$scope.premio_info = response.data.records;
 				document.getElementById("premtotal").innerHTML = response.data.total;
@@ -239,7 +239,7 @@ if ( is_user_logged_in() ) {
 		$scope.modificar = function(param) {
 			jQuery('#modal1').modal('open');
 
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/premios_modif.php", {params:{"id": param }})
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/premios_modif.php", {params:{"id": param }})
 			.then(function (response) {
 				$scope.idModificar=response.data.records[0].id;
 				$scope.usuarioModificar=response.data.records[0].usuario;
@@ -254,7 +254,7 @@ if ( is_user_logged_in() ) {
 				
 				var query = "usuario='"+ $scope.usuarioModificar +"', cam='"+ $scope.camModificar +"', nombre='"+ $scope.nombreModificar +"', cantidad='"+ $scope.cantidadModificar +"' WHERE id="+ $scope.idModificar;
 				
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/premios_modif_update.php", {params:{"query": query }})
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/premios_modif_update.php", {params:{"query": query }})
 			.then(function (response) {
 				$scope.PREMIO_QUERY();
 			});

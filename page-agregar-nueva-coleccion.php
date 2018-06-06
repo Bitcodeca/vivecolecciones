@@ -75,7 +75,7 @@ if ( is_user_logged_in() ) {
 			var nombre = jQuery('#nombre').val();
 			var costo = jQuery('#costo').val();
 			var ref = jQuery('#ref').val();
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/coleccion-push.php", {params:{"cam": cam, "art": nombre, "cos": costo, "ref": ref }})
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/coleccion-push.php", {params:{"cam": cam, "art": nombre, "cos": costo, "ref": ref }})
 			.then(function (response) {
 				$scope.agregar_Button = true;
 				jQuery('#nombre').val('');

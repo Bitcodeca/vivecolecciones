@@ -87,7 +87,7 @@ if ( is_user_logged_in() ) {
 	app.controller('customersCtrl', function($scope, $http, $timeout, $compile) { 
 
 		$scope.userInfo = function(){ 
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/user-info.php", {params:{"usuario": sessionStorage.getItem("sent") }})
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/user-info.php", {params:{"usuario": sessionStorage.getItem("sent") }})
 			.then(function (response) {
 				var jsondata2 = response.data.records2;
 				for (var index2 = 0; index2 < jsondata2.length; ++index2) {
@@ -102,7 +102,7 @@ if ( is_user_logged_in() ) {
 		};
 
 		$scope.getData = function(){ 
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/msn.php", {params:{"usuario": sessionStorage.getItem("sent"), "logged": '<?php echo $user_logged['login']; ?>' }})
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/msn.php", {params:{"usuario": sessionStorage.getItem("sent"), "logged": '<?php echo $user_logged['login']; ?>' }})
 			.then(function (response) {
 				$scope.names = response.data.records;
 			}); 

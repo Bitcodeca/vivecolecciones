@@ -216,7 +216,7 @@ if ( is_user_logged_in() ) {
 //////////////////////////////////////////////////////////////////
 		$scope.CAMB_PUSH = function() {
 			var camb = jQuery('#camb').val();
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/camb-push.php", {params:{"usuario": camb }})
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/camb-push.php", {params:{"usuario": camb }})
 			.then(function (response) {
 				$scope.CAMB_Button = true;
 				jQuery('#camb').val('');
@@ -225,7 +225,7 @@ if ( is_user_logged_in() ) {
 			}); 
 		}
 		$scope.CAMB_AT_PUSH = function() {
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/camb-push-AT.php")
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/camb-push-AT.php")
 			.then(function (response) {
 				$scope.CAMB_AT_Button = true;
 				$scope.CAMB_PULL();
@@ -233,7 +233,7 @@ if ( is_user_logged_in() ) {
 			}); 
 		}
 		$scope.CAMB_ET_PUSH = function() {
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/camb-push-ET.php")
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/camb-push-ET.php")
 			.then(function (response) {
 				$scope.CAMB_ET_Button = true;
 				$scope.CAMB_PULL();
@@ -241,14 +241,14 @@ if ( is_user_logged_in() ) {
 			}); 
 		}
 		$scope.CAMB_PULL = function() {
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/camb-pull.php")
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/camb-pull.php")
 			.then(function (response) {
 				$scope.camb_info = response.data.records;
 			}); 
 		}
 		$scope.camb_DEL = function(cambId) {
 			var valor = cambId;
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/camb-del.php", {params:{"id": valor }})
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/camb-del.php", {params:{"id": valor }})
 			.then(function (response) {
 				$scope.CAMB_PULL();
 			}); 
@@ -259,7 +259,7 @@ if ( is_user_logged_in() ) {
 //////////////////////////////////////////////////////////////////
 		$scope.AVER_PUSH = function() {
 			var aver = jQuery('#aver').val();
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/aver-push.php", {params:{"usuario": aver }})
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/aver-push.php", {params:{"usuario": aver }})
 			.then(function (response) {
 				$scope.AVER_Button = true;
 				jQuery('#aver').val('');
@@ -268,7 +268,7 @@ if ( is_user_logged_in() ) {
 			}); 
 		}
 		$scope.AVER_AT_PUSH = function() {
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/aver-push-AT.php")
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/aver-push-AT.php")
 			.then(function (response) {
 				$scope.AVER_AT_Button = true;
 				$scope.AVER_PULL();
@@ -276,7 +276,7 @@ if ( is_user_logged_in() ) {
 			}); 
 		}
 		$scope.AVER_ET_PUSH = function() {
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/aver-push-ET.php")
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/aver-push-ET.php")
 			.then(function (response) {
 				$scope.AVER_ET_Button = true;
 				$scope.AVER_PULL();
@@ -284,14 +284,14 @@ if ( is_user_logged_in() ) {
 			}); 
 		}
 		$scope.AVER_PULL = function() {
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/aver-pull.php")
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/aver-pull.php")
 			.then(function (response) {
 				$scope.aver_info = response.data.records;
 			}); 
 		}
 		$scope.aver_DEL = function(averId) {
 			var valor = averId;
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/aver-del.php", {params:{"id": valor }})
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/aver-del.php", {params:{"id": valor }})
 			.then(function (response) {
 				$scope.AVER_PULL();
 			}); 
@@ -302,7 +302,7 @@ if ( is_user_logged_in() ) {
 //////////////////////////////////////////////////////////////////
 		$scope.premio_PUSH = function() {
 			var premio = jQuery('#premio').val();
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/premio-push.php", {params:{"usuario": premio }})
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/premio-push.php", {params:{"usuario": premio }})
 			.then(function (response) {
 				$scope.premio_Button = true;
 				jQuery('#premio').val('');
@@ -311,7 +311,7 @@ if ( is_user_logged_in() ) {
 			}); 
 		}
 		$scope.premio_AT_PUSH = function() {
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/premio-push-AT.php")
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/premio-push-AT.php")
 			.then(function (response) {
 				$scope.premio_AT_Button = true;
 				$scope.premio_PULL();
@@ -319,7 +319,7 @@ if ( is_user_logged_in() ) {
 			}); 
 		}
 		$scope.premio_ET_PUSH = function() {
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/premio-push-ET.php")
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/premio-push-ET.php")
 			.then(function (response) {
 				$scope.premio_ET_Button = true;
 				$scope.premio_PULL();
@@ -327,14 +327,14 @@ if ( is_user_logged_in() ) {
 			}); 
 		}
 		$scope.premio_PULL = function() {
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/premio-pull.php")
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/premio-pull.php")
 			.then(function (response) {
 				$scope.premio_info = response.data.records;
 			}); 
 		}
 		$scope.premio_DEL = function(devId) {
 			var valor = devId;
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/premio-del.php", {params:{"id": valor }})
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/premio-del.php", {params:{"id": valor }})
 			.then(function (response) {
 				$scope.premio_PULL();
 			}); 
@@ -345,7 +345,7 @@ if ( is_user_logged_in() ) {
 //////////////////////////////////////////////////////////////////
 		$scope.devoluciones_PUSH = function() {
 			var devoluciones = jQuery('#devoluciones').val();
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/devoluciones-push.php", {params:{"usuario": devoluciones }})
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/devoluciones-push.php", {params:{"usuario": devoluciones }})
 			.then(function (response) {
 				$scope.devoluciones_Button = true;
 				jQuery('#devoluciones').val('');
@@ -354,7 +354,7 @@ if ( is_user_logged_in() ) {
 			}); 
 		}
 		$scope.devoluciones_AT_PUSH = function() {
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/devoluciones-push-AT.php")
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/devoluciones-push-AT.php")
 			.then(function (response) {
 				$scope.devoluciones_AT_Button = true;
 				$scope.devoluciones_PULL();
@@ -362,7 +362,7 @@ if ( is_user_logged_in() ) {
 			}); 
 		}
 		$scope.devoluciones_ET_PUSH = function() {
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/devoluciones-push-ET.php")
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/devoluciones-push-ET.php")
 			.then(function (response) {
 				$scope.devoluciones_ET_Button = true;
 				$scope.devoluciones_PULL();
@@ -370,7 +370,7 @@ if ( is_user_logged_in() ) {
 			}); 
 		}
 		$scope.devoluciones_PULL = function() {
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/devoluciones-pull.php")
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/devoluciones-pull.php")
 			.then(function (response) {
 				$scope.devoluciones_info = response.data.records;
 			}); 
@@ -378,7 +378,7 @@ if ( is_user_logged_in() ) {
 
 		$scope.devoluciones_DEL = function(devId) {
 			var valor = devId;
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/devoluciones-del.php", {params:{"id": valor }})
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/devoluciones-del.php", {params:{"id": valor }})
 			.then(function (response) {
 				$scope.devoluciones_PULL();
 			}); 

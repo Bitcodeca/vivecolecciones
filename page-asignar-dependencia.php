@@ -101,7 +101,7 @@ if ( is_user_logged_in() ) {
 	        if (contactform.$valid) {
 	            $http({
 	                method  : 'POST',
-	                url     : '<?php site_url(); ?>/wp-content/themes/Vivev2/api/agregar-dependencia.php',
+	                url     : '<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/agregar-dependencia.php',
 	                data    : jQuery.param($scope.formData),
 	                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
 	            }).success(function(data){

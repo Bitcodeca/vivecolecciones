@@ -296,7 +296,7 @@ else {
 	        if (contactform.$valid) {
 	            $http({
 	                method  : 'POST',
-	                url     : '<?php site_url(); ?>/wp-content/themes/Vivev2/api/registrar-cya.php',
+	                url     : '<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/registrar-cya.php',
 	                data    : jQuery.param($scope.formData),
 	                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
 	            }).success(function(data){

@@ -87,7 +87,7 @@ if ( is_user_logged_in() ) {
 			var usuario = jQuery('#usuario'+id).val();
 			var depid = jQuery('#depid'+id).val();
 			var pencam = jQuery('#cam'+id).val();
-			$http.get("<?php site_url(); ?>/wp-content/themes/Vivev2/api/comparacionAprobar.php", {params:{"penId": penid, "usuario": usuario, "depId": depid, "penCam": pencam }})
+			$http.get("<?php site_url(); ?>/wp-content/themes/vivecolecciones-3Q/api/comparacionAprobar.php", {params:{"penId": penid, "usuario": usuario, "depId": depid, "penCam": pencam }})
 			.then(function (response) {
 				jQuery("#btn"+id).removeClass("yellow").addClass("fondo3");
 				jQuery('#btn'+id).prop('disabled', true);
